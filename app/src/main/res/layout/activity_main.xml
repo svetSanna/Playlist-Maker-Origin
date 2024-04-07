@@ -1,18 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:orientation="vertical"
+    android:background="@color/blue_background"
+    android:padding="8dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="@string/app_name"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size"
+        android:layout_gravity="left"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="32dp"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/medium_padding"
+        android:layout_weight="1"
+        android:backgroundTint="@color/white"
+        android:text="@string/button1_text_search"
+        android:textColor="@color/text_button_icon"
+        android:textSize="@dimen/text_size"
+        app:cornerRadius="@dimen/corner_radius"
+        app:icon="@drawable/search"
+        app:iconGravity="textStart"
+        app:iconpadding="@dimen/medium_padding"
+        app:iconTint="@color/text_button_icon">
+    </Button>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/medium_padding"
+        android:layout_weight="1"
+        android:backgroundTint="@color/white"
+        android:text="@string/button2_text_media"
+        android:textColor="@color/text_button_icon"
+        android:textSize="@dimen/text_size"
+        app:cornerRadius="@dimen/corner_radius"
+        app:icon="@drawable/media"
+        app:iconGravity="textStart"
+        app:iconpadding="@dimen/medium_padding"
+        app:iconTint="@color/text_button_icon">
+    </Button>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/medium_padding"
+        android:layout_marginLeft="@dimen/medium_padding"
+        android:layout_marginRight="@dimen/medium_padding"
+        android:layout_marginBottom="20dp"
+        android:layout_weight="1"
+        android:backgroundTint="@color/white"
+        android:text="@string/button3_text_settings"
+        android:textColor="@color/text_button_icon"
+        android:textSize="@dimen/text_size"
+        app:cornerRadius="@dimen/corner_radius"
+        app:icon="@drawable/settings"
+        app:iconGravity="textStart"
+        app:iconpadding="@dimen/medium_padding"
+        app:iconTint="@color/text_button_icon">
+    </Button>
+</LinearLayout>
