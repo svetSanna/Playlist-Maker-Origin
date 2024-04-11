@@ -10,11 +10,10 @@ class SettingsActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val button_settings_back = findViewById<Button>(R.id.button_settings_back)
+        val buttonSettingsBack = findViewById<Button>(R.id.button_settings_back)
 
-        button_settings_back.setOnClickListener {
-            val displayIntent = Intent(this, MainActivity::class.java)
-            startActivity(displayIntent)
+        buttonSettingsBack.setOnClickListener {
+            onBackPressed()
         }
     }
 }
