@@ -1,8 +1,7 @@
 package com.example.playlistmaker
 
-import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 
 class SettingsActivity: AppCompatActivity() {
@@ -10,7 +9,7 @@ class SettingsActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val buttonSettingsBack = findViewById<Button>(R.id.button_settings_back)
+        val buttonSettingsBack = findViewById<ImageView>(R.id.button_settings_back)
 
         buttonSettingsBack.setOnClickListener {
             onBackPressed()

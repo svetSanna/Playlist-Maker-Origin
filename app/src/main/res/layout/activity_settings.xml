@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -8,18 +7,17 @@
     android:padding="@dimen/small_padding"    >
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:gravity="center_vertical"
         android:layout_marginBottom="28dp"
         >
-        <Button
+        <ImageView
             android:id="@+id/button_settings_back"
-            android:layout_width="@dimen/button_size"
-            android:layout_height="@dimen/button_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:backgroundTint="@color/white"
-            app:icon="@drawable/arrow_back"
-            app:iconTint="@color/text_button_icon"
-            style="?android:attr/borderlessButtonStyle"/>
+            android:src="@drawable/arrow_back"
+            android:layout_margin="@dimen/margin_12"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -64,14 +62,13 @@
             android:layout_gravity="center_vertical"
             android:layout_marginVertical= "@dimen/margin_21">
         </TextView>
-        <Button
+        <ImageView
             android:layout_width="@dimen/button_size"
             android:layout_height="@dimen/button_size"
+            android:layout_margin="@dimen/margin_12"
             android:backgroundTint="@color/white"
-            app:icon="@drawable/share"
-            app:iconTint="@color/icon"
-            android:layout_gravity="right|center_vertical"
-            style="?android:attr/borderlessButtonStyle" />
+            android:src="@drawable/share"
+            android:layout_gravity="right|center_vertical"/>
     </FrameLayout>
     <FrameLayout
         android:layout_width="match_parent"
@@ -87,14 +84,13 @@
             android:layout_gravity="center_vertical"
             android:layout_marginVertical= "@dimen/margin_21">
         </TextView>
-        <Button
+        <ImageView
             android:layout_width="@dimen/button_size"
             android:layout_height="@dimen/button_size"
             android:backgroundTint="@color/white"
-            app:icon="@drawable/support"
-            app:iconTint="@color/icon"
-            android:layout_gravity="right|center_vertical"
-            style="?android:attr/borderlessButtonStyle"/>
+            android:layout_margin="@dimen/margin_12"
+            android:src="@drawable/support"
+            android:layout_gravity="right|center_vertical"/>
     </FrameLayout>
     <FrameLayout
         android:layout_width="match_parent"
@@ -110,13 +106,12 @@
             android:layout_gravity="center_vertical"
             android:layout_marginVertical= "@dimen/margin_21">
         </TextView>
-        <Button
+        <ImageView
             android:layout_width="@dimen/button_size"
             android:layout_height="@dimen/button_size"
             android:backgroundTint="@color/white"
-            app:icon="@drawable/allow_forward"
-            app:iconTint="@color/icon"
-            android:layout_gravity="right|center_vertical"
-            style="?android:attr/borderlessButtonStyle"        />
-    </FrameLayout>
+            android:layout_margin="@dimen/margin_12"
+            android:src="@drawable/allow_forward"
+            android:layout_gravity="right|center_vertical" />
+      </FrameLayout>
 </LinearLayout>
