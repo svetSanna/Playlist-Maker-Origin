@@ -9,38 +9,27 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:gravity="center_vertical"
-        android:layout_marginBottom="28dp"
-        >
+        android:layout_marginBottom="28dp">
+
         <ImageView
             android:id="@+id/button_settings_back"
+            style="@style/ImageViewLayoutSettingsWindow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:src="@drawable/arrow_back"
-            android:layout_margin="@dimen/margin_12"/>
+            android:src="@drawable/arrow_back"/>
         <TextView
+            style="@style/TextTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_12"
             android:text="@string/button3_text_settings"
-            android:textColor="@color/text_button_icon"
-            android:textSize="@dimen/text_size"
-            android:textStyle="bold"
-            android:layout_marginLeft="@dimen/margin_12">
+            android:textColor="@color/text_button_icon">
         </TextView>
     </LinearLayout>
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_12"
-        android:layout_marginRight="@dimen/margin_14">
+    <FrameLayout style="@style/FrameLayoutSettingsWindow">
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/dark_theme"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_menu_settings"
-            android:layout_gravity="center_vertical"
-            android:layout_marginVertical= "@dimen/margin_21">
+            style="@style/TextViewLayoutSettingsWindow"
+            android:text="@string/dark_theme">
         </TextView>
         <androidx.appcompat.widget.SwitchCompat
             android:layout_width="wrap_content"
@@ -48,70 +37,31 @@
             android:checked="false"
             android:layout_gravity="right|center_vertical"/>
     </FrameLayout>
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_12"
-        android:layout_marginRight="@dimen/margin_14">
+    <FrameLayout style="@style/FrameLayoutSettingsWindow">
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/share_the_app"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_menu_settings"
-            android:layout_gravity="center_vertical"
-            android:layout_marginVertical= "@dimen/margin_21">
+            style="@style/TextViewLayoutSettingsWindow"
+            android:text="@string/share_the_app">
         </TextView>
         <ImageView
-            android:layout_width="@dimen/button_size"
-            android:layout_height="@dimen/button_size"
-            android:layout_margin="@dimen/margin_12"
-            android:backgroundTint="@color/white"
-            android:src="@drawable/share"
-            android:layout_gravity="right|center_vertical"/>
+            style="@style/ImageViewLayoutSettingsWindow"
+            android:src="@drawable/share"/>
     </FrameLayout>
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_12"
-        android:layout_marginRight="@dimen/margin_14">
+    <FrameLayout style="@style/FrameLayoutSettingsWindow">
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/write_to_support"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_menu_settings"
-            android:layout_gravity="center_vertical"
-            android:layout_marginVertical= "@dimen/margin_21">
+            style="@style/TextViewLayoutSettingsWindow"
+            android:text="@string/write_to_support">
         </TextView>
         <ImageView
-            android:layout_width="@dimen/button_size"
-            android:layout_height="@dimen/button_size"
-            android:backgroundTint="@color/white"
-            android:layout_margin="@dimen/margin_12"
-            android:src="@drawable/support"
-            android:layout_gravity="right|center_vertical"/>
+            style="@style/ImageViewLayoutSettingsWindow"
+            android:src="@drawable/support"/>
     </FrameLayout>
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/margin_12"
-        android:layout_marginRight="@dimen/margin_14">
+    <FrameLayout style="@style/FrameLayoutSettingsWindow">
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/user_agreement"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_menu_settings"
-            android:layout_gravity="center_vertical"
-            android:layout_marginVertical= "@dimen/margin_21">
+            style="@style/TextViewLayoutSettingsWindow"
+            android:text="@string/user_agreement">
         </TextView>
         <ImageView
-            android:layout_width="@dimen/button_size"
-            android:layout_height="@dimen/button_size"
-            android:backgroundTint="@color/white"
-            android:layout_margin="@dimen/margin_12"
-            android:src="@drawable/allow_forward"
-            android:layout_gravity="right|center_vertical" />
+            style="@style/ImageViewLayoutSettingsWindow"
+            android:src="@drawable/allow_forward"/>
       </FrameLayout>
 </LinearLayout>
