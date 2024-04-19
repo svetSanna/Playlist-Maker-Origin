@@ -8,4 +8,7 @@
   <string name="share_the_app">Share the app</string>
   <string name="write_to_support">Write to support</string>
   <string name="user_agreement">User agreement</string>
+    <string name="message_error_intent">There was no suitable application</string>
+  <string name="message_theme">Message to the developers of the Playlist Maker app</string>
+  <string name="message_text">Thanks to the developers for the cool app!</string>
 </resources>
