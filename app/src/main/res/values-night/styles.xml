@@ -11,7 +11,7 @@
 
         <item name="android:textFontWeight">500</item>
 
-        <item name="cornerRadius">@dimen/corner_radius</item>
+        <item name="cornerRadius">@dimen/corner_radius_16</item>
         <item name="android:foreground">?attr/selectableItemBackground</item>
         <item name="android:backgroundTint">@color/white</item>
         <item name="iconGravity">textStart</item>

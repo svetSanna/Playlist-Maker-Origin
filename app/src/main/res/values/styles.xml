@@ -11,7 +11,7 @@
 
         <item name="android:textFontWeight">500</item>
 
-        <item name="cornerRadius">@dimen/corner_radius</item>
+        <item name="cornerRadius">@dimen/corner_radius_16</item>
         <item name="android:foreground">?attr/selectableItemBackground</item>
         <item name="android:backgroundTint">@color/white</item>
         <item name="iconGravity">textStart</item>
@@ -51,6 +51,17 @@
     <style name="MySwitchStyle" parent = "Widget.AppCompat.CompoundButton.Switch">
         <item name="thumbTint">@color/selector_switch_thumb</item>
         <item name="trackTint">@color/selector_switch_track</item>
+    </style>
+    <style name="EditTextSearch">
+        <item name="android:textColor">@color/edit_text</item>
+        <item name="android:textColorHint">"@color/edit_textHint</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/edittext_size</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:drawableLeft">@drawable/search_for_edit</item>
+        <item name="android:paddingLeft">@dimen/margin_14</item>
+        <item name="android:background">@drawable/corner_radius</item>
     </style>
 </resources>
 
