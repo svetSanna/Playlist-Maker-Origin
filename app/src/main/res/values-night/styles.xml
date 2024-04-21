@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="ButtonMainWindow" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+   <!-- <style name="ButtonMainWindow" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
 
@@ -48,8 +48,9 @@
         <item name="android:layout_marginVertical">@dimen/margin_21</item>
         <item name="android:textFontWeight">400</item>
     </style>
-    <style name="MySwitchStyle" parent = "Widget.AppCompat.CompoundButton.Switch">
+    -->
+    <!--<style name="MySwitchStyle" parent = "Widget.AppCompat.CompoundButton.Switch">
         <item name="thumbTint">@color/selector_switch_thumb</item>
         <item name="trackTint">@color/selector_switch_track</item>
-    </style>
+    </style>-->
 </resources>

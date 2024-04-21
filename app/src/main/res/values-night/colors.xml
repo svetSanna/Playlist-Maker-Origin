@@ -8,6 +8,14 @@
     <color name="text_button_settings_window">#ffffff</color>
     <color name="icon">#FFFFFF</color>
 
+    <color name="thumb_check">#3772E7</color>
+    <color name="thumb">#AEAFB4</color>
+    <color name="track_check">#9FBBF3</color>
+    <color name="track">#E6E8EB</color>
+
+    <color name="edit_text">#1A1B22</color>
+    <color name="edit_background">#FFFFFF</color>
+    <color name="edit_textHint">#1A1B22</color>
 </resources>
 <!-- <color name="selector_checked">#3772E7</color>
     <color name="selector_nonchecked">#AEAFB4</color> -->
