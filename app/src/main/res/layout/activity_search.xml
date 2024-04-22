@@ -12,7 +12,7 @@ android:padding="@dimen/small_padding"    >
     android:layout_marginBottom="@dimen/margin_4">
 
     <ImageView
-        android:id="@+id/button_settings_back"
+        android:id="@+id/button_search_back"
         style="@style/ImageViewLayoutSettingsWindow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,15 +30,21 @@ android:padding="@dimen/small_padding"    >
         android:layout_width="match_parent"
         android:layout_height="@dimen/margin_56"
         android:orientation="horizontal">
-
         <EditText
             android:id="@+id/edit_search_window"
             style="@style/EditTextSearch"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="@dimen/edittext_height"
             android:layout_marginHorizontal="@dimen/margin_8"
             android:layout_marginVertical="@dimen/margin_8"
-            android:hint="Поиск" />
-    </FrameLayout>
+            android:hint="Поиск"/>
+        <ImageView
+            android:id="@+id/button_close_clear_cancel"
+            android:layout_width="@dimen/margin_16"
+            android:layout_height="@dimen/margin_16"
+            android:layout_gravity="right|center_vertical"
+            android:src="@drawable/ic_close_clear_cancel"
+            android:layout_marginRight="@dimen/margin_20"
+            android:visibility="gone"/>
+    </FrameLayout>/>
 </LinearLayout>
-<!--            android:Text="text" -->
