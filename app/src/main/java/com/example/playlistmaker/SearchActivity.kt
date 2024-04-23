@@ -1,14 +1,16 @@
 package com.example.playlistmaker
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.R.*
+
 
 class SearchActivity : AppCompatActivity() {
     private var editString: String = ""
@@ -27,6 +29,8 @@ class SearchActivity : AppCompatActivity() {
 
         clearButton.setOnClickListener{
             inputEditText.setText("")
+            val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            imm?.hideSoftInputFromWindow(inputEditText.getWindowToken(), 0)
         }
         inputEditText.requestFocus()
 
