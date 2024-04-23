@@ -4,7 +4,4 @@
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
     </style>
-    <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker">
-        <item name="switchStyle">@style/MySwitchStyle</item>
-    </style>
 </resources>
