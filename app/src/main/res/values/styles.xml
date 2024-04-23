@@ -12,9 +12,9 @@
         <item name="android:textFontWeight">500</item>
 
         <item name="cornerRadius">@dimen/corner_radius_16</item>
-        <item name="android:foreground">?attr/selectableItemBackground</item>
+       <!-- <item name="android:foreground">?attr/selectableItemBackground</item>-->
         <item name="android:backgroundTint">@color/white</item>
-        <!--<item name="android:background">@color/white</item>-->
+       <!-- <item name="android:background">@color/white</item>-->
         <item name="iconGravity">textStart</item>
         <item name="iconPadding">@dimen/medium_padding</item>
         <item name="iconTint">@color/text_button_main_window</item>

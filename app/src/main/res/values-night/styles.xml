@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-   <!-- <style name="ButtonMainWindow" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+    <!--<style name="ButtonMainWindow" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
 
@@ -12,7 +12,6 @@
         <item name="android:textFontWeight">500</item>
 
         <item name="cornerRadius">@dimen/corner_radius_16</item>
-        <item name="android:foreground">?attr/selectableItemBackground</item>
         <item name="android:backgroundTint">@color/white</item>
         <item name="iconGravity">textStart</item>
         <item name="iconPadding">@dimen/medium_padding</item>

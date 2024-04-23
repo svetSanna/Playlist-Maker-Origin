@@ -11,6 +11,7 @@ import android.widget.ImageView
 import com.example.playlistmaker.R.*
 
 class SearchActivity : AppCompatActivity() {
+    private var editString: String = ""
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +36,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                editString = s?.toString()?:""
                 clearButton.visibility = clearButtonVisibility(s)
             }
 
@@ -52,4 +54,16 @@ class SearchActivity : AppCompatActivity() {
             View.VISIBLE
         }
     }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("editString", editString)
+    }
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        // Вторым параметром мы передаём значение по умолчанию
+        editString = savedInstanceState.getString("editString", "")
+        val inputEditText = findViewById<EditText>(id.edit_search_window)
+        inputEditText.setText(editString)
+    }
+
 }
