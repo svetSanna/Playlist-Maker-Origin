@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
+    <color name="black">#1A1B22</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="background_main_window">#3772E7</color>
+    <color name="background_settings_window">#ffffff</color>
+    <color name="text_button_main_window">#1A1B22</color>
+    <color name="text_button_settings_window">#1A1B22</color>
+    <color name="icon">#AEAFB4</color>
+
+    <color name="thumb_check">#3772E7</color>
+    <color name="thumb">#AEAFB4</color>
+    <color name="track_check">#9FBBF3</color>
+    <color name="track">#E6E8EB</color>
+
+    <color name="edit_text">#1A1B22</color>
+    <color name="edit_background">#E6E8EB</color>
+    <color name="edit_textHint">#AEAFB4</color>
+    <color name="icon_for_edit">#AEAFB4</color>
 </resources>
+
+<!--     <color name="selector_checked">#3772E7</color>
+    <color name="selector_nonchecked">#AEAFB4</color> -->
+
+<!--<color name="thumbTint">#AEAFB4</color>
+<color name="trackTint">#E6E8EB</color>-->
