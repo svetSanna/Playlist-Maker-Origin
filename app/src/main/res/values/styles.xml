@@ -74,4 +74,5 @@
 <!--    <style name="MySwitchStyle" parent = "Widget.AppCompat.CompoundButton.Switch">
         <item name="thumbTint">@color/thumbTint</item>
         <item name="trackTint">@color/trackTint</item>
+
     </style>-->

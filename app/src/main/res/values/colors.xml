@@ -17,6 +17,8 @@
     <color name="edit_background">#E6E8EB</color>
     <color name="edit_textHint">#AEAFB4</color>
     <color name="icon_for_edit">#AEAFB4</color>
+
+    <color name="cursor_edittext">#3772E7</color>
 </resources>
 
 <!--     <color name="selector_checked">#3772E7</color>
