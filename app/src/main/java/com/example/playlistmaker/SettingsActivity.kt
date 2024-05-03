@@ -3,11 +3,13 @@ package com.example.playlistmaker
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import com.example.playlistmaker.R.id.button_settings_allow_forward
 import com.example.playlistmaker.R.id.button_settings_share
 import com.example.playlistmaker.R.id.button_settings_support
@@ -36,7 +38,24 @@ class SettingsActivity: AppCompatActivity() {
         buttonSettingsAllowForward.setOnClickListener {
             onButtonAllowForward()
         }
+
+           /*  val selectorSwitch = findViewById<SwitchCompat>(R.id.selector_switch)
+        selectorSwitch.setOnCheckedChangeListener{
+            (selectorSwitch.isChecked == true) -> {}
+        }
+*/
     }
+
+    override fun onResume() { // в задании этого пока не было, решила попробовать
+        super.onResume()
+        setContentView(R.layout.activity_settings)
+        val selectorSwitch = findViewById<SwitchCompat>(R.id.selector_switch)
+        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+            Configuration.UI_MODE_NIGHT_YES -> { selectorSwitch.setChecked(true)}
+            Configuration.UI_MODE_NIGHT_NO -> {selectorSwitch.setChecked(false)}
+        }
+    }
+
     fun onButtonShare(){
         val intent = Intent(Intent.ACTION_SEND)
         intent.setType("text/plain")

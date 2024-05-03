@@ -32,6 +32,7 @@
             android:text="@string/dark_theme">
         </TextView>
         <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/selector_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="false"
