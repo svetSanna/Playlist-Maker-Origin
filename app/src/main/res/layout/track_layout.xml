@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        style="@style/TextTitle"
+        android:id="@+id/tvTrackName"
+        android:textSize="@dimen/text_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="title"
+        android:textColor="@color/white"
+        android:layout_gravity="left"
+        android:layout_marginLeft="@dimen/margin_8"
+        android:layout_marginTop="@dimen/margin_6"
+        android:layout_marginBottom="@dimen/margin_4"/>
+    <TextView
+        style="@style/TextTitle"
+        android:id="@+id/tvArtistName"
+        android:textSize="@dimen/text_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="artist"
+        android:textColor="@color/white"
+        android:layout_gravity="left"
+        android:layout_marginLeft="@dimen/margin_8"
+        android:layout_marginTop="@dimen/margin_6"
+        android:layout_marginBottom="@dimen/margin_4"/>
+    <TextView
+        style="@style/TextTitle"
+        android:id="@+id/trackTime"
+        android:textSize="@dimen/text_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="time"
+        android:textColor="@color/white"
+        android:layout_gravity="left"
+        android:layout_marginLeft="@dimen/margin_8"
+        android:layout_marginTop="@dimen/margin_6"
+        android:layout_marginBottom="@dimen/margin_4"/>
+    <TextView
+        style="@style/TextTitle"
+        android:id="@+id/artworkUrl100"
+        android:textSize="@dimen/text_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="url"
+        android:textColor="@color/white"
+        android:layout_gravity="left"
+        android:layout_marginLeft="@dimen/margin_8"
+        android:layout_marginTop="@dimen/margin_6"
+        android:layout_marginBottom="@dimen/margin_4"/>
+
+</LinearLayout>
