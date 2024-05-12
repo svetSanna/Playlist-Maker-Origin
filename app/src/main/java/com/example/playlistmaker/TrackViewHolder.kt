@@ -1,20 +1,34 @@
 package com.example.playlistmaker
 
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 
 class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-    val tvTrackName: TextView = itemView.findViewById(R.id.tvTrackName)
-    val tvArtistName: TextView = itemView.findViewById(R.id.tvArtistName)
-    var trackTime: TextView = itemView.findViewById(R.id.trackTime)
-    var artworkUrl100: TextView = itemView.findViewById(R.id.artworkUrl100)
+    var tvTrackName: TextView = itemView.findViewById(R.id.tvTrackName)
+    var tvArtistName: TextView = itemView.findViewById(R.id.tvArtistName)
+    var tvTrackTime: TextView = itemView.findViewById(R.id.tvTrackTime)
+    val ivImage: ImageView = itemView.findViewById(R.id.image)
+
+   // var artworkUrl100: TextView = itemView.findViewById(R.id.artworkUrl100)
     fun bind(item: Track){
         tvTrackName.text = item.trackName
         tvArtistName.text = item.artistName
-        trackTime.text = item.trackTime
-        artworkUrl100.text = item.artworkUrl100
+        tvTrackTime.text = item.trackTime
+
+        // val image = parent.findViewById<ImageView>(R.id.image)
+
+       Glide.with(itemView).load(item.artworkUrl100).into(ivImage)
+
+       Glide.with(itemView)
+           .load(item.artworkUrl100)
+           .placeholder(R.drawable.place_holder)
+           .into(ivImage)
+
+       // artworkUrl100.text = item.artworkUrl100
     }
 
 }
