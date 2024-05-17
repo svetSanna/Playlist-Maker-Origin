@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 
 class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
     var tvTrackName: TextView = itemView.findViewById(R.id.tvTrackName)
@@ -26,6 +27,7 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
        Glide.with(itemView)
            .load(item.artworkUrl100)
            .placeholder(R.drawable.place_holder)
+           .transform(RoundedCorners(2))
            .into(ivImage)
 
        // artworkUrl100.text = item.artworkUrl100
