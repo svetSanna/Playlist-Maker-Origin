@@ -46,9 +46,9 @@ class SettingsActivity: AppCompatActivity() {
 */
     }
 
-    override fun onResume() { // в задании этого пока не было, решила попробовать
+    override fun onResume() { // в задании этого пока не было, решила попробовать.
         super.onResume()
-        setContentView(R.layout.activity_settings)
+       // setContentView(R.layout.activity_settings)
         val selectorSwitch = findViewById<SwitchCompat>(R.id.selector_switch)
         when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_YES -> { selectorSwitch.setChecked(true)}
