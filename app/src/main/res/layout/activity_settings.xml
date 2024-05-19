@@ -68,6 +68,6 @@
         <ImageView
             android:id="@+id/button_settings_allow_forward"
             style="@style/ImageViewLayoutSettingsWindow"
-            android:src="@drawable/allow_forward"/>
+            android:src="@drawable/arrow_forward"/>
       </FrameLayout>
 </LinearLayout>
