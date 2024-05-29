@@ -32,6 +32,7 @@
             android:text="@string/dark_theme">
         </TextView>
         <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/selector_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="false"
@@ -67,6 +68,6 @@
         <ImageView
             android:id="@+id/button_settings_allow_forward"
             style="@style/ImageViewLayoutSettingsWindow"
-            android:src="@drawable/allow_forward"/>
+            android:src="@drawable/arrow_forward"/>
       </FrameLayout>
 </LinearLayout>
