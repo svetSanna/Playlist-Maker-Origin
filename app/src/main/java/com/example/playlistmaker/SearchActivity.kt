@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
@@ -12,11 +13,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R.*
-
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 
 class SearchActivity : AppCompatActivity() {
     private var editString: String = ""
-    var trackList: ArrayList<Track> = arrayListOf(
+    private var trackList: ArrayList<Track> = arrayListOf()   // private
+    /*var trackList: ArrayList<Track> = arrayListOf(
         Track( // 1 элемент
             trackName = "Smells Like Teen Spirit",
             artistName = "Nirvana",
@@ -47,16 +54,28 @@ class SearchActivity : AppCompatActivity() {
             trackTime = "5:03",
             artworkUrl100 = "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/a0/4d/c4/a04dc484-03cc-02aa-fa82-5334fcb4bc16/18UMGIM24878.rgb.jpg/100x100bb.jpg"
         )
-    )
+    )*/
+    // базовый URL для Retrofit
+    private val baseUrlStr = "https://itunes.apple.com"  //https://itunes.apple.com/search?entity=song&term="мама"
+
+    // подключаем библиотеку Retrofit
+    private val retrofit = Retrofit.Builder()
+        .baseUrl(baseUrlStr)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    // получаем реализацию нашего com.example.playlistmaker.TrackApi
+    private val trackApiService = retrofit.create(TrackApi::class.java) //val trackApiService = retrofit.create<TrackApi>()
 
     // создаем адаптер для Track
-    val trackAdapter = TrackAdapter()
+    private val trackAdapter = TrackAdapter()
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layout.activity_search)
 
-        val buttonSearchBack = findViewById<ImageView>(R.id.button_search_back)
+        val buttonSearchBack = findViewById<ImageView>(id.button_search_back)
         buttonSearchBack.setOnClickListener {
             onBackPressed()
         }
@@ -92,7 +111,60 @@ class SearchActivity : AppCompatActivity() {
             adapter = trackAdapter
             layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
         }
-        trackAdapter.items = trackList
+        trackAdapter.items = trackList   // ?? переставить на 140 строку
+
+        //Чтобы обработать нажатие на кнопку Done, к соответствующему экземпляру EditText нужно добавить специального слушателя:
+        inputEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                // Поисковый запрос
+                if(inputEditText.text.isNotEmpty()){
+                    trackApiService.search(inputEditText.text.toString()).enqueue(object: Callback<TrackResponse>{
+                        override fun onResponse(call: Call<TrackResponse>, response: Response<TrackResponse>) {
+                            if (response.code() == 200) {
+                                trackList.clear()
+                                if (response.body()?.results?.isNotEmpty() == true) {
+                                    trackList.addAll(response.body()?.results!!)
+                                    trackAdapter.items = trackList
+                                    //trackAdapter.notifyDataSetChanged()
+                                }
+                                if (trackList.isEmpty()) {
+                                    showMessage(getString(string.nothing_found), "")
+                                } else {
+                                    showMessage("", "")
+                                }
+                            } else {
+                                showMessage(getString(string.something_went_wrong), response.code().toString())
+                            }
+                        }
+                        override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
+                            showMessage(getString(string.something_went_wrong), t.message.toString())
+                        }
+                    })
+                }
+                true
+            }
+            false
+        }
+      /*  val rvItems: RecyclerView = findViewById(R.id.rvItems)
+        rvItems.apply{
+            adapter = trackAdapter
+            layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
+        }
+        trackAdapter.items = trackList   // ?? переставить на 140 строку */
+    }
+
+    private fun showMessage(text: String, additionalMessage: String) {
+      /*  if (text.isNotEmpty()) {
+            placeholderMessage.visibility = View.VISIBLE
+            movies.clear()
+            adapter.notifyDataSetChanged()
+            placeholderMessage.text = text
+            if (additionalMessage.isNotEmpty()) {
+                Toast.makeText(applicationContext, additionalMessage, Toast.LENGTH_LONG).show()
+            }
+        } else {
+            placeholderMessage.visibility = View.GONE
+        }*/
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {

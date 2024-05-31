@@ -42,7 +42,12 @@ android:padding="@dimen/small_padding"    >
             android:layout_marginHorizontal="@dimen/margin_8"
             android:layout_marginVertical="@dimen/margin_8"
             android:hint="@string/button1_text_search"
-            android:inputType="text"/>
+            android:inputType="text"
+            android:imeOptions="actionDone"
+            android:singleLine="true"/>
+        <!--Сочетание атрибутов android:imeOptions="actionDone” и android:singleLine="true”
+        приведёт к тому, что на клавиатуре в правой нижней её части кнопка переноса строки будет заменена на кнопку Done-->
+
         <ImageView
             android:id="@+id/button_close_clear_cancel"
             android:layout_width="@dimen/margin_16"
@@ -59,9 +64,6 @@ android:padding="@dimen/small_padding"    >
         android:layout_height="match_parent"
         android:orientation="vertical"
        >
-        <!--xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        tools:context=".SearchActivity"-->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvItems"
             android:layout_width="match_parent"
