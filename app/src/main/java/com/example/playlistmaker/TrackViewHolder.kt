@@ -1,5 +1,6 @@
 package com.example.playlistmaker
 
+import android.icu.text.SimpleDateFormat
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -7,6 +8,7 @@ import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import java.util.Locale
 
 class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
     var tvTrackName: TextView = itemView.findViewById(R.id.tvTrackName)
@@ -18,7 +20,12 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
     fun bind(item: Track){
         tvTrackName.text = item.trackName
         tvArtistName.text = item.artistName
-        tvTrackTime.text = item.trackTime
+        tvTrackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis)
+
+            /*songName.text = item.trackName
+       singer.text = item.artistName
+       songTime.text = item.trackTime
+       songTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis) */
 
         // val image = parent.findViewById<ImageView>(R.id.image)
 

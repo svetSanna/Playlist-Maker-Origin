@@ -58,7 +58,6 @@ android:padding="@dimen/small_padding"    >
             android:visibility="gone"/>
     </FrameLayout>/>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
         android:id="@+id/track_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -70,6 +69,12 @@ android:padding="@dimen/small_padding"    >
             android:layout_height="0dp"
             android:layout_weight="1"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-
+        <!-- PlaceHolder для ненайденного трека -->
+        <TextView android:id="@+id/placeholderMessage"
+            android:layout_width="@dimen/margin_300"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:inputType="textMultiLine"
+            style="@style/PlaceHolderMessageText"/>
     </LinearLayout>
 </LinearLayout>

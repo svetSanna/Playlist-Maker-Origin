@@ -82,6 +82,12 @@
         <item name="android:layout_gravity">center_vertical</item>
         <item name="lineHeight">18.75sp</item>
     </style>
+    <style name="PlaceHolderMessageText">
+        <item name="android:textAlignment">center</item>
+        <item name="android:textSize">@dimen/margin_19</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
 </resources>
 
 <!--    <style name="MySwitchStyle" parent = "Widget.AppCompat.CompoundButton.Switch">

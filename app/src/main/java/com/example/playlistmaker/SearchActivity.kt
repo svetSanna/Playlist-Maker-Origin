@@ -9,6 +9,8 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -111,7 +113,7 @@ class SearchActivity : AppCompatActivity() {
             adapter = trackAdapter
             layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
         }
-        trackAdapter.items = trackList   // ?? переставить на 140 строку
+        trackAdapter.items = trackList
 
         //Чтобы обработать нажатие на кнопку Done, к соответствующему экземпляру EditText нужно добавить специального слушателя:
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
@@ -125,7 +127,7 @@ class SearchActivity : AppCompatActivity() {
                                 if (response.body()?.results?.isNotEmpty() == true) {
                                     trackList.addAll(response.body()?.results!!)
                                     trackAdapter.items = trackList
-                                    //trackAdapter.notifyDataSetChanged()
+                                    trackAdapter.notifyDataSetChanged()
                                 }
                                 if (trackList.isEmpty()) {
                                     showMessage(getString(string.nothing_found), "")
@@ -145,26 +147,22 @@ class SearchActivity : AppCompatActivity() {
             }
             false
         }
-      /*  val rvItems: RecyclerView = findViewById(R.id.rvItems)
-        rvItems.apply{
-            adapter = trackAdapter
-            layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
-        }
-        trackAdapter.items = trackList   // ?? переставить на 140 строку */
     }
 
     private fun showMessage(text: String, additionalMessage: String) {
-      /*  if (text.isNotEmpty()) {
-            placeholderMessage.visibility = View.VISIBLE
-            movies.clear()
-            adapter.notifyDataSetChanged()
-            placeholderMessage.text = text
+        val placeholderMessage: TextView = findViewById<TextView>(id.placeholderMessage)
+
+        if (text.isNotEmpty()) {
+           placeholderMessage.visibility = View.VISIBLE
+            trackList.clear()
+            trackAdapter.notifyDataSetChanged()
+            placeholderMessage.setText(text)
             if (additionalMessage.isNotEmpty()) {
                 Toast.makeText(applicationContext, additionalMessage, Toast.LENGTH_LONG).show()
             }
         } else {
             placeholderMessage.visibility = View.GONE
-        }*/
+        }
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
