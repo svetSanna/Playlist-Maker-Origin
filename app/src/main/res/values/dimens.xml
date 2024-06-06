@@ -3,10 +3,12 @@
     <dimen name="small_padding">4dp</dimen>
     <dimen name="medium_padding">8dp</dimen>
     <dimen name="text_size_11">11sp</dimen>
+    <dimen name="text_size_14">14sp</dimen>
     <dimen name="text_size_16">16sp</dimen>
     <dimen name="text_size_22">22sp</dimen>
-    <dimen name="corner_radius_16">16dp</dimen>
     <dimen name="corner_radius_8">8dp</dimen>
+    <dimen name="corner_radius_16">16dp</dimen>
+    <dimen name="corner_radius_54">54dp</dimen>
     <dimen name="margin_1">1dp</dimen>
     <dimen name="margin_4">4dp</dimen>
     <dimen name="margin_6">6dp</dimen>
@@ -25,6 +27,7 @@
     <dimen name="margin_45">45dp</dimen>
     <dimen name="margin_48">48dp</dimen>
     <dimen name="margin_56">56dp</dimen>
+    <dimen name="margin_102">102dp</dimen>
     <dimen name="margin_300">300dp</dimen>
     <dimen name="button_size">24dp</dimen>
     <dimen name="edittext_size">16dp</dimen>

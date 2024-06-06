@@ -22,6 +22,11 @@
 
     <color name="edit_text_track_big">#000000</color>
     <color name="edit_text_track_small">#AEAFB4</color>
+
+    <color name="edit_text_placeholder_message">#1A1B22</color>
+
+    <color name="button_refresh_background">#1A1B22</color>
+    <color name="button_refresh_text">#FFFFFF</color>
 </resources>
 
 <!--     <color name="selector_checked">#3772E7</color>

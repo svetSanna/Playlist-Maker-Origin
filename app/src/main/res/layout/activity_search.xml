@@ -69,12 +69,34 @@ android:padding="@dimen/small_padding"    >
             android:layout_height="0dp"
             android:layout_weight="1"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
         <!-- PlaceHolder для ненайденного трека -->
-        <TextView android:id="@+id/placeholderMessage"
-            android:layout_width="@dimen/margin_300"
-            android:layout_height="wrap_content"
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/placeholderLinearLayout"
+            android:layout_marginTop="@dimen/margin_102"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
             android:layout_gravity="center"
-            android:inputType="textMultiLine"
-            style="@style/PlaceHolderMessageText"/>
+            >
+        <ImageView android:id="@+id/placeholderImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            />
+        <TextView android:id="@+id/placeholderMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:lines="3"
+            style="@style/PlaceHolderMessageText"
+            tools:text="Ошибка какая-то"/>
+            <Button android:id="@+id/buttonRefresh"
+                style="@style/ButtonRefresh"
+                android:layout_marginTop="@dimen/margin_24"
+                android:text="Обновить"
+               />
+            <!-- android:visibility="gone"-->
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -21,12 +21,6 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         tvTrackName.text = item.trackName
         tvArtistName.text = item.artistName
         tvTrackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis)
-
-            /*songName.text = item.trackName
-       singer.text = item.artistName
-       songTime.text = item.trackTime
-       songTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis) */
-
         // val image = parent.findViewById<ImageView>(R.id.image)
 
        Glide.with(itemView)
