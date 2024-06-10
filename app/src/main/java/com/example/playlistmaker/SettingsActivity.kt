@@ -39,21 +39,30 @@ class SettingsActivity: AppCompatActivity() {
             onButtonAllowForward()
         }
 
-           /*  val selectorSwitch = findViewById<SwitchCompat>(R.id.selector_switch)
-        selectorSwitch.setOnCheckedChangeListener{
-            (selectorSwitch.isChecked == true) -> {}
+        val sharedPrefs = getSharedPreferences(PLAYLISTMAKER_PREFERENCES, MODE_PRIVATE)
+
+        val selectorSwitch = findViewById<SwitchCompat>(R.id.selector_switch)
+        selectorSwitch.setOnCheckedChangeListener { _, checked ->
+            (applicationContext as App).switchTheme(checked)
+            sharedPrefs.edit()
+                    .putString(THEME_SWITCH_KEY, checked.toString())
+                    .apply()
+               // Toast.makeText(this, "Сохранили значение ${editText.editableText}", Toast.LENGTH_SHORT)
+               //     .show()
         }
-*/
+        selectorSwitch.isChecked =  (applicationContext as App).darkTheme
     }
 
     override fun onResume() { // в задании этого пока не было, решила попробовать.
         super.onResume()
        // setContentView(R.layout.activity_settings)
-        val selectorSwitch = findViewById<SwitchCompat>(R.id.selector_switch)
-        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+        /* Выставляла переключатель по заданной теме, потом переделала с помощью sharedPrefernces
+            val selectorSwitch = findViewById<SwitchCompat>(R.id.selector_switch)
+
+            when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_YES -> { selectorSwitch.setChecked(true)}
             Configuration.UI_MODE_NIGHT_NO -> {selectorSwitch.setChecked(false)}
-        }
+        } */
     }
 
     fun onButtonShare(){

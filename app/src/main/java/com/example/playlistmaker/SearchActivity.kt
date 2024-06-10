@@ -2,6 +2,7 @@ package com.example.playlistmaker
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -22,7 +23,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
+
 
 class SearchActivity : AppCompatActivity() {
     private var editString: String = ""
@@ -210,6 +211,8 @@ class SearchActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("editString", editString)
+
+        outState.putParcelableArrayList("track_list", trackList as ArrayList<out Parcelable?>?)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -218,6 +221,14 @@ class SearchActivity : AppCompatActivity() {
         editString = savedInstanceState.getString("editString", "")
         val inputEditText = findViewById<EditText>(id.edit_search_window)
         inputEditText.setText(editString)
+
+        trackList = savedInstanceState.getParcelableArrayList("track_list")!!
+        trackAdapter.items = trackList
+        trackAdapter.notifyDataSetChanged()
     }
 
+    override fun onResume() { // решила сделать для сохранения cписка найденных пересен, например, при повороте телефона
+        super.onResume()
+
+    }
 }
