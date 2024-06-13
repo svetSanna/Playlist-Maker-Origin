@@ -47,8 +47,7 @@ class SettingsActivity: AppCompatActivity() {
             sharedPrefs.edit()
                     .putString(THEME_SWITCH_KEY, checked.toString())
                     .apply()
-               // Toast.makeText(this, "Сохранили значение ${editText.editableText}", Toast.LENGTH_SHORT)
-               //     .show()
+               // Toast.makeText(this, "Сохранили значение ${editText.editableText}", Toast.LENGTH_SHORT).show()
         }
         selectorSwitch.isChecked =  (applicationContext as App).darkTheme
     }
