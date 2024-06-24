@@ -7,6 +7,7 @@ import androidx.appcompat.widget.SwitchCompat
 
 const val PLAYLISTMAKER_PREFERENCES = "playlist_preferences" // ключ для SharedPreferences
 const val THEME_SWITCH_KEY = "key_for_selectorSwitch" // ключ для перелючателя темы
+const val SEARCH_HISTORY_KEY = "key_for_search_hystory" // ключ для истории поиска
 
 class App : Application() {
     var darkTheme: Boolean = false

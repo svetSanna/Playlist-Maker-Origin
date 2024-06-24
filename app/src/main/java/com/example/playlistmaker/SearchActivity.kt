@@ -1,6 +1,7 @@
 package com.example.playlistmaker
 
 import android.annotation.SuppressLint
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.Editable
@@ -19,83 +20,88 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R.*
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-var trackListSearchHistory: ArrayList<Track> = arrayListOf(
-    Track( // 1 элемент
-        trackId = 1,
-        trackName = "Smells Like Teen Spirit",
-        artistName = "Nirvana",
-        trackTimeMillis = 3000000,
-        artworkUrl100 = "https://is5-ssl.mzstatic.com/image/thumb/Music115/v4/7b/58/c2/7b58c21a-2b51-2bb2-e59a-9bb9b96ad8c3/00602567924166.rgb.jpg/100x100bb.jpg"
-    ),
-    Track( // 2 элемент
-        trackId = 2,
-        trackName = "Billie Jean",
-        artistName = "Michael Jackson",
-        trackTimeMillis = 261000,
-        artworkUrl100 = "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/3d/9d/38/3d9d3811-71f0-3a0e-1ada-3004e56ff852/827969428726.jpg/100x100bb.jpg"
-    ),
-    Track( // 3 элемент
-        trackId = 3,
-        trackName = "Stayin' Alive",
-        artistName = "Bee Gees",
-        trackTimeMillis = 246000,
-        artworkUrl100 = "https://is4-ssl.mzstatic.com/image/thumb/Music115/v4/1f/80/1f/1f801fc1-8c0f-ea3e-d3e5-387c6619619e/16UMGIM86640.rgb.jpg/100x100bb.jpg"
-    ),
-    Track( // 4 элемент
-        trackId = 4,
-        trackName = "Whole Lotta Love",
-        artistName = "Led Zeppelin",
-        trackTimeMillis = 319800,
-        artworkUrl100 = "https://is2-ssl.mzstatic.com/image/thumb/Music62/v4/7e/17/e3/7e17e33f-2efa-2a36-e916-7f808576cf6b/mzm.fyigqcbs.jpg/100x100bb.jpg"
-    ),
-    Track( // 5 элемент
-        trackId = 5,
-        trackName = "Sweet Child O'Mine",
-        artistName = "Guns N' Roses",
-        trackTimeMillis = 301800,
-        artworkUrl100 = "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/a0/4d/c4/a04dc484-03cc-02aa-fa82-5334fcb4bc16/18UMGIM24878.rgb.jpg/100x100bb.jpg"
-    ),
-    Track( // 6 элемент
-        trackId = 6,
-        trackName = "Smells Like Teen Spirit 2",
-        artistName = "Nirvana",
-        trackTimeMillis = 3000000,
-        artworkUrl100 = "https://is5-ssl.mzstatic.com/image/thumb/Music115/v4/7b/58/c2/7b58c21a-2b51-2bb2-e59a-9bb9b96ad8c3/00602567924166.rgb.jpg/100x100bb.jpg"
-    ),
-    Track( // 7 элемент
-        trackId = 7,
-        trackName = "Billie Jean 2",
-        artistName = "Michael Jackson",
-        trackTimeMillis = 261000,
-        artworkUrl100 = "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/3d/9d/38/3d9d3811-71f0-3a0e-1ada-3004e56ff852/827969428726.jpg/100x100bb.jpg"
-    ),
-    Track( // 8 элемент
-        trackId = 8,
-        trackName = "Stayin' Alive 2",
-        artistName = "Bee Gees",
-        trackTimeMillis = 246000,
-        artworkUrl100 = "https://is4-ssl.mzstatic.com/image/thumb/Music115/v4/1f/80/1f/1f801fc1-8c0f-ea3e-d3e5-387c6619619e/16UMGIM86640.rgb.jpg/100x100bb.jpg"
-    ),
-    Track( // 9 элемент
-        trackId = 9,
-        trackName = "Whole Lotta Love 2",
-        artistName = "Led Zeppelin",
-        trackTimeMillis = 319800,
-        artworkUrl100 = "https://is2-ssl.mzstatic.com/image/thumb/Music62/v4/7e/17/e3/7e17e33f-2efa-2a36-e916-7f808576cf6b/mzm.fyigqcbs.jpg/100x100bb.jpg"
-    ),
-    Track( // 10 элемент
-        trackId = 10,
-        trackName = "Sweet Child O'Mine 2",
-        artistName = "Guns N' Roses",
-        trackTimeMillis = 301800,
-        artworkUrl100 = "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/a0/4d/c4/a04dc484-03cc-02aa-fa82-5334fcb4bc16/18UMGIM24878.rgb.jpg/100x100bb.jpg"
-    ))
+var trackListSearchHistory: ArrayList<Track> = arrayListOf()
+
+/*(Track( // 1 элемент
+    trackId = 1,
+    trackName = "Smells Like Teen Spirit",
+    artistName = "Nirvana",
+    trackTimeMillis = 3000000,
+    artworkUrl100 = "https://is5-ssl.mzstatic.com/image/thumb/Music115/v4/7b/58/c2/7b58c21a-2b51-2bb2-e59a-9bb9b96ad8c3/00602567924166.rgb.jpg/100x100bb.jpg"
+),
+Track( // 2 элемент
+    trackId = 2,
+    trackName = "Billie Jean",
+    artistName = "Michael Jackson",
+    trackTimeMillis = 261000,
+    artworkUrl100 = "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/3d/9d/38/3d9d3811-71f0-3a0e-1ada-3004e56ff852/827969428726.jpg/100x100bb.jpg"
+),
+Track( // 3 элемент
+    trackId = 3,
+    trackName = "Stayin' Alive",
+    artistName = "Bee Gees",
+    trackTimeMillis = 246000,
+    artworkUrl100 = "https://is4-ssl.mzstatic.com/image/thumb/Music115/v4/1f/80/1f/1f801fc1-8c0f-ea3e-d3e5-387c6619619e/16UMGIM86640.rgb.jpg/100x100bb.jpg"
+),
+Track( // 4 элемент
+    trackId = 4,
+    trackName = "Whole Lotta Love",
+    artistName = "Led Zeppelin",
+    trackTimeMillis = 319800,
+    artworkUrl100 = "https://is2-ssl.mzstatic.com/image/thumb/Music62/v4/7e/17/e3/7e17e33f-2efa-2a36-e916-7f808576cf6b/mzm.fyigqcbs.jpg/100x100bb.jpg"
+),
+Track( // 5 элемент
+    trackId = 5,
+    trackName = "Sweet Child O'Mine",
+    artistName = "Guns N' Roses",
+    trackTimeMillis = 301800,
+    artworkUrl100 = "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/a0/4d/c4/a04dc484-03cc-02aa-fa82-5334fcb4bc16/18UMGIM24878.rgb.jpg/100x100bb.jpg"
+),
+Track( // 6 элемент
+    trackId = 6,
+    trackName = "Smells Like Teen Spirit 2",
+    artistName = "Nirvana",
+    trackTimeMillis = 3000000,
+    artworkUrl100 = "https://is5-ssl.mzstatic.com/image/thumb/Music115/v4/7b/58/c2/7b58c21a-2b51-2bb2-e59a-9bb9b96ad8c3/00602567924166.rgb.jpg/100x100bb.jpg"
+),
+Track( // 7 элемент
+    trackId = 7,
+    trackName = "Billie Jean 2",
+    artistName = "Michael Jackson",
+    trackTimeMillis = 261000,
+    artworkUrl100 = "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/3d/9d/38/3d9d3811-71f0-3a0e-1ada-3004e56ff852/827969428726.jpg/100x100bb.jpg"
+),
+Track( // 8 элемент
+    trackId = 8,
+    trackName = "Stayin' Alive 2",
+    artistName = "Bee Gees",
+    trackTimeMillis = 246000,
+    artworkUrl100 = "https://is4-ssl.mzstatic.com/image/thumb/Music115/v4/1f/80/1f/1f801fc1-8c0f-ea3e-d3e5-387c6619619e/16UMGIM86640.rgb.jpg/100x100bb.jpg"
+),
+Track( // 9 элемент
+    trackId = 9,
+    trackName = "Whole Lotta Love 2",
+    artistName = "Led Zeppelin",
+    trackTimeMillis = 319800,
+    artworkUrl100 = "https://is2-ssl.mzstatic.com/image/thumb/Music62/v4/7e/17/e3/7e17e33f-2efa-2a36-e916-7f808576cf6b/mzm.fyigqcbs.jpg/100x100bb.jpg"
+),
+Track( // 10 элемент
+    trackId = 10,
+    trackName = "Sweet Child O'Mine 2",
+    artistName = "Guns N' Roses",
+    trackTimeMillis = 301800,
+    artworkUrl100 = "https://is5-ssl.mzstatic.com/image/thumb/Music125/v4/a0/4d/c4/a04dc484-03cc-02aa-fa82-5334fcb4bc16/18UMGIM24878.rgb.jpg/100x100bb.jpg"
+))*/
+// создаем адаптер для Track для истории поиска
+var trackAdapterSearchHistory = TrackAdapter()
 
 class SearchActivity : AppCompatActivity() {
     private var editString: String = ""
@@ -117,13 +123,34 @@ class SearchActivity : AppCompatActivity() {
 
     // создаем адаптер для Track
     private val trackAdapter = TrackAdapter()
-    // создаем адаптер для Track для истории поиска
-    private val trackAdapterSearchHistory = TrackAdapter()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(layout.activity_search)
+
+        // LinearLayout истории поиска
+        val linearLayoutSearchHistory = findViewById<LinearLayout>(id.searchHistoryLinearLayout)
+
+        // Получаем историю поиска из SharedPreferences, а если
+        // ничего туда не успели сохранить, то список пустой и не отображается
+        val sharedPrefs = getSharedPreferences(PLAYLISTMAKER_PREFERENCES, MODE_PRIVATE)
+        // MODE_PRIVATE - чтобы данные были доступны только нашему приложению
+        val json = sharedPrefs.getString(SEARCH_HISTORY_KEY, "")
+
+        when (json) {
+            "" -> {
+                trackListSearchHistory.clear()
+
+                linearLayoutSearchHistory.visibility = View.GONE
+            }
+
+            else -> {
+                val trackListType = object : TypeToken<ArrayList<Track>>() {}.type
+                trackListSearchHistory = Gson().fromJson(json, trackListType)
+            }
+        }
 
         // кнопка "назад"
         val buttonSearchBack = findViewById<ImageView>(id.button_search_back)
@@ -132,9 +159,6 @@ class SearchActivity : AppCompatActivity() {
         }
 
         val inputEditText = findViewById<EditText>(id.edit_search_window)
-
-        // кнопка "очистить поле ввода"
-        val clearButton = findViewById<ImageView>(id.button_close_clear_cancel)
 
         val rvItems: RecyclerView = findViewById(R.id.rvItems)
         rvItems.apply {
@@ -160,6 +184,8 @@ class SearchActivity : AppCompatActivity() {
             inputEditText.onEditorAction(EditorInfo.IME_ACTION_DONE)
         }
 
+        // кнопка "очистить поле ввода"
+        val clearButton = findViewById<ImageView>(id.button_close_clear_cancel)
         clearButton.setOnClickListener {
             inputEditText.setText("")
             val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
@@ -171,8 +197,8 @@ class SearchActivity : AppCompatActivity() {
             val placeholderLayout: LinearLayout = findViewById(id.placeholderLinearLayout)
             placeholderLayout.visibility = View.GONE
 
-            val linearLayoutSearchHistory = findViewById<LinearLayout>(id.searchHistoryLinearLayout)
-            linearLayoutSearchHistory.visibility = View.VISIBLE
+       //     val linearLayoutSearchHistory = findViewById<LinearLayout>(id.searchHistoryLinearLayout)
+       //     linearLayoutSearchHistory.visibility = View.VISIBLE
         }
 
         val simpleTextWatcher = object : TextWatcher {
@@ -184,8 +210,21 @@ class SearchActivity : AppCompatActivity() {
                 editString = s?.toString() ?: ""
                 clearButton.visibility = clearButtonVisibility(s)
 
-                val linearLayoutSearchHistory = findViewById<LinearLayout>(id.searchHistoryLinearLayout)
-                linearLayoutSearchHistory.visibility = View.GONE
+                val linearLayoutSearchHistory =
+                    findViewById<LinearLayout>(id.searchHistoryLinearLayout)
+                //linearLayoutSearchHistory.visibility = View.GONE
+                linearLayoutSearchHistory.visibility =
+                    if (inputEditText.hasFocus() && (s?.isEmpty()  == true) && !trackListSearchHistory.isEmpty())
+                        View.VISIBLE
+                    else View.GONE
+
+                //(s?.isEmpty()  == true)
+                trackList.clear()
+                trackAdapter.items = trackList
+                trackAdapter.notifyDataSetChanged()
+
+                val placeholderLinearLayout = findViewById<LinearLayout>(id.placeholderLinearLayout)
+                placeholderLinearLayout.visibility = View.GONE
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -242,16 +281,37 @@ class SearchActivity : AppCompatActivity() {
         }
 
         // отображаем LinearLayout истории поиска, если фокус находится в inputEditText и inputEditText пуст
-        val linearLayoutSearchHistory = findViewById<LinearLayout>(id.searchHistoryLinearLayout)
-
         inputEditText.setOnFocusChangeListener { view, hasFocus ->
-            linearLayoutSearchHistory.visibility = if (hasFocus && inputEditText.text.isEmpty())
-                View.VISIBLE
-            else View.GONE
-         //   Log.w("hasFocus", hasFocus.toString())
+            linearLayoutSearchHistory.visibility =
+                if (hasFocus && inputEditText.text.isEmpty() && !trackListSearchHistory.isEmpty())
+                    View.VISIBLE
+                else View.GONE
+            //   Log.w("hasFocus", hasFocus.toString())
         }
 
         inputEditText.requestFocus()
+
+        // кнопка "Очистить историю"
+        val buttonCleanSearchHistory = findViewById<Button>(id.buttonCleanSearchHistory)
+        buttonCleanSearchHistory.setOnClickListener {
+            trackListSearchHistory.clear()
+            trackAdapterSearchHistory.items = trackListSearchHistory
+            trackAdapterSearchHistory.notifyDataSetChanged()
+
+            linearLayoutSearchHistory.visibility = View.GONE
+
+            // Записываем историю поиска в SharedPreferences
+            val sharedPrefs = it.context.getSharedPreferences(
+                PLAYLISTMAKER_PREFERENCES,
+                AppCompatActivity.MODE_PRIVATE
+            )
+
+            val json = Gson().toJson(trackListSearchHistory)
+            sharedPrefs.edit()
+                .putString(SEARCH_HISTORY_KEY, json)
+                .apply()
+            // Toast.makeText(this, "Сохранили значение ${editText.editableText}", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun showMessage(text: String, additionalMessage: String) {
@@ -281,7 +341,6 @@ class SearchActivity : AppCompatActivity() {
             rvItems.visibility = View.VISIBLE
             placeholderLayout.visibility = View.GONE
         }
-
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
@@ -297,6 +356,16 @@ class SearchActivity : AppCompatActivity() {
         outState.putString("editString", editString)
 
         outState.putParcelableArrayList("track_list", trackList as ArrayList<out Parcelable?>?)
+
+        val linearLayoutSearchHistory = findViewById<LinearLayout>(id.searchHistoryLinearLayout)
+        outState.putString(
+            "search_history_visibility",
+            linearLayoutSearchHistory.visibility.toString()
+        )
+        outState.putParcelableArrayList(
+            "track_list_search_history",
+            trackListSearchHistory as ArrayList<out Parcelable?>?
+        )
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -311,6 +380,19 @@ class SearchActivity : AppCompatActivity() {
         trackAdapter.notifyDataSetChanged()
 
         hidePlaceholder()
+
+        trackListSearchHistory =
+            savedInstanceState.getParcelableArrayList("track_list_search_history")!!
+        trackAdapterSearchHistory.items = trackListSearchHistory
+        trackAdapterSearchHistory.notifyDataSetChanged()
+
+        val linearLayoutSearchHistory = findViewById<LinearLayout>(id.searchHistoryLinearLayout)
+        linearLayoutSearchHistory.visibility =
+            when (savedInstanceState.getString("search_history_visibility", "0")) {
+                "4" -> View.INVISIBLE
+                "8" -> View.GONE
+                else -> View.VISIBLE
+            }
     }
 
     private fun hidePlaceholder() {

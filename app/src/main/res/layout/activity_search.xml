@@ -64,8 +64,9 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/track_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
+        <!--android:layout_height="match_parent"-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvItems"
@@ -78,7 +79,7 @@
         <LinearLayout
             android:id="@+id/searchHistoryLinearLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/margin_24"
             android:orientation="vertical"
