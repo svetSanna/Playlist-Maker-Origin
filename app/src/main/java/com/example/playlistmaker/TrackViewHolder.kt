@@ -17,7 +17,10 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val ivImage: ImageView = itemView.findViewById(R.id.image)
 
     // var artworkUrl100: TextView = itemView.findViewById(R.id.artworkUrl100)
-    fun bind(item: Track) {
+    fun bind(
+        item: Track,
+        onItemClickListener: OnItemClickListener?
+    ) {
         tvTrackName.text = item.trackName
         tvArtistName.text = item.artistName
         tvTrackTime.text =
@@ -31,7 +34,13 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .transform(RoundedCorners(R.dimen.corner_radius_2))
             .into(ivImage)
 
-        // artworkUrl100.text = item.artworkUrl100
+        // для истории поиска генерируем слушателя нажатия на элемент
+        itemView.setOnClickListener {
+            onItemClickListener?.onItemClick(item)
+        }
     }
 
+    interface OnItemClickListener {
+        fun onItemClick(item: Track)
+    }
 }

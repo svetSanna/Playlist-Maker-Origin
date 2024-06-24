@@ -66,7 +66,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <!--android:layout_height="match_parent"-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvItems"
@@ -84,6 +83,7 @@
             android:layout_marginTop="@dimen/margin_24"
             android:orientation="vertical"
             android:visibility="visible">
+
             <TextView
                 android:id="@+id/searchHistoryMessage"
                 style="@style/SearchHistoryMessageText"
@@ -93,12 +93,14 @@
                 android:layout_marginBottom="@dimen/margin_20"
                 android:lines="1"
                 android:text="Вы искали" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvSearchHistoryItems"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
             <Button
                 android:id="@+id/buttonCleanSearchHistory"
                 style="@style/ButtonRefresh"
@@ -114,7 +116,6 @@
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/margin_102"
             android:orientation="vertical">
-            <!--android:visibility="gone"-->
 
             <ImageView
                 android:id="@+id/placeholderImage"
