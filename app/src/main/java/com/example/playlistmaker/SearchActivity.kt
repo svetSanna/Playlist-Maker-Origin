@@ -1,10 +1,13 @@
 package com.example.playlistmaker
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -18,19 +21,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R.*
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener {
     private var editString: String = ""
     private var trackList: ArrayList<Track> = arrayListOf()
 
     // базовый URL для Retrofit
-    private val baseUrlStr = "https://itunes.apple.com"  //https://itunes.apple.com/search?entity=song&term="мама"
+    private val baseUrlStr =
+        "https://itunes.apple.com"  //https://itunes.apple.com/search?entity=song&term="мама"
 
     // подключаем библиотеку Retrofit
     private val retrofit = Retrofit.Builder()
@@ -39,15 +44,38 @@ class SearchActivity : AppCompatActivity() {
         .build()
 
     // получаем реализацию нашего com.example.playlistmaker.TrackApi
-    private val trackApiService = retrofit.create(TrackApi::class.java) //val trackApiService = retrofit.create<TrackApi>()
+    private val trackApiService =
+        retrofit.create(TrackApi::class.java) //val trackApiService = retrofit.create<TrackApi>()
 
     // создаем адаптер для Track
     private val trackAdapter = TrackAdapter()
 
+    lateinit var searchHistory: SearchHistory //= SearchHistory(getSharedPreferences(PLAYLISTMAKER_PREFERENCES, MODE_PRIVATE))         // MODE_PRIVATE - чтобы данные были доступны только нашему приложению
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(layout.activity_search)
+
+        searchHistory = SearchHistory(
+            getSharedPreferences(
+                PLAYLISTMAKER_PREFERENCES,
+                MODE_PRIVATE
+            )
+        )         // MODE_PRIVATE - чтобы данные были доступны только нашему приложению
+        searchHistory.trackAdapterSearchHistory.onItemClickListener = this
+
+        trackAdapter.onItemClickListener = this
+
+        // LinearLayout истории поиска
+        val linearLayoutSearchHistory = findViewById<LinearLayout>(id.searchHistoryLinearLayout)
+
+        // Получаем историю поиска из SharedPreferences, а если
+        // ничего туда не успели сохранить, то список пустой и не отображается
+        if (searchHistory.trackListSearchHistory.isEmpty())
+            linearLayoutSearchHistory.visibility = View.GONE
+
 
         // кнопка "назад"
         val buttonSearchBack = findViewById<ImageView>(id.button_search_back)
@@ -57,24 +85,33 @@ class SearchActivity : AppCompatActivity() {
 
         val inputEditText = findViewById<EditText>(id.edit_search_window)
 
-        // кнопка "очистить поле ввода"
-        val clearButton = findViewById<ImageView>(id.button_close_clear_cancel)
-
         val rvItems: RecyclerView = findViewById(R.id.rvItems)
-        rvItems.apply{
+        rvItems.apply {
             adapter = trackAdapter
-            layoutManager = LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
+            layoutManager =
+                LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
         }
         trackAdapter.items = trackList
 
+        // для истории поиска
+        val rvItemsSearchHistory: RecyclerView = findViewById(R.id.rvSearchHistoryItems)
+        rvItemsSearchHistory.apply {
+            adapter = searchHistory.trackAdapterSearchHistory
+            layoutManager =
+                LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
+        }
+        // trackAdapterSearchHistory.items = trackListSearchHistory
+
         // кнопка "Обновить"
         val buttonRefresh = findViewById<Button>(id.buttonRefresh)
-        buttonRefresh.visibility=View.GONE
+        buttonRefresh.visibility = View.GONE
         buttonRefresh.setOnClickListener {
             inputEditText.onEditorAction(EditorInfo.IME_ACTION_DONE)
         }
 
-        clearButton.setOnClickListener{
+        // кнопка "очистить поле ввода"
+        val clearButton = findViewById<ImageView>(id.button_close_clear_cancel)
+        clearButton.setOnClickListener {
             inputEditText.setText("")
             val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             imm?.hideSoftInputFromWindow(inputEditText.getWindowToken(), 0)
@@ -84,22 +121,35 @@ class SearchActivity : AppCompatActivity() {
 
             val placeholderLayout: LinearLayout = findViewById(id.placeholderLinearLayout)
             placeholderLayout.visibility = View.GONE
-        }
 
-        inputEditText.requestFocus()
+        }
 
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            //    TODO("Not yet implemented")
+                //    TODO("Not yet implemented")
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                editString = s?.toString()?:""
+                editString = s?.toString() ?: ""
                 clearButton.visibility = clearButtonVisibility(s)
+
+                val linearLayoutSearchHistory =
+                    findViewById<LinearLayout>(id.searchHistoryLinearLayout)
+                linearLayoutSearchHistory.visibility =
+                    if (inputEditText.hasFocus() && (s?.isEmpty() == true) && !searchHistory.trackListSearchHistory.isEmpty())
+                        View.VISIBLE
+                    else View.GONE
+
+                trackList.clear()
+                trackAdapter.items = trackList
+                trackAdapter.notifyDataSetChanged()
+
+                val placeholderLinearLayout = findViewById<LinearLayout>(id.placeholderLinearLayout)
+                placeholderLinearLayout.visibility = View.GONE
             }
 
             override fun afterTextChanged(s: Editable?) {
-              //  TODO("Not yet implemented")
+                //  TODO("Not yet implemented")
             }
         }
         inputEditText.addTextChangedListener(simpleTextWatcher)
@@ -108,36 +158,68 @@ class SearchActivity : AppCompatActivity() {
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 // Поисковый запрос
-                if(inputEditText.text.isNotEmpty()){
-                    trackApiService.search(inputEditText.text.toString()).enqueue(object: Callback<TrackResponse>{
-                        override fun onResponse(call: Call<TrackResponse>, response: Response<TrackResponse>) {
-                            if (response.code() == 200) {
-                                buttonRefresh.visibility=View.GONE
-                                trackList.clear()
-                                if (response.body()?.results?.isNotEmpty() == true) {
-                                    trackList.addAll(response.body()?.results!!)
-                                    trackAdapter.items = trackList
-                                    trackAdapter.notifyDataSetChanged()
-                                }
-                                if (trackList.isEmpty()) {
-                                    showMessage(getString(string.nothing_found), "")
+                if (inputEditText.text.isNotEmpty()) {
+                    trackApiService.search(inputEditText.text.toString())
+                        .enqueue(object : Callback<TrackResponse> {
+                            override fun onResponse(
+                                call: Call<TrackResponse>,
+                                response: Response<TrackResponse>
+                            ) {
+                                if (response.code() == 200) {
+                                    buttonRefresh.visibility = View.GONE
+                                    trackList.clear()
+                                    if (response.body()?.results?.isNotEmpty() == true) {
+                                        trackList.addAll(response.body()?.results!!)
+                                        trackAdapter.items = trackList
+                                        trackAdapter.notifyDataSetChanged()
+                                    }
+                                    if (trackList.isEmpty()) {
+                                        showMessage(getString(string.nothing_found), "")
+                                    } else {
+                                        showMessage("", "")
+                                    }
                                 } else {
-                                    showMessage("", "")
+                                    buttonRefresh.visibility = View.VISIBLE
+                                    showMessage(
+                                        getString(string.something_went_wrong),
+                                        response.code().toString()
+                                    )
                                 }
-                            } else {
-                                buttonRefresh.visibility=View.VISIBLE
-                                showMessage(getString(string.something_went_wrong), response.code().toString())
                             }
-                        }
-                        override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
-                            buttonRefresh.visibility=View.VISIBLE
-                            showMessage(getString(string.something_went_wrong), t.message.toString())
-                        }
-                    })
+
+                            override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
+                                buttonRefresh.visibility = View.VISIBLE
+                                showMessage(
+                                    getString(string.something_went_wrong),
+                                    t.message.toString()
+                                )
+                            }
+                        })
                 }
                 true
             }
             false
+        }
+
+        // отображаем LinearLayout истории поиска, если фокус находится в inputEditText и inputEditText пуст
+        inputEditText.setOnFocusChangeListener { view, hasFocus ->
+            linearLayoutSearchHistory.visibility =
+                if (hasFocus && inputEditText.text.isEmpty() && !searchHistory.trackListSearchHistory.isEmpty())
+                    View.VISIBLE
+                else View.GONE
+        }
+
+        inputEditText.requestFocus()
+
+        // кнопка "Очистить историю"
+        val buttonCleanSearchHistory = findViewById<Button>(id.buttonCleanSearchHistory)
+        buttonCleanSearchHistory.setOnClickListener {
+
+            searchHistory.clean()
+
+            linearLayoutSearchHistory.visibility = View.GONE
+
+            searchHistory.writeToSharedPreferences()
         }
     }
 
@@ -151,10 +233,11 @@ class SearchActivity : AppCompatActivity() {
             rvItems.visibility = View.GONE
             placeholderLayout.visibility = View.VISIBLE
 
-            when(text){
+            when (text) {
                 getString(string.nothing_found) ->
                     placeholderImage.setImageResource(R.drawable.nothing_found)
-                getString(string.something_went_wrong)->
+
+                getString(string.something_went_wrong) ->
                     placeholderImage.setImageResource(R.drawable.something_went_wrong)
             }
             trackList.clear()
@@ -167,21 +250,31 @@ class SearchActivity : AppCompatActivity() {
             rvItems.visibility = View.VISIBLE
             placeholderLayout.visibility = View.GONE
         }
-
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
-        return if (s.isNullOrEmpty()){
+        return if (s.isNullOrEmpty()) {
             View.GONE
-        } else{
+        } else {
             View.VISIBLE
         }
     }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("editString", editString)
 
         outState.putParcelableArrayList("track_list", trackList as ArrayList<out Parcelable?>?)
+
+        val linearLayoutSearchHistory = findViewById<LinearLayout>(id.searchHistoryLinearLayout)
+        outState.putString(
+            "search_history_visibility",
+            linearLayoutSearchHistory.visibility.toString()
+        )
+        outState.putParcelableArrayList(
+            "track_list_search_history",
+            searchHistory.trackListSearchHistory as ArrayList<out Parcelable?>?
+        )
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -194,9 +287,51 @@ class SearchActivity : AppCompatActivity() {
         trackList = savedInstanceState.getParcelableArrayList("track_list")!!
         trackAdapter.items = trackList
         trackAdapter.notifyDataSetChanged()
+
+        hidePlaceholder()
+
+        searchHistory.trackListSearchHistory =
+            savedInstanceState.getParcelableArrayList("track_list_search_history")!!
+        searchHistory.trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory
+        searchHistory.trackAdapterSearchHistory.notifyDataSetChanged()
+
+        val linearLayoutSearchHistory = findViewById<LinearLayout>(id.searchHistoryLinearLayout)
+        linearLayoutSearchHistory.visibility =
+            when (savedInstanceState.getString("search_history_visibility", "0")) {
+                "4" -> View.INVISIBLE
+                "8" -> View.GONE
+                else -> View.VISIBLE
+            }
     }
 
-    override fun onResume() { // решила сделать для сохранения cписка найденных пересен, например, при повороте телефона
-        super.onResume()
+    private fun hidePlaceholder() {
+        val placeholderLayout: LinearLayout = findViewById(id.placeholderLinearLayout)
+        val rvItems: RecyclerView = findViewById(id.rvItems)
+
+        rvItems.visibility = View.VISIBLE
+        placeholderLayout.visibility = View.GONE
+    }
+
+    override fun onItemClick(item: Track) {
+        var itemSearchHistory =
+            searchHistory.trackListSearchHistory.firstOrNull { it.trackId == item.trackId }
+        if (itemSearchHistory != null)
+            searchHistory.trackListSearchHistory.remove(itemSearchHistory)
+        searchHistory.trackListSearchHistory.add(0, item)
+
+        if (searchHistory.trackListSearchHistory.size > 10)
+            searchHistory.trackListSearchHistory.removeAt(10)//(trackListSearchHistory[10])
+
+        searchHistory.trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory
+        searchHistory.trackAdapterSearchHistory.notifyDataSetChanged()
+
+        searchHistory.addItem(item)
+        searchHistory.writeToSharedPreferences()
+
+        // переход на экран аудиоплейера, передаем выбранный трек
+        val displayIntent = Intent(this, MediaActivity::class.java)
+        displayIntent.putExtra("TRACK", item)
+
+        startActivity(displayIntent)
     }
 }

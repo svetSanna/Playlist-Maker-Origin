@@ -5,13 +5,15 @@ import android.os.Parcelable
 
 
 // Класс для хранения информации об одном треке
-data class Track (
+data class Track(
+    val trackId: Int, // идентификатор трека
     var trackName: String, // Название композиции
     var artistName: String, // Имя исполнителя
     var trackTimeMillis: Long, // Продолжительность трека   // var trackTime: String, // Продолжительность трека
     var artworkUrl100: String // Ссылка на изображение обложки
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readInt(),
         parcel.readString().toString(),
         parcel.readString().toString(),
         parcel.readLong(),

@@ -10,27 +10,37 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import java.util.Locale
 
-class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var tvTrackName: TextView = itemView.findViewById(R.id.tvTrackName)
     var tvArtistName: TextView = itemView.findViewById(R.id.tvArtistName)
     var tvTrackTime: TextView = itemView.findViewById(R.id.tvTrackTime)
     val ivImage: ImageView = itemView.findViewById(R.id.image)
 
-   // var artworkUrl100: TextView = itemView.findViewById(R.id.artworkUrl100)
-    fun bind(item: Track){
+    // var artworkUrl100: TextView = itemView.findViewById(R.id.artworkUrl100)
+    fun bind(
+        item: Track,
+        onItemClickListener: OnItemClickListener?
+    ) {
         tvTrackName.text = item.trackName
         tvArtistName.text = item.artistName
-        tvTrackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis)
+        tvTrackTime.text =
+            SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis)
         // val image = parent.findViewById<ImageView>(R.id.image)
 
-       Glide.with(itemView)
-           .load(item.artworkUrl100)
-           .placeholder(R.drawable.place_holder)
-           .fitCenter()
-           .transform(RoundedCorners(R.dimen.corner_radius_2))
-           .into(ivImage)
+        Glide.with(itemView)
+            .load(item.artworkUrl100)
+            .placeholder(R.drawable.place_holder)
+            .fitCenter()
+            .transform(RoundedCorners(R.dimen.corner_radius_2))
+            .into(ivImage)
 
-       // artworkUrl100.text = item.artworkUrl100
+        // для истории поиска генерируем слушателя нажатия на элемент
+        itemView.setOnClickListener {
+            onItemClickListener?.onItemClick(item)
+        }
     }
 
+    interface OnItemClickListener {
+        fun onItemClick(item: Track)
+    }
 }

@@ -7,5 +7,5 @@ interface TrackApi {
     @GET("/search?entity=song")
     // Аннотация @Query позволяет фильтровать наш запрос со значениями параметра.
     // Внутри неё мы должны указать ключ параметра для фильтрации  (term).
-    fun search(@Query("term") text : String): Call<TrackResponse>
+    fun search(@Query("term") text: String): Call<TrackResponse>
 }
