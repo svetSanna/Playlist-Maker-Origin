@@ -1,6 +1,7 @@
 package com.example.playlistmaker
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Parcelable
@@ -326,5 +327,11 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
 
         searchHistory.addItem(item)
         searchHistory.writeToSharedPreferences()
+
+        // переход на экран аудиоплейера, передаем выбранный трек
+        val displayIntent = Intent(this, MediaActivity::class.java)
+        displayIntent.putExtra("TRACK", item)
+
+        startActivity(displayIntent)
     }
 }
