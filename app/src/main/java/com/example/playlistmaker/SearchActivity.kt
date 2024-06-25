@@ -330,7 +330,7 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
 
         // переход на экран аудиоплейера, передаем выбранный трек
         val displayIntent = Intent(this, MediaActivity::class.java)
-        displayIntent.putExtra("TRACK", item)
+      //  displayIntent.putExtra("TRACK", item)
 
         startActivity(displayIntent)
     }

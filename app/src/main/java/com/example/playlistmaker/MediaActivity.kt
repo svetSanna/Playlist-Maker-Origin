@@ -16,12 +16,12 @@ class MediaActivity : AppCompatActivity() {
         setContentView(R.layout.activity_media)
 
         // кнопка "Назад"
-        val buttonSearchBack = findViewById<ImageView>(id.button_search_back_media)
+      /*  val buttonSearchBack = findViewById<ImageView>(id.button_search_back_media)
         buttonSearchBack.setOnClickListener{
             onBackPressed()
         }
-
-        var item : Track? = getIntent().getParcelableExtra("TRACK")
+*/
+       // var item : Track? = getIntent().getParcelableExtra("TRACK")
 
 
 
