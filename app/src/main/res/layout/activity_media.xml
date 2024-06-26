@@ -5,13 +5,57 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MediaActivity">
-   <!-- <ImageView
-        android:id="@+id/button_search_back_media"
-        style="@style/ImageViewLayoutSettingsWindow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/arrow_back"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
--->
+  <androidx.appcompat.widget.Toolbar
+       android:id="@+id/toolbar"
+       app:navigationIcon="@drawable/arrow_back"
+       android:layout_width="wrap_content"
+       android:layout_height="@dimen/margin_56"
+       app:layout_constraintStart_toStartOf="parent"
+       app:layout_constraintTop_toTopOf="parent"/>
+  <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/left_line12"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      app:layout_constraintGuide_percent="0.033" />
+  <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/right_line12"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      app:layout_constraintGuide_percent="0.967" />
+  <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/left_line24"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      app:layout_constraintGuide_percent="0.066" />
+  <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/right_line24"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      app:layout_constraintGuide_percent="0.934" />
+  <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/bottom_line22"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      app:layout_constraintGuide_percent="0.78" />
+<!-- обложка трека -->
+  <ImageView
+      android:id="@+id/track_image"
+      android:layout_width="0dp"
+      android:layout_height="0dp"
+      android:layout_marginTop="@dimen/margin_26"
+      android:contentDescription="@string/track_image_description"
+      android:scaleType="centerCrop"
+      app:layout_constraintDimensionRatio="1:1"
+      app:layout_constraintEnd_toStartOf="@+id/right_line24"
+      app:layout_constraintStart_toStartOf="@+id/left_line24"
+      app:layout_constraintTop_toBottomOf="@+id/toolbar"
+      app:srcCompat="@drawable/album" />
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

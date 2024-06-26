@@ -2,12 +2,10 @@ package com.example.playlistmaker
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -20,9 +18,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.R.*
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.example.playlistmaker.R.id
+import com.example.playlistmaker.R.layout
+import com.example.playlistmaker.R.string
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -330,7 +328,7 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
 
         // переход на экран аудиоплейера, передаем выбранный трек
         val displayIntent = Intent(this, MediaActivity::class.java)
-      //  displayIntent.putExtra("TRACK", item)
+        displayIntent.putExtra(TRACK, item)
 
         startActivity(displayIntent)
     }

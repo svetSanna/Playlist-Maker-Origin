@@ -4,7 +4,6 @@ import android.icu.text.SimpleDateFormat
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -15,6 +14,11 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     var tvArtistName: TextView = itemView.findViewById(R.id.tvArtistName)
     var tvTrackTime: TextView = itemView.findViewById(R.id.tvTrackTime)
     val ivImage: ImageView = itemView.findViewById(R.id.image)
+        /* var tvCollectionName: TextView = itemView.findViewById(R.id
+    var tvReleaseDate: TextView = itemView.findViewById(R.id
+    var tvPrimaryGenreName: TextView = itemView.findViewById(R.id
+    var tvCountry: TextView = itemView.findViewById(R.id
+*/
 
     // var artworkUrl100: TextView = itemView.findViewById(R.id.artworkUrl100)
     fun bind(
@@ -33,6 +37,12 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .fitCenter()
             .transform(RoundedCorners(R.dimen.corner_radius_2))
             .into(ivImage)
+
+        /*tvCollectionName.text = item.collectionName
+        tvReleaseDate.text = item.releaseDate
+        tvPrimaryGenreName.text = item.primaryGenreName
+        tvCountry.text = item.country
+*/
 
         // для истории поиска генерируем слушателя нажатия на элемент
         itemView.setOnClickListener {

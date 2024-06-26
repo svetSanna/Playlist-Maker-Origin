@@ -1,12 +1,9 @@
 package com.example.playlistmaker
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageView
-import androidx.activity.OnBackPressedCallback
-import com.example.playlistmaker.R.*
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 
 class MediaActivity : AppCompatActivity() {
 
@@ -15,13 +12,17 @@ class MediaActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_media)
 
+        val buttonBackMedia = findViewById<Toolbar>(R.id.toolbar)
+        buttonBackMedia.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
         // кнопка "Назад"
       /*  val buttonSearchBack = findViewById<ImageView>(id.button_search_back_media)
         buttonSearchBack.setOnClickListener{
             onBackPressed()
         }
 */
-       // var item : Track? = getIntent().getParcelableExtra("TRACK")
+       var item : Track? = getIntent().getParcelableExtra(TRACK)
 
 
 
