@@ -1,16 +1,14 @@
 package com.example.playlistmaker
 
 import android.app.Application
-import android.content.SharedPreferences
 import android.content.res.Configuration
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-
-import androidx.appcompat.widget.SwitchCompat
 
 const val PLAYLISTMAKER_PREFERENCES = "playlist_preferences" // ключ для SharedPreferences
 const val THEME_SWITCH_KEY = "key_for_selectorSwitch" // ключ для перелючателя темы
 const val SEARCH_HISTORY_KEY = "key_for_search_hystory" // ключ для истории поиска
+
+const val TRACK = "TRACK" // ключ для сериализации трека при передаче из SearchActivity в MediaActivity
 
 class App : Application() {
     var darkTheme: Boolean = false
