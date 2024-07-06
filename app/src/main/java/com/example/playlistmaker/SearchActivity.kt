@@ -3,6 +3,8 @@ package com.example.playlistmaker
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
@@ -49,6 +51,15 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
     private val trackAdapter = TrackAdapter()
 
     lateinit var searchHistory: SearchHistory //= SearchHistory(getSharedPreferences(PLAYLISTMAKER_PREFERENCES, MODE_PRIVATE))         // MODE_PRIVATE - чтобы данные были доступны только нашему приложению
+
+    // для поиска при задержке ввода на 2 секунды
+    companion object{
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+    }
+    // Создаём Handler, привязанный к ГЛАВНОМУ потоку
+    private val searchRunnable = Runnable { SearchRequest() }
+
+    private var mainHandler: Handler? = null
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -122,6 +133,8 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
 
         }
 
+        mainHandler = Handler(Looper.getMainLooper())
+
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 //    TODO("Not yet implemented")
@@ -144,6 +157,12 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
 
                 val placeholderLinearLayout = findViewById<LinearLayout>(id.placeholderLinearLayout)
                 placeholderLinearLayout.visibility = View.GONE
+
+                SearchDebounce()
+              /*  private fun SearchDebounce(){
+                    mainHandler?.removeCallbacks(searchRunnable)
+                    mainHandler?.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+                }*/
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -153,7 +172,7 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         inputEditText.addTextChangedListener(simpleTextWatcher)
 
         //Чтобы обработать нажатие на кнопку Done, к соответствующему экземпляру EditText нужно добавить специального слушателя:
-        inputEditText.setOnEditorActionListener { _, actionId, _ ->
+    /*    inputEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 // Поисковый запрос
                 if (inputEditText.text.isNotEmpty()) {
@@ -197,7 +216,7 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
                 true
             }
             false
-        }
+        }*/
 
         // отображаем LinearLayout истории поиска, если фокус находится в inputEditText и inputEditText пуст
         inputEditText.setOnFocusChangeListener { view, hasFocus ->
@@ -331,5 +350,54 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         displayIntent.putExtra(TRACK, item)
 
         startActivity(displayIntent)
+    }
+    // для поиска при задержке ввода на 2 секунды
+    private fun SearchDebounce(){
+        mainHandler?.removeCallbacks(searchRunnable)
+        mainHandler?.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+    private fun SearchRequest() {
+        // Поисковый запрос
+        val inputEditText = findViewById<EditText>(id.edit_search_window)
+        val buttonRefresh = findViewById<Button>(id.buttonRefresh)
+
+        if (inputEditText.text.isNotEmpty()) {
+            trackApiService.search(inputEditText.text.toString())
+                .enqueue(object : Callback<TrackResponse> {
+                    override fun onResponse(
+                        call: Call<TrackResponse>,
+                        response: Response<TrackResponse>
+                    ) {
+                        if (response.code() == 200) {
+                            buttonRefresh.visibility = View.GONE
+                            trackList.clear()
+                            if (response.body()?.results?.isNotEmpty() == true) {
+                                trackList.addAll(response.body()?.results!!)
+                                trackAdapter.items = trackList
+                                trackAdapter.notifyDataSetChanged()
+                            }
+                            if (trackList.isEmpty()) {
+                                showMessage(getString(string.nothing_found), "")
+                            } else {
+                                showMessage("", "")
+                            }
+                        } else {
+                            buttonRefresh.visibility = View.VISIBLE
+                            showMessage(
+                                getString(string.something_went_wrong),
+                                response.code().toString()
+                            )
+                        }
+                    }
+
+                    override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
+                        buttonRefresh.visibility = View.VISIBLE
+                        showMessage(
+                            getString(string.something_went_wrong),
+                            t.message.toString()
+                        )
+                    }
+                })
+        }
     }
 }
