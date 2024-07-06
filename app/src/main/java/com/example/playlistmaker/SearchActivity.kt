@@ -15,6 +15,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -360,6 +361,9 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         // Поисковый запрос
         val inputEditText = findViewById<EditText>(id.edit_search_window)
         val buttonRefresh = findViewById<Button>(id.buttonRefresh)
+        var progressBar = findViewById<ProgressBar>(id.progressBar)
+
+        progressBar.visibility = View.VISIBLE // Показываем ProgressBar перед выполнением запроса
 
         if (inputEditText.text.isNotEmpty()) {
             trackApiService.search(inputEditText.text.toString())
@@ -368,6 +372,8 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
                         call: Call<TrackResponse>,
                         response: Response<TrackResponse>
                     ) {
+                        progressBar.visibility = View.GONE // Прячем ProgressBar после успешного выполнения запроса
+
                         if (response.code() == 200) {
                             buttonRefresh.visibility = View.GONE
                             trackList.clear()
@@ -391,13 +397,15 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
                     }
 
                     override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
+                        progressBar.visibility = View.GONE // Прячем ProgressBar после выполнения запроса с ошибкой
                         buttonRefresh.visibility = View.VISIBLE
                         showMessage(
                             getString(string.something_went_wrong),
                             t.message.toString()
                         )
                     }
-                })
+                }
+                )
         }
     }
 }
