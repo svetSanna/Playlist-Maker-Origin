@@ -4,7 +4,6 @@ import android.icu.text.SimpleDateFormat
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.view.menu.MenuView.ItemView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -31,7 +30,7 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .load(item.artworkUrl100)
             .placeholder(R.drawable.place_holder)
             .fitCenter()
-            .transform(RoundedCorners(R.dimen.corner_radius_2))
+            .transform(RoundedCorners(2))//(R.dimen.corner_radius_2))
             .into(ivImage)
 
         // для истории поиска генерируем слушателя нажатия на элемент

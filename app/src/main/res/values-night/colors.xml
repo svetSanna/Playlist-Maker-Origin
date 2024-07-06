@@ -25,6 +25,11 @@
 
     <color name="button_refresh_background">#FFFFFF</color>
     <color name="button_refresh_text">#1A1B22</color>
+
+    <color name="time">#FFFFFF</color>
+
+    <color name="track_attribute_text">#AEAFB4</color>
+    <color name="track_attribute_data">#FFFFFF</color>
 </resources>
 <!-- <color name="selector_checked">#3772E7</color>
     <color name="selector_nonchecked">#AEAFB4</color> -->
