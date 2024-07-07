@@ -53,14 +53,16 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
 
     lateinit var searchHistory: SearchHistory //= SearchHistory(getSharedPreferences(PLAYLISTMAKER_PREFERENCES, MODE_PRIVATE))         // MODE_PRIVATE - чтобы данные были доступны только нашему приложению
 
-    // для поиска при задержке ввода на 2 секунды
     companion object{
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L     // для поиска при задержке ввода на 2 секунды
+        private const val CLICK_DEBOUNCE_DELAY = 1000L      // для предотвращения нажатия два раза подряд на элемент списка
     }
     // Создаём Handler, привязанный к ГЛАВНОМУ потоку
     private val searchRunnable = Runnable { SearchRequest() }
 
     private var mainHandler: Handler? = null
+
+    private var isClickAllowed = true
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -331,34 +333,37 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
     }
 
     override fun onItemClick(item: Track) {
-        var itemSearchHistory =
-            searchHistory.trackListSearchHistory.firstOrNull { it.trackId == item.trackId }
-        if (itemSearchHistory != null)
-            searchHistory.trackListSearchHistory.remove(itemSearchHistory)
-        searchHistory.trackListSearchHistory.add(0, item)
+        if (clickDebounce()) { // если между нажатиями на элемент прошло не меньше 1 секунды
+            var itemSearchHistory =
+                searchHistory.trackListSearchHistory.firstOrNull { it.trackId == item.trackId }
+            if (itemSearchHistory != null)
+                searchHistory.trackListSearchHistory.remove(itemSearchHistory)
+            searchHistory.trackListSearchHistory.add(0, item)
 
-        if (searchHistory.trackListSearchHistory.size > 10)
-            searchHistory.trackListSearchHistory.removeAt(10)//(trackListSearchHistory[10])
+            if (searchHistory.trackListSearchHistory.size > 10)
+                searchHistory.trackListSearchHistory.removeAt(10)//(trackListSearchHistory[10])
 
-        searchHistory.trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory
-        searchHistory.trackAdapterSearchHistory.notifyDataSetChanged()
+            searchHistory.trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory
+            searchHistory.trackAdapterSearchHistory.notifyDataSetChanged()
 
-        searchHistory.addItem(item)
-        searchHistory.writeToSharedPreferences()
+            searchHistory.addItem(item)
+            searchHistory.writeToSharedPreferences()
 
-        // переход на экран аудиоплейера, передаем выбранный трек
-        val displayIntent = Intent(this, MediaActivity::class.java)
-        displayIntent.putExtra(TRACK, item)
+            // переход на экран аудиоплейера, передаем выбранный трек
+            val displayIntent = Intent(this, MediaActivity::class.java)
+            displayIntent.putExtra(TRACK, item)
 
-        startActivity(displayIntent)
+            startActivity(displayIntent)
+        }
     }
+
     // для поиска при задержке ввода на 2 секунды
     private fun SearchDebounce(){
         mainHandler?.removeCallbacks(searchRunnable)
         mainHandler?.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
+    // Поисковый запрос
     private fun SearchRequest() {
-        // Поисковый запрос
         val inputEditText = findViewById<EditText>(id.edit_search_window)
         val buttonRefresh = findViewById<Button>(id.buttonRefresh)
         var progressBar = findViewById<ProgressBar>(id.progressBar)
@@ -407,5 +412,14 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
                 }
                 )
         }
+    }
+    // Предотвращение двойного нажатия на элемент списка
+    private fun clickDebounce() : Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            mainHandler?.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
     }
 }
