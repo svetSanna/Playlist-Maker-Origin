@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.icu.text.SimpleDateFormat
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -21,11 +23,14 @@ class MediaActivity : AppCompatActivity() {
         private const val STATE_PREPARED = 1 // подготовлен
         private const val STATE_PLAYING = 2 // воспроизводится
         private const val STATE_PAUSED = 3 // пауза
+        private const val TIME_DEBOUNCE = 400L // время, через которое будет обновляться поле, показывающее, сколько времени от начала отрывка проиграно в формате
     }
 
     private var playerState = STATE_DEFAULT // cостояние плейера
 
     private var url: String? = ""
+
+    private val handlerMain = Handler(Looper.getMainLooper())
 
     @SuppressLint("MissingInflatedId", "WrongViewCast")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,8 +45,6 @@ class MediaActivity : AppCompatActivity() {
 
         // кнопка "Play"/"Pause"
         val buttonPlayPause = findViewById<ImageView>(R.id.button_media_play_pause)
-
-       // buttonPlayPause.setImageResource(R.drawable.button_media_play)
 
         // получаем данные трека из Intent
         var item: Track? = getIntent().getParcelableExtra(TRACK)
@@ -85,21 +88,37 @@ class MediaActivity : AppCompatActivity() {
         }
     }
 
+    private val timeTrackRunnable = object: Runnable {
+        override fun run() {
+            var timeTrack = findViewById<TextView>(R.id.time)
+            // обновляем время
+            timeTrack.text =
+                SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+            handlerMain?.postDelayed(this, TIME_DEBOUNCE)
+        }
+    }
+
     // подготовка плейера
     private fun preparePlayer() {
         // кнопка "Play"/"Pause"
         val buttonPlayPause = findViewById<ImageView>(R.id.button_media_play_pause)
+        // отображение времени трека
+        var timeTrack = findViewById<TextView>(R.id.time)
 
         mediaPlayer.setDataSource(url) // установить источник
         mediaPlayer.prepareAsync() // подготовка
         mediaPlayer.setOnPreparedListener{
             buttonPlayPause.setImageResource(R.drawable.button_media_play)
             playerState = STATE_PREPARED
+            timeTrack.text = "00:00"
         }
         mediaPlayer.setOnCompletionListener {// отслеживание завершения воспроизведения
             buttonPlayPause.setImageResource(R.drawable.button_media_play)
             playerState = STATE_PREPARED
+            timeTrack.text = "00:00"
+            handlerMain?.removeCallbacks(timeTrackRunnable) // удаляем из очереди все сообщения Runnable, чтобы таймер не обновлялся
         }
+
     }
 
     // запустить плейер
@@ -110,6 +129,8 @@ class MediaActivity : AppCompatActivity() {
         mediaPlayer.start()
         buttonPlayPause.setImageResource(R.drawable.button_media_pause)
         playerState = STATE_PLAYING
+
+        handlerMain?.postDelayed(timeTrackRunnable, TIME_DEBOUNCE)  // ставим в очередь обновление таймера
     }
 
     // поставить плейер на паузу
@@ -120,6 +141,8 @@ class MediaActivity : AppCompatActivity() {
         mediaPlayer.pause()
         buttonPlayPause.setImageResource(R.drawable.button_media_play)
         playerState = STATE_PAUSED
+
+        handlerMain?.removeCallbacks(timeTrackRunnable) // удаляем из очереди все сообщения Runnable, чтобы таймер не обновлялся
     }
 
     // aфункция вызывается при нажатии на кнопку Play/Pause
