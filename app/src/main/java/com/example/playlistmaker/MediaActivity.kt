@@ -2,6 +2,7 @@ package com.example.playlistmaker
 
 import android.annotation.SuppressLint
 import android.icu.text.SimpleDateFormat
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
@@ -13,8 +14,20 @@ import java.util.Locale
 
 class MediaActivity : AppCompatActivity() {
 
+    private var mediaPlayer = MediaPlayer()
 
-    @SuppressLint("MissingInflatedId")
+    companion object {
+        private const val STATE_DEFAULT = 0 // освобожден
+        private const val STATE_PREPARED = 1 // подготовлен
+        private const val STATE_PLAYING = 2 // воспроизводится
+        private const val STATE_PAUSED = 3 // пауза
+    }
+
+    private var playerState = STATE_DEFAULT // cостояние плейера
+
+    private var url: String? = ""
+
+    @SuppressLint("MissingInflatedId", "WrongViewCast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_media)
@@ -25,8 +38,13 @@ class MediaActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
+        // кнопка "Play"/"Pause"
+        val buttonPlayPause = findViewById<ImageView>(R.id.button_media_play_pause)
+
+       // buttonPlayPause.setImageResource(R.drawable.button_media_play)
+
         // получаем данные трека из Intent
-        var item : Track? = getIntent().getParcelableExtra(TRACK)
+        var item: Track? = getIntent().getParcelableExtra(TRACK)
 
         // раскладываем эти данные по соответствующим вьюшкам
         var ivTrackImage: ImageView = findViewById(R.id.track_image)
@@ -38,7 +56,7 @@ class MediaActivity : AppCompatActivity() {
         var tvPrimaryGenreName: TextView = findViewById(R.id.primary_genre_name_data)
         var tvCountry: TextView = findViewById(R.id.country_data)
 
-        if(item != null) {
+        if (item != null) {
             Glide.with(this)
                 .load(item.getCoverArtwork())
                 .placeholder(R.drawable.place_holder)
@@ -48,11 +66,83 @@ class MediaActivity : AppCompatActivity() {
 
             tvTrackName.text = item.trackName
             tvArtistName.text = item.artistName
-            tvTrackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis)
+            tvTrackTime.text =
+                SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis)
             tvCollectionName.text = item.collectionName
-            tvReleaseDate.text = item.releaseDate.substring(0,4)
+            tvReleaseDate.text = item.releaseDate.substring(0, 4)
             tvPrimaryGenreName.text = item.primaryGenreName
             tvCountry.text = item.country
         }
+
+        // ссылка на отрывок
+        url = item?.previewUrl
+
+        // подготавливаем плейер
+        preparePlayer()
+
+        buttonPlayPause.setOnClickListener {
+            playbackControl()
+        }
+    }
+
+    // подготовка плейера
+    private fun preparePlayer() {
+        // кнопка "Play"/"Pause"
+        val buttonPlayPause = findViewById<ImageView>(R.id.button_media_play_pause)
+
+        mediaPlayer.setDataSource(url) // установить источник
+        mediaPlayer.prepareAsync() // подготовка
+        mediaPlayer.setOnPreparedListener{
+            buttonPlayPause.setImageResource(R.drawable.button_media_play)
+            playerState = STATE_PREPARED
+        }
+        mediaPlayer.setOnCompletionListener {// отслеживание завершения воспроизведения
+            buttonPlayPause.setImageResource(R.drawable.button_media_play)
+            playerState = STATE_PREPARED
+        }
+    }
+
+    // запустить плейер
+    private fun startPlayer(){
+        // кнопка "Play"/"Pause"
+        val buttonPlayPause = findViewById<ImageView>(R.id.button_media_play_pause)
+
+        mediaPlayer.start()
+        buttonPlayPause.setImageResource(R.drawable.button_media_pause)
+        playerState = STATE_PLAYING
+    }
+
+    // поставить плейер на паузу
+    private fun pausePlayer(){
+        // кнопка "Play"/"Pause"
+        val buttonPlayPause = findViewById<ImageView>(R.id.button_media_play_pause)
+
+        mediaPlayer.pause()
+        buttonPlayPause.setImageResource(R.drawable.button_media_play)
+        playerState = STATE_PAUSED
+    }
+
+    // aфункция вызывается при нажатии на кнопку Play/Pause
+    private fun playbackControl(){
+        when(playerState){
+            STATE_PLAYING -> {
+                pausePlayer()
+            }
+            STATE_PREPARED, STATE_PAUSED -> {
+                startPlayer()
+            }
+        }
+    }
+
+    // Активити на паузу
+    override fun onPause(){
+        super.onPause()
+        pausePlayer()
+    }
+
+    // Активити закрывается
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.release()
     }
 }
