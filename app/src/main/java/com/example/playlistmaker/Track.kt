@@ -16,13 +16,15 @@ data class Track(
     var collectionName: String, // Название альбома (если его нет, то эту информацию на экране не показываем)
     var releaseDate: String = "", // Год релиза трека
     var primaryGenreName: String = "", // Жанр трека
-    var country: String = "" // Страна исполнителя
+    var country: String = "", // Страна исполнителя
+    var previewUrl: String = "" //  Ссылка на отрывок трека в формате String
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
         parcel.readString().toString(),
         parcel.readString().toString(),
         parcel.readLong(),
+        parcel.readString().toString(),
         parcel.readString().toString(),
         parcel.readString().toString(),
         parcel.readString().toString(),

@@ -59,8 +59,14 @@
             android:src="@drawable/ic_close_clear_cancel"
             android:visibility="gone" />
     </FrameLayout>
+    <ProgressBar android:id="@+id/progressBar"
+        android:layout_width="@dimen/margin_44"
+        android:layout_height="@dimen/margin_44"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/margin_140"
+        android:indeterminateTint="@color/progressbar"
+        android:visibility="gone"/>
     />
-
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/track_list"
         android:layout_width="match_parent"

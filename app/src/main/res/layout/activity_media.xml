@@ -95,7 +95,7 @@
       app:layout_constraintStart_toEndOf="@id/left_line24"
       app:layout_constraintEnd_toStartOf="@id/right_line24"
       app:layout_constraintTop_toBottomOf="@id/track_name_data"
-      app:layout_constraintBottom_toTopOf="@id/button_media_play"
+      app:layout_constraintBottom_toTopOf="@id/button_media_play_pause"
       android:layout_marginTop="@dimen/margin_12"
       android:ellipsize="end"
       app:layout_constrainedWidth="true"
@@ -111,12 +111,12 @@
       android:layout_height="51dp"
       app:layout_constraintHorizontal_chainStyle="spread"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintEnd_toStartOf="@id/button_media_play"
-      app:layout_constraintTop_toTopOf="@id/button_media_play"
-      app:layout_constraintBottom_toBottomOf="@id/button_media_play"/>
+      app:layout_constraintEnd_toStartOf="@id/button_media_play_pause"
+      app:layout_constraintTop_toTopOf="@id/button_media_play_pause"
+      app:layout_constraintBottom_toBottomOf="@id/button_media_play_pause"/>
 
   <ImageView
-      android:id="@+id/button_media_play"
+      android:id="@+id/button_media_play_pause"
       android:src="@drawable/button_media_play"
       android:layout_width="83dp"
       android:layout_height="83dp"
@@ -132,10 +132,10 @@
       android:src="@drawable/button_media_like"
       android:layout_width="51dp"
       android:layout_height="51dp"
-      app:layout_constraintStart_toEndOf="@+id/button_media_play"
+      app:layout_constraintStart_toEndOf="@+id/button_media_play_pause"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="@id/button_media_play"
-      app:layout_constraintBottom_toBottomOf="@id/button_media_play"/>
+      app:layout_constraintTop_toTopOf="@id/button_media_play_pause"
+      app:layout_constraintBottom_toBottomOf="@id/button_media_play_pause"/>
 
   <!-- Time -->
   <TextView
@@ -147,7 +147,7 @@
       app:layout_constraintStart_toEndOf="@id/left_line12"
       app:layout_constraintEnd_toStartOf="@id/right_line12"
       app:layout_constraintBottom_toTopOf="@id/bottom_line"
-      app:layout_constraintTop_toBottomOf="@id/button_media_play"
+      app:layout_constraintTop_toBottomOf="@id/button_media_play_pause"
       android:layout_marginTop = "@dimen/margin_12"
       android:layout_marginBottom = "@dimen/margin_30"
       />
