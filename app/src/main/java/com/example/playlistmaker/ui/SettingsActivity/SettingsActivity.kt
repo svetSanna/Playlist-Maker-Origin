@@ -1,18 +1,21 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.SettingsActivity
 
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
+import com.example.playlistmaker.App
+import com.example.playlistmaker.R
 import com.example.playlistmaker.R.id.button_settings_allow_forward
 import com.example.playlistmaker.R.id.button_settings_share
 import com.example.playlistmaker.R.id.button_settings_support
+import com.example.playlistmaker.THEME_SWITCH_KEY
+import com.example.playlistmaker.creator.Creator
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,26 +23,34 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_settings)
 
         val buttonSettingsBack = findViewById<ImageView>(R.id.button_settings_back)
+        // вернуться назад
         buttonSettingsBack.setOnClickListener {
             onBackPressed()
         }
 
         val buttonSettingsShare = findViewById<ImageView>(button_settings_share)
+        // поделиться приложением
         buttonSettingsShare.setOnClickListener {
             onButtonShare()
         }
 
         val buttonSettingsSupport = findViewById<ImageView>(button_settings_support)
+        // написать в поддержку
         buttonSettingsSupport.setOnClickListener {
             onButtonSupport()
         }
 
         val buttonSettingsAllowForward = findViewById<ImageView>(button_settings_allow_forward)
+        // пользовательское соглашение
         buttonSettingsAllowForward.setOnClickListener {
             onButtonAllowForward()
         }
 
-        val sharedPrefs = getSharedPreferences(PLAYLISTMAKER_PREFERENCES, MODE_PRIVATE)
+        //val sharedPrefs = getSharedPreferences(PLAYLISTMAKER_PREFERENCES, MODE_PRIVATE)
+        //Creator.initApplication(this.application)
+        Creator.initApplication(this)
+
+        val sharedPrefs = Creator.provideSharedPreferences()
 
         val selectorSwitch = findViewById<SwitchCompat>(R.id.selector_switch)
         selectorSwitch.setOnCheckedChangeListener { _, checked ->
@@ -47,7 +58,6 @@ class SettingsActivity : AppCompatActivity() {
             sharedPrefs.edit()
                 .putString(THEME_SWITCH_KEY, checked.toString())
                 .apply()
-            // Toast.makeText(this, "Сохранили значение ${editText.editableText}", Toast.LENGTH_SHORT).show()
         }
         selectorSwitch.isChecked = (applicationContext as App).darkTheme
     }

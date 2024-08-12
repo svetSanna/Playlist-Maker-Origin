@@ -1,7 +1,7 @@
 package com.example.playlistmaker
 
-import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import com.example.playlistmaker.domain.entity.Track
+import com.example.playlistmaker.ui.SearchActivity.TrackAdapter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 

@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.SearchActivity
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -21,9 +21,17 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.PLAYLISTMAKER_PREFERENCES
+import com.example.playlistmaker.R
 import com.example.playlistmaker.R.id
 import com.example.playlistmaker.R.layout
 import com.example.playlistmaker.R.string
+import com.example.playlistmaker.SearchHistory
+import com.example.playlistmaker.TRACK
+import com.example.playlistmaker.TrackApi
+import com.example.playlistmaker.TrackResponse
+import com.example.playlistmaker.domain.entity.Track
+import com.example.playlistmaker.ui.MediaActivity.MediaActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -53,10 +61,13 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
 
     lateinit var searchHistory: SearchHistory //= SearchHistory(getSharedPreferences(PLAYLISTMAKER_PREFERENCES, MODE_PRIVATE))         // MODE_PRIVATE - чтобы данные были доступны только нашему приложению
 
-    companion object{
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L     // для поиска при задержке ввода на 2 секунды
-        private const val CLICK_DEBOUNCE_DELAY = 1000L      // для предотвращения нажатия два раза подряд на элемент списка
+    companion object {
+        private const val SEARCH_DEBOUNCE_DELAY =
+            2000L     // для поиска при задержке ввода на 2 секунды
+        private const val CLICK_DEBOUNCE_DELAY =
+            1000L      // для предотвращения нажатия два раза подряд на элемент списка
     }
+
     // Создаём Handler, привязанный к ГЛАВНОМУ потоку
     private val searchRunnable = Runnable { SearchRequest() }
 
@@ -133,7 +144,6 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
 
             val placeholderLayout: LinearLayout = findViewById(id.placeholderLinearLayout)
             placeholderLayout.visibility = View.GONE
-
         }
 
         mainHandler = Handler(Looper.getMainLooper())
@@ -162,10 +172,6 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
                 placeholderLinearLayout.visibility = View.GONE
 
                 SearchDebounce()
-              /*  private fun SearchDebounce(){
-                    mainHandler?.removeCallbacks(searchRunnable)
-                    mainHandler?.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
-                }*/
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -173,53 +179,6 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
             }
         }
         inputEditText.addTextChangedListener(simpleTextWatcher)
-
-        //Чтобы обработать нажатие на кнопку Done, к соответствующему экземпляру EditText нужно добавить специального слушателя:
-    /*    inputEditText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                // Поисковый запрос
-                if (inputEditText.text.isNotEmpty()) {
-                    trackApiService.search(inputEditText.text.toString())
-                        .enqueue(object : Callback<TrackResponse> {
-                            override fun onResponse(
-                                call: Call<TrackResponse>,
-                                response: Response<TrackResponse>
-                            ) {
-                                if (response.code() == 200) {
-                                    buttonRefresh.visibility = View.GONE
-                                    trackList.clear()
-                                    if (response.body()?.results?.isNotEmpty() == true) {
-                                        trackList.addAll(response.body()?.results!!)
-                                        trackAdapter.items = trackList
-                                        trackAdapter.notifyDataSetChanged()
-                                    }
-                                    if (trackList.isEmpty()) {
-                                        showMessage(getString(string.nothing_found), "")
-                                    } else {
-                                        showMessage("", "")
-                                    }
-                                } else {
-                                    buttonRefresh.visibility = View.VISIBLE
-                                    showMessage(
-                                        getString(string.something_went_wrong),
-                                        response.code().toString()
-                                    )
-                                }
-                            }
-
-                            override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
-                                buttonRefresh.visibility = View.VISIBLE
-                                showMessage(
-                                    getString(string.something_went_wrong),
-                                    t.message.toString()
-                                )
-                            }
-                        })
-                }
-                true
-            }
-            false
-        }*/
 
         // отображаем LinearLayout истории поиска, если фокус находится в inputEditText и inputEditText пуст
         inputEditText.setOnFocusChangeListener { view, hasFocus ->
@@ -358,10 +317,11 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
     }
 
     // для поиска при задержке ввода на 2 секунды
-    private fun SearchDebounce(){
+    private fun SearchDebounce() {
         mainHandler?.removeCallbacks(searchRunnable)
         mainHandler?.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
+
     // Поисковый запрос
     private fun SearchRequest() {
         val inputEditText = findViewById<EditText>(id.edit_search_window)
@@ -377,7 +337,8 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
                         call: Call<TrackResponse>,
                         response: Response<TrackResponse>
                     ) {
-                        progressBar.visibility = View.GONE // Прячем ProgressBar после успешного выполнения запроса
+                        progressBar.visibility =
+                            View.GONE // Прячем ProgressBar после успешного выполнения запроса
 
                         if (response.code() == 200) {
                             buttonRefresh.visibility = View.GONE
@@ -402,7 +363,8 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
                     }
 
                     override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
-                        progressBar.visibility = View.GONE // Прячем ProgressBar после выполнения запроса с ошибкой
+                        progressBar.visibility =
+                            View.GONE // Прячем ProgressBar после выполнения запроса с ошибкой
                         buttonRefresh.visibility = View.VISIBLE
                         showMessage(
                             getString(string.something_went_wrong),
@@ -413,8 +375,9 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
                 )
         }
     }
+
     // Предотвращение двойного нажатия на элемент списка
-    private fun clickDebounce() : Boolean {
+    private fun clickDebounce(): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false

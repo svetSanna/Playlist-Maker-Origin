@@ -1,13 +1,12 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation.model
 
 import android.os.Parcel
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
-
 // Класс для хранения информации об одном треке
 @Parcelize
-data class Track(
+data class TrackInfo(
     val trackId: Int, // идентификатор трека
     var trackName: String, // Название композиции
     var artistName: String, // Имя исполнителя
@@ -34,5 +33,3 @@ data class Track(
     }
     fun getCoverArtwork() = artworkUrl100.replaceAfterLast('/',"512x512bb.jpg")
 }
-
-

@@ -1,8 +1,7 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.MediaActivity
 
 import android.annotation.SuppressLint
 import android.icu.text.SimpleDateFormat
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -12,11 +11,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.R
+import com.example.playlistmaker.TRACK
+import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.domain.entity.Track
 import java.util.Locale
 
 class MediaActivity : AppCompatActivity() {
 
-    private var mediaPlayer = MediaPlayer()
+    //private var mediaPlayer = MediaPlayer()
+    private var getMediaPlayerUseCase = Creator.provideGetMediaPlayerUseCase()
+    private var mediaPlayer = getMediaPlayerUseCase()
 
     companion object {
         private const val STATE_DEFAULT = 0 // освобожден
@@ -118,7 +123,6 @@ class MediaActivity : AppCompatActivity() {
             timeTrack.text = "00:00"
             handlerMain?.removeCallbacks(timeTrackRunnable) // удаляем из очереди все сообщения Runnable, чтобы таймер не обновлялся
         }
-
     }
 
     // запустить плейер
@@ -145,7 +149,7 @@ class MediaActivity : AppCompatActivity() {
         handlerMain?.removeCallbacks(timeTrackRunnable) // удаляем из очереди все сообщения Runnable, чтобы таймер не обновлялся
     }
 
-    // aфункция вызывается при нажатии на кнопку Play/Pause
+    // функция вызывается при нажатии на кнопку Play/Pause
     private fun playbackControl(){
         when(playerState){
             STATE_PLAYING -> {
