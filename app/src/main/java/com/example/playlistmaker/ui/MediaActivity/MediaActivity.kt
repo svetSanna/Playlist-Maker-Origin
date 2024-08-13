@@ -1,7 +1,6 @@
 package com.example.playlistmaker.ui.MediaActivity
 
 import android.annotation.SuppressLint
-import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -16,7 +15,7 @@ import com.example.playlistmaker.TRACK
 import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.presentation.mapper.SimpleDateFormatMapper
-import java.util.Locale
+
 
 class MediaActivity : AppCompatActivity() {
 
@@ -76,8 +75,8 @@ class MediaActivity : AppCompatActivity() {
 
             tvTrackName.text = item.trackName
             tvArtistName.text = item.artistName
-            tvTrackTime.text =
-                SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis)
+            //tvTrackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis)
+            tvTrackTime.text = SimpleDateFormatMapper.map(item.trackTimeMillis)
             tvCollectionName.text = item.collectionName
             tvReleaseDate.text = item.releaseDate.substring(0, 4)
             tvPrimaryGenreName.text = item.primaryGenreName
