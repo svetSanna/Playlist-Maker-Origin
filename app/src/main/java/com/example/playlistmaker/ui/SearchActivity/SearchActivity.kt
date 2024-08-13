@@ -28,8 +28,8 @@ import com.example.playlistmaker.R.layout
 import com.example.playlistmaker.R.string
 import com.example.playlistmaker.SearchHistory
 import com.example.playlistmaker.TRACK
-import com.example.playlistmaker.TrackApi
-import com.example.playlistmaker.TrackResponse
+import com.example.playlistmaker.data.network.TrackApi
+import com.example.playlistmaker.data.dto.TrackResponse
 import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.ui.MediaActivity.MediaActivity
 import retrofit2.Call
@@ -52,7 +52,7 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    // получаем реализацию нашего com.example.playlistmaker.TrackApi
+    // получаем реализацию нашего com.example.playlistmaker.data.network.TrackApi
     private val trackApiService =
         retrofit.create(TrackApi::class.java) //val trackApiService = retrofit.create<TrackApi>()
 

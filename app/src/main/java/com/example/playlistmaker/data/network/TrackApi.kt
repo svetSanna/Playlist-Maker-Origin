@@ -1,4 +1,5 @@
-package com.example.playlistmaker// интерфейс для работы с API  "iTunes Search API".
+package com.example.playlistmaker.data.network// интерфейс для работы с API  "iTunes Search API".
+import com.example.playlistmaker.data.dto.TrackResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

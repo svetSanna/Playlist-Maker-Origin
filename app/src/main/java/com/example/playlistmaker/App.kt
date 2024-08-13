@@ -27,7 +27,7 @@ class App : Application() {
         // Получаем тему приложения, выбранную пользователем, из SharedPreferences, а если
         // ничего туда не успели сохранить, то применим текущую тему приложения
         var sharedPrefs = getSharedPreferences(PLAYLISTMAKER_PREFERENCES, MODE_PRIVATE)
-        // MODE_PRIVATE - чтобы данные были досутпны только нашему приложению
+        // MODE_PRIVATE - чтобы данные были доступны только нашему приложению
 
         var stringFromSharedPrefs = sharedPrefs.getString(THEME_SWITCH_KEY, "")
         when (stringFromSharedPrefs) {

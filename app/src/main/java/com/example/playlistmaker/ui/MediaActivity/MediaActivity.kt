@@ -15,6 +15,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.TRACK
 import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.domain.entity.Track
+import com.example.playlistmaker.presentation.mapper.SimpleDateFormatMapper
 import java.util.Locale
 
 class MediaActivity : AppCompatActivity() {
@@ -28,7 +29,8 @@ class MediaActivity : AppCompatActivity() {
         private const val STATE_PREPARED = 1 // подготовлен
         private const val STATE_PLAYING = 2 // воспроизводится
         private const val STATE_PAUSED = 3 // пауза
-        private const val TIME_DEBOUNCE = 400L // время, через которое будет обновляться поле, показывающее, сколько времени от начала отрывка проиграно в формате
+        private const val TIME_DEBOUNCE =
+            400L // время, через которое будет обновляться поле, показывающее, сколько времени от начала отрывка проиграно в формате
     }
 
     private var playerState = STATE_DEFAULT // cостояние плейера
@@ -93,12 +95,12 @@ class MediaActivity : AppCompatActivity() {
         }
     }
 
-    private val timeTrackRunnable = object: Runnable {
+    private val timeTrackRunnable = object : Runnable {
         override fun run() {
             var timeTrack = findViewById<TextView>(R.id.time)
             // обновляем время
-            timeTrack.text =
-                SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+            // timeTrack.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+            timeTrack.text = SimpleDateFormatMapper.map(mediaPlayer.currentPosition)
             handlerMain?.postDelayed(this, TIME_DEBOUNCE)
         }
     }
@@ -112,7 +114,7 @@ class MediaActivity : AppCompatActivity() {
 
         mediaPlayer.setDataSource(url) // установить источник
         mediaPlayer.prepareAsync() // подготовка
-        mediaPlayer.setOnPreparedListener{
+        mediaPlayer.setOnPreparedListener {
             buttonPlayPause.setImageResource(R.drawable.button_media_play)
             playerState = STATE_PREPARED
             timeTrack.text = "00:00"
@@ -126,7 +128,7 @@ class MediaActivity : AppCompatActivity() {
     }
 
     // запустить плейер
-    private fun startPlayer(){
+    private fun startPlayer() {
         // кнопка "Play"/"Pause"
         val buttonPlayPause = findViewById<ImageView>(R.id.button_media_play_pause)
 
@@ -134,11 +136,14 @@ class MediaActivity : AppCompatActivity() {
         buttonPlayPause.setImageResource(R.drawable.button_media_pause)
         playerState = STATE_PLAYING
 
-        handlerMain?.postDelayed(timeTrackRunnable, TIME_DEBOUNCE)  // ставим в очередь обновление таймера
+        handlerMain?.postDelayed(
+            timeTrackRunnable,
+            TIME_DEBOUNCE
+        )  // ставим в очередь обновление таймера
     }
 
     // поставить плейер на паузу
-    private fun pausePlayer(){
+    private fun pausePlayer() {
         // кнопка "Play"/"Pause"
         val buttonPlayPause = findViewById<ImageView>(R.id.button_media_play_pause)
 
@@ -150,11 +155,12 @@ class MediaActivity : AppCompatActivity() {
     }
 
     // функция вызывается при нажатии на кнопку Play/Pause
-    private fun playbackControl(){
-        when(playerState){
+    private fun playbackControl() {
+        when (playerState) {
             STATE_PLAYING -> {
                 pausePlayer()
             }
+
             STATE_PREPARED, STATE_PAUSED -> {
                 startPlayer()
             }
@@ -162,7 +168,7 @@ class MediaActivity : AppCompatActivity() {
     }
 
     // Активити на паузу
-    override fun onPause(){
+    override fun onPause() {
         super.onPause()
         pausePlayer()
     }
