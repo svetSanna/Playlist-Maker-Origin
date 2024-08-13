@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
@@ -81,16 +82,21 @@ class MediaActivity : AppCompatActivity() {
             tvReleaseDate.text = item.releaseDate.substring(0, 4)
             tvPrimaryGenreName.text = item.primaryGenreName
             tvCountry.text = item.country
+
+            // ссылка на отрывок
+            url = item?.previewUrl
+
+            // подготавливаем плейер
+            preparePlayer()
+
+            buttonPlayPause.setOnClickListener {
+                playbackControl()
+            }
         }
-
-        // ссылка на отрывок
-        url = item?.previewUrl
-
-        // подготавливаем плейер
-        preparePlayer()
-
-        buttonPlayPause.setOnClickListener {
-            playbackControl()
+        else{
+            Toast.makeText(this,
+                "Пока посмотреть на работу плейера можно, зайдя через экран поиска",
+                Toast.LENGTH_LONG).show()
         }
     }
 
