@@ -21,28 +21,27 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.PLAYLISTMAKER_PREFERENCES
+import com.example.playlistmaker.ui.PLAYLISTMAKER_PREFERENCES
 import com.example.playlistmaker.R
 import com.example.playlistmaker.R.id
 import com.example.playlistmaker.R.layout
 import com.example.playlistmaker.R.string
-import com.example.playlistmaker.SearchHistory
-import com.example.playlistmaker.TRACK
-import com.example.playlistmaker.data.network.TrackApi
-import com.example.playlistmaker.data.dto.TrackResponse
+import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.ui.TRACK
+import com.example.playlistmaker.data.dto.TrackSearchResponse
+import com.example.playlistmaker.domain.consumer.Consumer
+import com.example.playlistmaker.domain.consumer.ConsumerData
 import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.ui.MediaActivity.MediaActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener {
     private var editString: String = ""
     private var trackList: ArrayList<Track> = arrayListOf()
 
-    // базовый URL для Retrofit
+   /* // базовый URL для Retrofit
     private val baseUrlStr =
         "https://itunes.apple.com"  //https://itunes.apple.com/search?entity=song&term="мама"
 
@@ -55,7 +54,7 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
     // получаем реализацию нашего com.example.playlistmaker.data.network.TrackApi
     private val trackApiService =
         retrofit.create(TrackApi::class.java) //val trackApiService = retrofit.create<TrackApi>()
-
+*/
     // создаем адаптер для Track
     private val trackAdapter = TrackAdapter()
 
@@ -74,6 +73,9 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
     private var mainHandler: Handler? = null
 
     private var isClickAllowed = true
+
+    private val getTrackListUseCase = Creator.provideGetTrackListUseCase()
+    private var responseRunnable: Runnable? = null
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -331,11 +333,63 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         progressBar.visibility = View.VISIBLE // Показываем ProgressBar перед выполнением запроса
 
         if (inputEditText.text.isNotEmpty()) {
-            trackApiService.search(inputEditText.text.toString())
-                .enqueue(object : Callback<TrackResponse> {
+            getTrackListUseCase(
+                str = inputEditText.text.toString(),
+                consumer = object : Consumer<List<Track>>{
+                    override fun consume(data: ConsumerData<List<Track>>) {
+                        val currentRunnable = responseRunnable
+                        if (currentRunnable != null) {
+                            mainHandler?.removeCallbacks(currentRunnable)
+                        }
+
+                        val newDetailsRunnable = Runnable {
+                            progressBar.visibility =
+                                View.GONE // Прячем ProgressBar после выполнения запроса
+
+                            when (data) {
+                                is ConsumerData.Data -> {
+                                    buttonRefresh.visibility = View.GONE
+                                    trackList.clear()
+
+                                    trackList.addAll(data.value)
+                                    trackAdapter.items = trackList
+                                    trackAdapter.notifyDataSetChanged()
+
+                                    /*if (response.body()?.results?.isNotEmpty() == true) {
+                                    trackList.addAll(response.body()?.results!!)
+                                    trackAdapter.items = trackList
+                                    trackAdapter.notifyDataSetChanged()
+                                }*/
+                                    if (trackList.isEmpty()) {
+                                        showMessage(getString(string.nothing_found), "")
+                                    } else {
+                                        showMessage("", "")
+                                    }
+                                }
+
+                                is ConsumerData.Error -> {
+                                    //  progressBar.visibility =
+                                    //     View.GONE // Прячем ProgressBar после выполнения запроса с ошибкой
+                                    buttonRefresh.visibility = View.VISIBLE
+                                    showMessage(
+                                        getString(string.something_went_wrong),
+                                        data.message
+                                        //response.code().toString()//t.message.toString()
+                                    )
+                                }
+                            }
+                        }
+                        responseRunnable = newDetailsRunnable
+                        mainHandler?.post(newDetailsRunnable)
+                    }
+                }
+            )
+
+            /*trackApiService.search(inputEditText.text.toString())
+                .enqueue(object : Callback<TrackSearchResponse> {
                     override fun onResponse(
-                        call: Call<TrackResponse>,
-                        response: Response<TrackResponse>
+                        call: Call<TrackSearchResponse>,
+                        response: Response<TrackSearchResponse>
                     ) {
                         progressBar.visibility =
                             View.GONE // Прячем ProgressBar после успешного выполнения запроса
@@ -362,7 +416,52 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
                         }
                     }
 
-                    override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
+                    override fun onFailure(call: Call<TrackSearchResponse>, t: Throwable) {
+                        progressBar.visibility =
+                            View.GONE // Прячем ProgressBar после выполнения запроса с ошибкой
+                        buttonRefresh.visibility = View.VISIBLE
+                        showMessage(
+                            getString(string.something_went_wrong),
+                            t.message.toString()
+                        )
+                    }
+                }
+                )*/
+        }
+
+       /* if (inputEditText.text.isNotEmpty()) {
+            trackApiService.search(inputEditText.text.toString())
+                .enqueue(object : Callback<TrackSearchResponse> {
+                    override fun onResponse(
+                        call: Call<TrackSearchResponse>,
+                        response: Response<TrackSearchResponse>
+                    ) {
+                        progressBar.visibility =
+                            View.GONE // Прячем ProgressBar после успешного выполнения запроса
+
+                        if (response.code() == 200) {
+                            buttonRefresh.visibility = View.GONE
+                            trackList.clear()
+                            if (response.body()?.results?.isNotEmpty() == true) {
+                                trackList.addAll(response.body()?.results!!)
+                                trackAdapter.items = trackList
+                                trackAdapter.notifyDataSetChanged()
+                            }
+                            if (trackList.isEmpty()) {
+                                showMessage(getString(string.nothing_found), "")
+                            } else {
+                                showMessage("", "")
+                            }
+                        } else {
+                            buttonRefresh.visibility = View.VISIBLE
+                            showMessage(
+                                getString(string.something_went_wrong),
+                                response.code().toString()
+                            )
+                        }
+                    }
+
+                    override fun onFailure(call: Call<TrackSearchResponse>, t: Throwable) {
                         progressBar.visibility =
                             View.GONE // Прячем ProgressBar после выполнения запроса с ошибкой
                         buttonRefresh.visibility = View.VISIBLE
@@ -373,7 +472,7 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
                     }
                 }
                 )
-        }
+        }*/
     }
 
     // Предотвращение двойного нажатия на элемент списка
@@ -384,5 +483,14 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
             mainHandler?.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
         }
         return current
+    }
+
+    override fun onDestroy() {
+        val currentRunnable = responseRunnable
+        if (currentRunnable != null) {
+            mainHandler?.removeCallbacks(currentRunnable)
+        }
+
+        super.onDestroy()
     }
 }

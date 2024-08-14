@@ -1,7 +1,7 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.SearchActivity
 
 import com.example.playlistmaker.domain.entity.Track
-import com.example.playlistmaker.ui.SearchActivity.TrackAdapter
+import com.example.playlistmaker.ui.SEARCH_HISTORY_KEY
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 

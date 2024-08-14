@@ -12,7 +12,7 @@ import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.TRACK
+import com.example.playlistmaker.ui.TRACK
 import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.presentation.mapper.SimpleDateFormatMapper
