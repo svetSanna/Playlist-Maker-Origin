@@ -19,7 +19,7 @@ class GetTrackListUseCase (private val repository: TrackRepository) {
                     consumer.consume(ConsumerData.Data(trackResponse.data))
                 }
                 is Resource.Error -> {
-                    consumer.consume(ConsumerData.Error("200"))
+                    consumer.consume(ConsumerData.Error("Ошибка поиска"))
                 }
             }
         }

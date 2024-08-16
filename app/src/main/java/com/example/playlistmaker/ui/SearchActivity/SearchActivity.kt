@@ -75,7 +75,8 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
     private var isClickAllowed = true
 
     private val getTrackListUseCase = Creator.provideGetTrackListUseCase()
-    private var responseRunnable: Runnable? = null
+    private var responseRunnable: Runnable? = null // для того, чтобы обновление UI относительно данных,
+    // которые пришли из другого потока, происходило в главном потоке.
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -132,6 +133,18 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         buttonRefresh.visibility = View.GONE
         buttonRefresh.setOnClickListener {
             inputEditText.onEditorAction(EditorInfo.IME_ACTION_DONE)
+        }
+
+        inputEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                val placeholderLayout: LinearLayout = findViewById(id.placeholderLinearLayout)
+                placeholderLayout.visibility = View.GONE
+                rvItems.visibility = View.GONE
+
+                SearchRequest()
+                true
+            }
+            false
         }
 
         // кнопка "очистить поле ввода"
@@ -330,9 +343,11 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         val buttonRefresh = findViewById<Button>(id.buttonRefresh)
         var progressBar = findViewById<ProgressBar>(id.progressBar)
 
-        progressBar.visibility = View.VISIBLE // Показываем ProgressBar перед выполнением запроса
+        //progressBar.visibility = View.VISIBLE // Показываем ProgressBar перед выполнением запроса
 
         if (inputEditText.text.isNotEmpty()) {
+            progressBar.visibility = View.VISIBLE // Показываем ProgressBar перед выполнением запроса
+
             getTrackListUseCase(
                 str = inputEditText.text.toString(),
                 consumer = object : Consumer<List<Track>>{
@@ -486,6 +501,9 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
     }
 
     override fun onDestroy() {
+        // перед тем как уничтожить нашу activity, мы должны проверить,
+        // если наш consumerRunnable не равен null, то мы можем удалить
+        // его из handler
         val currentRunnable = responseRunnable
         if (currentRunnable != null) {
             mainHandler?.removeCallbacks(currentRunnable)
