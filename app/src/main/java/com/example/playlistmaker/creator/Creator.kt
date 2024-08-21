@@ -43,7 +43,7 @@ object Creator {
         return MediaPlayerRepositoryImpl()
     }
 
-    fun provideGetTrackListUseCase(): GetTrackListUseCase{
+    fun provideGetTrackListUseCase(): GetTrackListUseCase {
         return GetTrackListUseCase(provideTrackRepository())
     }
 

@@ -8,29 +8,39 @@ import com.example.playlistmaker.domain.repository.TrackRepository
 
 // Задача этой реализации — получить список треков, используя сетевой клиент, и вернуть его в виде List<Track>:
 class TrackRepositoryImpl(private val networkClient: NetworkClient) : TrackRepository {
-    override fun searchTrack(str: String) : Resource<List<Track>> { //<List<Track>> {
+    override fun searchTrack(str: String): Resource<List<Track>> { //<List<Track>> {
         val response = networkClient.doRequest(TrackSearchRequest(str))
 
-       if (response is TrackSearchResponse){
-           // данные получаем в формате TrackDto, следовательно надо сформировать данные в формате Track.
-           // В принципе, можно сделать для этого mapper (в вебинаре это CurrencyRateMapper).
-           // В теории было без mapper, так и сделала:
+        if (response is TrackSearchResponse) {
+            // данные получаем в формате TrackDto, следовательно надо сформировать данные в формате Track.
+            // В принципе, можно сделать для этого mapper (в вебинаре это CurrencyRateMapper).
+            // В теории было без mapper, так и сделала:
             val results = response.results.map {
-                Track(it.trackId, it.trackName, it.artistName, it.trackTimeMillis, it.artworkUrl100,
-                    it.collectionName, it.releaseDate, it.primaryGenreName, it.country, it.previewUrl)
+                Track(
+                    it.trackId,
+                    it.trackName,
+                    it.artistName,
+                    it.trackTimeMillis,
+                    it.artworkUrl100,
+                    it.collectionName,
+                    it.releaseDate,
+                    it.primaryGenreName,
+                    it.country,
+                    it.previewUrl
+                )
             }
-           return Resource.Success(results) //results
-        }else{
+            return Resource.Success(results) //results
+        } else {
             return Resource.Error("Произошла сетевая ошибка") //emptyList()
         }
 
-       /*if (response.resultCode == 200) {
-            return (response as TrackSearchResponse).results.map {
-                Track(it.trackId, it.trackName, it.artistName, it.trackTimeMillis, it.artworkUrl100,
-                    it.collectionName, it.releaseDate, it.primaryGenreName, it.country, it.previewUrl)
-            }
-        } else {
-            return emptyList()
-        }*/
+        /*if (response.resultCode == 200) {
+             return (response as TrackSearchResponse).results.map {
+                 Track(it.trackId, it.trackName, it.artistName, it.trackTimeMillis, it.artworkUrl100,
+                     it.collectionName, it.releaseDate, it.primaryGenreName, it.country, it.previewUrl)
+             }
+         } else {
+             return emptyList()
+         }*/
     }
 }

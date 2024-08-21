@@ -6,7 +6,7 @@ import com.example.playlistmaker.domain.repository.MediaPlayerRepository
 class GetMediaPlayerUseCase(
     private val repositoryImpl: MediaPlayerRepository
 ) {
-    operator fun invoke(): MediaPlayer{
+    operator fun invoke(): MediaPlayer {
         return repositoryImpl.getMediaPlayer()
     }
 }

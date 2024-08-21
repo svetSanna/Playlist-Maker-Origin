@@ -37,22 +37,23 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
     private var editString: String = ""
     private var trackList: ArrayList<Track> = arrayListOf()
 
-   /* // базовый URL для Retrofit
-    private val baseUrlStr =
-        "https://itunes.apple.com"  //https://itunes.apple.com/search?entity=song&term="мама"
+    /* // базовый URL для Retrofit
+     private val baseUrlStr =
+         "https://itunes.apple.com"  //https://itunes.apple.com/search?entity=song&term="мама"
 
-    // подключаем библиотеку Retrofit
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(baseUrlStr)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+     // подключаем библиотеку Retrofit
+     private val retrofit = Retrofit.Builder()
+         .baseUrl(baseUrlStr)
+         .addConverterFactory(GsonConverterFactory.create())
+         .build()
 
-    // получаем реализацию нашего com.example.playlistmaker.data.network.TrackApi
-    private val trackApiService =
-        retrofit.create(TrackApi::class.java) //val trackApiService = retrofit.create<TrackApi>()
-*/
+     // получаем реализацию нашего com.example.playlistmaker.data.network.TrackApi
+     private val trackApiService =
+         retrofit.create(TrackApi::class.java) //val trackApiService = retrofit.create<TrackApi>()
+ */
     // создаем адаптер для Track
     private val trackAdapter = TrackAdapter()
+
     // создаем адаптер для Track для истории поиска
     private var trackAdapterSearchHistory = TrackAdapter() //1
 
@@ -73,7 +74,8 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
     private var isClickAllowed = true
 
     private val getTrackListUseCase = Creator.provideGetTrackListUseCase()
-    private var responseRunnable: Runnable? = null // для того, чтобы обновление UI относительно данных,
+    private var responseRunnable: Runnable? =
+        null // для того, чтобы обновление UI относительно данных,
     // которые пришли из другого потока, происходило в главном потоке.
 
     private lateinit var historyInteractor: SearchHistoryInteractor
@@ -84,12 +86,12 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         super.onCreate(savedInstanceState)
         setContentView(layout.activity_search)
 
-       /*searchHistory = SearchHistory(
-            getSharedPreferences(
-                PLAYLISTMAKER_PREFERENCES,
-                MODE_PRIVATE // MODE_PRIVATE - чтобы данные были доступны только нашему приложению
-            )
-        ) */  //n1
+        /*searchHistory = SearchHistory(
+             getSharedPreferences(
+                 PLAYLISTMAKER_PREFERENCES,
+                 MODE_PRIVATE // MODE_PRIVATE - чтобы данные были доступны только нашему приложению
+             )
+         ) */  //n1
 
         /*Creator.initApplication(this)
         val sharedPrefs = Creator.provideSharedPreferences()
@@ -102,7 +104,8 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         //trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory //2 //v1
         historyInteractor = Creator.provideGetSearchHistoryInteractor(sharedPrefs) //V1
         trackAdapterSearchHistory.items = historyInteractor.getTrackListSearchHistory() //2 //v1
-        trackAdapterSearchHistory.onItemClickListener = this // searchHistory.trackAdapterSearchHistory.onItemClickListener = this //2
+        trackAdapterSearchHistory.onItemClickListener =
+            this // searchHistory.trackAdapterSearchHistory.onItemClickListener = this //2
 
         trackAdapter.onItemClickListener = this
 
@@ -111,7 +114,9 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
 
         // Получаем историю поиска из SharedPreferences, а если
         // ничего туда не успели сохранить, то список пустой и не отображается
-        if (historyInteractor.getTrackListSearchHistory().isEmpty())//if (searchHistory.trackListSearchHistory.isEmpty()) //v1
+        if (historyInteractor.getTrackListSearchHistory()
+                .isEmpty()
+        )//if (searchHistory.trackListSearchHistory.isEmpty()) //v1
             linearLayoutSearchHistory.visibility = View.GONE
 
         // кнопка "назад"
@@ -133,7 +138,8 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         // для истории поиска
         val rvItemsSearchHistory: RecyclerView = findViewById(R.id.rvSearchHistoryItems)
         rvItemsSearchHistory.apply {
-            adapter = trackAdapterSearchHistory //adapter = searchHistory.trackAdapterSearchHistory //3
+            adapter =
+                trackAdapterSearchHistory //adapter = searchHistory.trackAdapterSearchHistory //3
             layoutManager =
                 LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
         }
@@ -185,7 +191,9 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
                 val linearLayoutSearchHistory =
                     findViewById<LinearLayout>(id.searchHistoryLinearLayout)
                 linearLayoutSearchHistory.visibility =
-                    if (inputEditText.hasFocus() && (s?.isEmpty() == true) && !historyInteractor.getTrackListSearchHistory().isEmpty()) // if (inputEditText.hasFocus() && (s?.isEmpty() == true) && !searchHistory.trackListSearchHistory.isEmpty()) //v1
+                    if (inputEditText.hasFocus() && (s?.isEmpty() == true) && !historyInteractor.getTrackListSearchHistory()
+                            .isEmpty()
+                    ) // if (inputEditText.hasFocus() && (s?.isEmpty() == true) && !searchHistory.trackListSearchHistory.isEmpty()) //v1
                         View.VISIBLE
                     else View.GONE
 
@@ -208,8 +216,10 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         // отображаем LinearLayout истории поиска, если фокус находится в inputEditText и inputEditText пуст
         inputEditText.setOnFocusChangeListener { view, hasFocus ->
             linearLayoutSearchHistory.visibility =
-                //if (hasFocus && inputEditText.text.isEmpty() && !searchHistory.trackListSearchHistory.isEmpty()) //v1
-                if (hasFocus && inputEditText.text.isEmpty() && !historyInteractor.getTrackListSearchHistory().isEmpty())
+                    //if (hasFocus && inputEditText.text.isEmpty() && !searchHistory.trackListSearchHistory.isEmpty()) //v1
+                if (hasFocus && inputEditText.text.isEmpty() && !historyInteractor.getTrackListSearchHistory()
+                        .isEmpty()
+                )
                     View.VISIBLE
                 else View.GONE
         }
@@ -221,7 +231,8 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         buttonCleanSearchHistory.setOnClickListener {
 
             historyInteractor.searchHistoryClean() //searchHistory.clean() //v1
-            trackAdapterSearchHistory.items = historyInteractor.getTrackListSearchHistory() //searchHistory.trackListSearchHistory //4 //v1
+            trackAdapterSearchHistory.items =
+                historyInteractor.getTrackListSearchHistory() //searchHistory.trackListSearchHistory //4 //v1
             trackAdapterSearchHistory.notifyDataSetChanged()         //4
 
             linearLayoutSearchHistory.visibility = View.GONE
@@ -307,8 +318,10 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         trackAdapterSearchHistory.notifyDataSetChanged() //searchHistory.trackAdapterSearchHistory.notifyDataSetChanged()                        //5 */ //v1
 
         historyInteractor.setTrackListSearchHistory(
-            savedInstanceState.getParcelableArrayList("track_list_search_history")!!)   //v1
-        trackAdapterSearchHistory.items = historyInteractor.getTrackListSearchHistory()//searchHistory.trackListSearchHistory //searchHistory.trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory  //5  //v1
+            savedInstanceState.getParcelableArrayList("track_list_search_history")!!
+        )   //v1
+        trackAdapterSearchHistory.items =
+            historyInteractor.getTrackListSearchHistory()//searchHistory.trackListSearchHistory //searchHistory.trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory  //5  //v1
         trackAdapterSearchHistory.notifyDataSetChanged() //searchHistory.trackAdapterSearchHistory.notifyDataSetChanged()                        //5  //v1
 
 
@@ -331,17 +344,18 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
 
     override fun onItemClick(item: Track) {
         if (clickDebounce()) { // если между нажатиями на элемент прошло не меньше 1 секунды
-/*            var itemSearchHistory =
-                searchHistory.trackListSearchHistory.firstOrNull { it.trackId == item.trackId }
-            if (itemSearchHistory != null)
-                searchHistory.trackListSearchHistory.remove(itemSearchHistory)
-            searchHistory.trackListSearchHistory.add(0, item)
+            /*            var itemSearchHistory =
+                            searchHistory.trackListSearchHistory.firstOrNull { it.trackId == item.trackId }
+                        if (itemSearchHistory != null)
+                            searchHistory.trackListSearchHistory.remove(itemSearchHistory)
+                        searchHistory.trackListSearchHistory.add(0, item)
 
-            if (searchHistory.trackListSearchHistory.size > 10)
-                searchHistory.trackListSearchHistory.removeAt(10)
-*/ //v1
+                        if (searchHistory.trackListSearchHistory.size > 10)
+                            searchHistory.trackListSearchHistory.removeAt(10)
+            */ //v1
             var itemSearchHistory =
-                historyInteractor.getTrackListSearchHistory().firstOrNull { it.trackId == item.trackId } //v1
+                historyInteractor.getTrackListSearchHistory()
+                    .firstOrNull { it.trackId == item.trackId } //v1
             if (itemSearchHistory != null)
                 historyInteractor.getTrackListSearchHistory().remove(itemSearchHistory)  //v1
             historyInteractor.getTrackListSearchHistory().add(0, item)
@@ -385,11 +399,12 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         //progressBar.visibility = View.VISIBLE // Показываем ProgressBar перед выполнением запроса
 
         if (inputEditText.text.isNotEmpty()) {
-            progressBar.visibility = View.VISIBLE // Показываем ProgressBar перед выполнением запроса
+            progressBar.visibility =
+                View.VISIBLE // Показываем ProgressBar перед выполнением запроса
 
             getTrackListUseCase(
                 str = inputEditText.text.toString(),
-                consumer = object : Consumer<List<Track>>{
+                consumer = object : Consumer<List<Track>> {
                     override fun consume(data: ConsumerData<List<Track>>) {
                         val currentRunnable = responseRunnable
                         if (currentRunnable != null) {
@@ -483,50 +498,50 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
                 )*/
         }
 
-       /* if (inputEditText.text.isNotEmpty()) {
-            trackApiService.search(inputEditText.text.toString())
-                .enqueue(object : Callback<TrackSearchResponse> {
-                    override fun onResponse(
-                        call: Call<TrackSearchResponse>,
-                        response: Response<TrackSearchResponse>
-                    ) {
-                        progressBar.visibility =
-                            View.GONE // Прячем ProgressBar после успешного выполнения запроса
+        /* if (inputEditText.text.isNotEmpty()) {
+             trackApiService.search(inputEditText.text.toString())
+                 .enqueue(object : Callback<TrackSearchResponse> {
+                     override fun onResponse(
+                         call: Call<TrackSearchResponse>,
+                         response: Response<TrackSearchResponse>
+                     ) {
+                         progressBar.visibility =
+                             View.GONE // Прячем ProgressBar после успешного выполнения запроса
 
-                        if (response.code() == 200) {
-                            buttonRefresh.visibility = View.GONE
-                            trackList.clear()
-                            if (response.body()?.results?.isNotEmpty() == true) {
-                                trackList.addAll(response.body()?.results!!)
-                                trackAdapter.items = trackList
-                                trackAdapter.notifyDataSetChanged()
-                            }
-                            if (trackList.isEmpty()) {
-                                showMessage(getString(string.nothing_found), "")
-                            } else {
-                                showMessage("", "")
-                            }
-                        } else {
-                            buttonRefresh.visibility = View.VISIBLE
-                            showMessage(
-                                getString(string.something_went_wrong),
-                                response.code().toString()
-                            )
-                        }
-                    }
+                         if (response.code() == 200) {
+                             buttonRefresh.visibility = View.GONE
+                             trackList.clear()
+                             if (response.body()?.results?.isNotEmpty() == true) {
+                                 trackList.addAll(response.body()?.results!!)
+                                 trackAdapter.items = trackList
+                                 trackAdapter.notifyDataSetChanged()
+                             }
+                             if (trackList.isEmpty()) {
+                                 showMessage(getString(string.nothing_found), "")
+                             } else {
+                                 showMessage("", "")
+                             }
+                         } else {
+                             buttonRefresh.visibility = View.VISIBLE
+                             showMessage(
+                                 getString(string.something_went_wrong),
+                                 response.code().toString()
+                             )
+                         }
+                     }
 
-                    override fun onFailure(call: Call<TrackSearchResponse>, t: Throwable) {
-                        progressBar.visibility =
-                            View.GONE // Прячем ProgressBar после выполнения запроса с ошибкой
-                        buttonRefresh.visibility = View.VISIBLE
-                        showMessage(
-                            getString(string.something_went_wrong),
-                            t.message.toString()
-                        )
-                    }
-                }
-                )
-        }*/
+                     override fun onFailure(call: Call<TrackSearchResponse>, t: Throwable) {
+                         progressBar.visibility =
+                             View.GONE // Прячем ProgressBar после выполнения запроса с ошибкой
+                         buttonRefresh.visibility = View.VISIBLE
+                         showMessage(
+                             getString(string.something_went_wrong),
+                             t.message.toString()
+                         )
+                     }
+                 }
+                 )
+         }*/
     }
 
     // Предотвращение двойного нажатия на элемент списка

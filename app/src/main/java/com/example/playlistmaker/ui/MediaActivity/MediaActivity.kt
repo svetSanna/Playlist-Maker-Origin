@@ -92,11 +92,12 @@ class MediaActivity : AppCompatActivity() {
             buttonPlayPause.setOnClickListener {
                 playbackControl()
             }
-        }
-        else{
-            Toast.makeText(this,
+        } else {
+            Toast.makeText(
+                this,
                 "Пока посмотреть на работу плейера можно, зайдя через экран поиска",
-                Toast.LENGTH_LONG).show()
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 

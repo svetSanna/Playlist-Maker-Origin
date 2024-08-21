@@ -24,16 +24,15 @@ class RetrofitNetworkClient : NetworkClient {
         retrofit.create(TrackApi::class.java) //val trackApiService = retrofit.create<TrackApi>()
 
     override fun doRequest(dto: Any): Response {
-        try{
+        try {
             if (dto is TrackSearchRequest) {
                 val resp = trackApiService.search(dto.str).execute()
                 val body = resp.body() ?: Response()
                 return body.apply { resultCode = resp.code() }
-            }
-            else{
+            } else {
                 return Response().apply { resultCode = 400 }
             }
-        } catch (ex: Exception){
+        } catch (ex: Exception) {
             return Response().apply { resultCode = 400 }
         }
         /*if (dto is TrackSearchRequest) {
