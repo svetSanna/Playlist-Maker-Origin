@@ -21,7 +21,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.PLAYLISTMAKER_PREFERENCES
 import com.example.playlistmaker.R
 import com.example.playlistmaker.R.id
 import com.example.playlistmaker.R.layout
@@ -83,12 +82,15 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         super.onCreate(savedInstanceState)
         setContentView(layout.activity_search)
 
-        searchHistory = SearchHistory(
+       /*searchHistory = SearchHistory(
             getSharedPreferences(
                 PLAYLISTMAKER_PREFERENCES,
-                MODE_PRIVATE
+                MODE_PRIVATE // MODE_PRIVATE - чтобы данные были доступны только нашему приложению
             )
-        )         // MODE_PRIVATE - чтобы данные были доступны только нашему приложению
+        ) */  //n1
+        Creator.initApplication(this)
+        val sharedPrefs = Creator.provideSharedPreferences()
+        searchHistory = SearchHistory(sharedPrefs)
 
         trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory //2
         trackAdapterSearchHistory.onItemClickListener = this // searchHistory.trackAdapterSearchHistory.onItemClickListener = this //2
