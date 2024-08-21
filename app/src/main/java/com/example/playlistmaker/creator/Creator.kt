@@ -3,15 +3,18 @@ package com.example.playlistmaker.creator
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
-import com.example.playlistmaker.data.network.RetrofitNetworkClient
 import com.example.playlistmaker.PLAYLISTMAKER_PREFERENCES
+import com.example.playlistmaker.data.network.RetrofitNetworkClient
 import com.example.playlistmaker.data.repository.MediaPlayerRepositoryImpl
 import com.example.playlistmaker.data.repository.NetworkClient
+import com.example.playlistmaker.data.repository.SearchHistoryRepositoryImpl
 import com.example.playlistmaker.data.repository.TrackRepositoryImpl
 import com.example.playlistmaker.domain.repository.MediaPlayerRepository
+import com.example.playlistmaker.domain.repository.SearchHistoryRepository
 import com.example.playlistmaker.domain.repository.TrackRepository
 import com.example.playlistmaker.domain.use_case.GetMediaPlayerUseCase
 import com.example.playlistmaker.domain.use_case.GetTrackListUseCase
+import com.example.playlistmaker.domain.use_case.SearchHistoryInteractor
 
 object Creator {
     // поле, которое отвечает за контекст
@@ -52,7 +55,11 @@ object Creator {
         return RetrofitNetworkClient()
     }
 
-   // fun provideGetTrackInteractor(): TrackInteractor {
-   //     return GetTrackListUseCase(getTrackRepository())
-   // }
+    fun provideGetSearchHistoryInteractor(sharedPrefs: SharedPreferences): SearchHistoryInteractor {
+        return SearchHistoryInteractor(provideSearchHistoryInteractor(sharedPrefs))
+    }
+
+    private fun provideSearchHistoryInteractor(sharedPrefs: SharedPreferences): SearchHistoryRepository {
+        return SearchHistoryRepositoryImpl(sharedPrefs)
+    }
 }

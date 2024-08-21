@@ -27,10 +27,10 @@ import com.example.playlistmaker.R.layout
 import com.example.playlistmaker.R.string
 import com.example.playlistmaker.TRACK
 import com.example.playlistmaker.creator.Creator
-import com.example.playlistmaker.data.history.SearchHistory
 import com.example.playlistmaker.domain.consumer.Consumer
 import com.example.playlistmaker.domain.consumer.ConsumerData
 import com.example.playlistmaker.domain.entity.Track
+import com.example.playlistmaker.domain.use_case.SearchHistoryInteractor
 import com.example.playlistmaker.ui.MediaActivity.MediaActivity
 
 class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener {
@@ -56,7 +56,7 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
     // создаем адаптер для Track для истории поиска
     private var trackAdapterSearchHistory = TrackAdapter() //1
 
-    lateinit var searchHistory: SearchHistory
+    //lateinit var searchHistory: SearchHistory
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY =
@@ -76,6 +76,8 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
     private var responseRunnable: Runnable? = null // для того, чтобы обновление UI относительно данных,
     // которые пришли из другого потока, происходило в главном потоке.
 
+    private lateinit var historyInteractor: SearchHistoryInteractor
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -88,11 +90,18 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
                 MODE_PRIVATE // MODE_PRIVATE - чтобы данные были доступны только нашему приложению
             )
         ) */  //n1
-        Creator.initApplication(this)
-        val sharedPrefs = Creator.provideSharedPreferences()
-        searchHistory = SearchHistory(sharedPrefs)
 
-        trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory //2
+        /*Creator.initApplication(this)
+        val sharedPrefs = Creator.provideSharedPreferences()
+        searchHistory = SearchHistory(sharedPrefs)*/ //v1
+
+        Creator.initApplication(this) //v1
+        val sharedPrefs = Creator.provideSharedPreferences() //v1
+        //searchHistory = Creator.provideGetSearchHistoryInteractor(sharedPrefs) //v1
+
+        //trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory //2 //v1
+        historyInteractor = Creator.provideGetSearchHistoryInteractor(sharedPrefs) //V1
+        trackAdapterSearchHistory.items = historyInteractor.getTrackListSearchHistory() //2 //v1
         trackAdapterSearchHistory.onItemClickListener = this // searchHistory.trackAdapterSearchHistory.onItemClickListener = this //2
 
         trackAdapter.onItemClickListener = this
@@ -102,7 +111,7 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
 
         // Получаем историю поиска из SharedPreferences, а если
         // ничего туда не успели сохранить, то список пустой и не отображается
-        if (searchHistory.trackListSearchHistory.isEmpty())
+        if (historyInteractor.getTrackListSearchHistory().isEmpty())//if (searchHistory.trackListSearchHistory.isEmpty()) //v1
             linearLayoutSearchHistory.visibility = View.GONE
 
         // кнопка "назад"
@@ -176,7 +185,7 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
                 val linearLayoutSearchHistory =
                     findViewById<LinearLayout>(id.searchHistoryLinearLayout)
                 linearLayoutSearchHistory.visibility =
-                    if (inputEditText.hasFocus() && (s?.isEmpty() == true) && !searchHistory.trackListSearchHistory.isEmpty())
+                    if (inputEditText.hasFocus() && (s?.isEmpty() == true) && !historyInteractor.getTrackListSearchHistory().isEmpty()) // if (inputEditText.hasFocus() && (s?.isEmpty() == true) && !searchHistory.trackListSearchHistory.isEmpty()) //v1
                         View.VISIBLE
                     else View.GONE
 
@@ -199,7 +208,8 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         // отображаем LinearLayout истории поиска, если фокус находится в inputEditText и inputEditText пуст
         inputEditText.setOnFocusChangeListener { view, hasFocus ->
             linearLayoutSearchHistory.visibility =
-                if (hasFocus && inputEditText.text.isEmpty() && !searchHistory.trackListSearchHistory.isEmpty())
+                //if (hasFocus && inputEditText.text.isEmpty() && !searchHistory.trackListSearchHistory.isEmpty()) //v1
+                if (hasFocus && inputEditText.text.isEmpty() && !historyInteractor.getTrackListSearchHistory().isEmpty())
                     View.VISIBLE
                 else View.GONE
         }
@@ -210,13 +220,13 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         val buttonCleanSearchHistory = findViewById<Button>(id.buttonCleanSearchHistory)
         buttonCleanSearchHistory.setOnClickListener {
 
-            searchHistory.clean()
-            trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory //4
+            historyInteractor.searchHistoryClean() //searchHistory.clean() //v1
+            trackAdapterSearchHistory.items = historyInteractor.getTrackListSearchHistory() //searchHistory.trackListSearchHistory //4 //v1
             trackAdapterSearchHistory.notifyDataSetChanged()         //4
 
             linearLayoutSearchHistory.visibility = View.GONE
 
-            searchHistory.writeToSharedPreferences()
+            historyInteractor.writeToSharedPreferences() //searchHistory.writeToSharedPreferences() //v1
         }
     }
 
@@ -268,9 +278,13 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
             "search_history_visibility",
             linearLayoutSearchHistory.visibility.toString()
         )
-        outState.putParcelableArrayList(
+        /*outState.putParcelableArrayList(
             "track_list_search_history",
             searchHistory.trackListSearchHistory as ArrayList<out Parcelable?>?
+        )*/ //v1
+        outState.putParcelableArrayList(
+            "track_list_search_history",
+            historyInteractor.getTrackListSearchHistory() as ArrayList<out Parcelable?>?
         )
     }
 
@@ -287,10 +301,16 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
 
         hidePlaceholder()
 
-        searchHistory.trackListSearchHistory =
+        /*searchHistory.trackListSearchHistory =
             savedInstanceState.getParcelableArrayList("track_list_search_history")!!
         trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory //searchHistory.trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory  //5
-        trackAdapterSearchHistory.notifyDataSetChanged() //searchHistory.trackAdapterSearchHistory.notifyDataSetChanged()                        //5
+        trackAdapterSearchHistory.notifyDataSetChanged() //searchHistory.trackAdapterSearchHistory.notifyDataSetChanged()                        //5 */ //v1
+
+        historyInteractor.setTrackListSearchHistory(
+            savedInstanceState.getParcelableArrayList("track_list_search_history")!!)   //v1
+        trackAdapterSearchHistory.items = historyInteractor.getTrackListSearchHistory()//searchHistory.trackListSearchHistory //searchHistory.trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory  //5  //v1
+        trackAdapterSearchHistory.notifyDataSetChanged() //searchHistory.trackAdapterSearchHistory.notifyDataSetChanged()                        //5  //v1
+
 
         val linearLayoutSearchHistory = findViewById<LinearLayout>(id.searchHistoryLinearLayout)
         linearLayoutSearchHistory.visibility =
@@ -311,23 +331,36 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
 
     override fun onItemClick(item: Track) {
         if (clickDebounce()) { // если между нажатиями на элемент прошло не меньше 1 секунды
-            var itemSearchHistory =
+/*            var itemSearchHistory =
                 searchHistory.trackListSearchHistory.firstOrNull { it.trackId == item.trackId }
             if (itemSearchHistory != null)
                 searchHistory.trackListSearchHistory.remove(itemSearchHistory)
             searchHistory.trackListSearchHistory.add(0, item)
 
             if (searchHistory.trackListSearchHistory.size > 10)
-                searchHistory.trackListSearchHistory.removeAt(10)//(trackListSearchHistory[10])
+                searchHistory.trackListSearchHistory.removeAt(10)
+*/ //v1
+            var itemSearchHistory =
+                historyInteractor.getTrackListSearchHistory().firstOrNull { it.trackId == item.trackId } //v1
+            if (itemSearchHistory != null)
+                historyInteractor.getTrackListSearchHistory().remove(itemSearchHistory)  //v1
+            historyInteractor.getTrackListSearchHistory().add(0, item)
 
-            trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory //searchHistory.trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory //6
+            if (historyInteractor.getTrackListSearchHistory().size > 10)
+                historyInteractor.getTrackListSearchHistory().removeAt(10)  //v1
+
+            // trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory //searchHistory.trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory //6 //v1
+            trackAdapterSearchHistory.items = historyInteractor.getTrackListSearchHistory() //v1
             trackAdapterSearchHistory.notifyDataSetChanged() //searchHistory.trackAdapterSearchHistory.notifyDataSetChanged() //6
 
-            searchHistory.addItem(item)
-            trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory //7
+            //searchHistory.addItem(item) //v1
+            historyInteractor.addItem(item) //v1
+            //trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory //7 //v1
+            trackAdapterSearchHistory.items = historyInteractor.getTrackListSearchHistory() //v1
             trackAdapterSearchHistory.notifyDataSetChanged() //7
 
-            searchHistory.writeToSharedPreferences()
+            //searchHistory.writeToSharedPreferences() //v1
+            historyInteractor.writeToSharedPreferences() //v1
 
             // переход на экран аудиоплейера, передаем выбранный трек
             val displayIntent = Intent(this, MediaActivity::class.java)
