@@ -21,6 +21,6 @@ class SearchHistoryInteractor(
         return repositoryImpl.setTrackListSearchHistory(parcelableArrayList)
     }
     fun addItem(item: Track) {
-        return
+        return repositoryImpl.addItem(item)
     }
 }
