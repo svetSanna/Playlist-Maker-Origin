@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.data.network.RetrofitNetworkClient
-import com.example.playlistmaker.ui.PLAYLISTMAKER_PREFERENCES
+import com.example.playlistmaker.PLAYLISTMAKER_PREFERENCES
 import com.example.playlistmaker.data.repository.MediaPlayerRepositoryImpl
 import com.example.playlistmaker.data.repository.NetworkClient
 import com.example.playlistmaker.data.repository.TrackRepositoryImpl

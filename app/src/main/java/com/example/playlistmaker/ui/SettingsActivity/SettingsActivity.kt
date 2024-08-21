@@ -9,12 +9,12 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
-import com.example.playlistmaker.ui.App
+import com.example.playlistmaker.App
 import com.example.playlistmaker.R
 import com.example.playlistmaker.R.id.button_settings_allow_forward
 import com.example.playlistmaker.R.id.button_settings_share
 import com.example.playlistmaker.R.id.button_settings_support
-import com.example.playlistmaker.ui.THEME_SWITCH_KEY
+import com.example.playlistmaker.THEME_SWITCH_KEY
 import com.example.playlistmaker.creator.Creator
 
 class SettingsActivity : AppCompatActivity() {

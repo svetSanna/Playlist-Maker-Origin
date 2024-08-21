@@ -1,7 +1,7 @@
-package com.example.playlistmaker.ui.SearchActivity
+package com.example.playlistmaker.data.history
 
+import com.example.playlistmaker.SEARCH_HISTORY_KEY
 import com.example.playlistmaker.domain.entity.Track
-import com.example.playlistmaker.ui.SEARCH_HISTORY_KEY
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -9,7 +9,7 @@ class SearchHistory (val sharedPrefs: android.content.SharedPreferences){
     var trackListSearchHistory: ArrayList<Track> = arrayListOf()
 
     // создаем адаптер для Track для истории поиска
-    var trackAdapterSearchHistory = TrackAdapter()
+    //var trackAdapterSearchHistory = TrackAdapter() //1
 
      init{
          val json = sharedPrefs.getString(SEARCH_HISTORY_KEY, "")
@@ -23,14 +23,14 @@ class SearchHistory (val sharedPrefs: android.content.SharedPreferences){
                 trackListSearchHistory = Gson().fromJson(json, trackListType)
             }
         }
-        trackAdapterSearchHistory.items = trackListSearchHistory
+        // trackAdapterSearchHistory.items = trackListSearchHistory //2
     }
 
     fun clean()
     {
         trackListSearchHistory.clear()
-        trackAdapterSearchHistory.items = trackListSearchHistory
-        trackAdapterSearchHistory.notifyDataSetChanged()
+        //        trackAdapterSearchHistory.items = trackListSearchHistory //4
+        //        trackAdapterSearchHistory.notifyDataSetChanged() //4
     }
 
     fun writeToSharedPreferences(){
@@ -49,7 +49,7 @@ class SearchHistory (val sharedPrefs: android.content.SharedPreferences){
         if(trackListSearchHistory.size>10)
             trackListSearchHistory.removeAt(10)//(trackListSearchHistory[10])
 
-        trackAdapterSearchHistory.items = trackListSearchHistory
-        trackAdapterSearchHistory.notifyDataSetChanged()
+        //trackAdapterSearchHistory.items = trackListSearchHistory //7
+        //trackAdapterSearchHistory.notifyDataSetChanged() //7
     }
 }

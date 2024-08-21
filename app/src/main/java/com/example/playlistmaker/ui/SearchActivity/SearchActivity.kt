@@ -21,21 +21,18 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.ui.PLAYLISTMAKER_PREFERENCES
+import com.example.playlistmaker.PLAYLISTMAKER_PREFERENCES
 import com.example.playlistmaker.R
 import com.example.playlistmaker.R.id
 import com.example.playlistmaker.R.layout
 import com.example.playlistmaker.R.string
+import com.example.playlistmaker.TRACK
 import com.example.playlistmaker.creator.Creator
-import com.example.playlistmaker.ui.TRACK
-import com.example.playlistmaker.data.dto.TrackSearchResponse
+import com.example.playlistmaker.data.history.SearchHistory
 import com.example.playlistmaker.domain.consumer.Consumer
 import com.example.playlistmaker.domain.consumer.ConsumerData
 import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.ui.MediaActivity.MediaActivity
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener {
     private var editString: String = ""
@@ -57,8 +54,10 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
 */
     // создаем адаптер для Track
     private val trackAdapter = TrackAdapter()
+    // создаем адаптер для Track для истории поиска
+    private var trackAdapterSearchHistory = TrackAdapter() //1
 
-    lateinit var searchHistory: SearchHistory //= SearchHistory(getSharedPreferences(PLAYLISTMAKER_PREFERENCES, MODE_PRIVATE))         // MODE_PRIVATE - чтобы данные были доступны только нашему приложению
+    lateinit var searchHistory: SearchHistory
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY =
@@ -90,7 +89,9 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
                 MODE_PRIVATE
             )
         )         // MODE_PRIVATE - чтобы данные были доступны только нашему приложению
-        searchHistory.trackAdapterSearchHistory.onItemClickListener = this
+
+        trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory //2
+        trackAdapterSearchHistory.onItemClickListener = this // searchHistory.trackAdapterSearchHistory.onItemClickListener = this //2
 
         trackAdapter.onItemClickListener = this
 
@@ -101,7 +102,6 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         // ничего туда не успели сохранить, то список пустой и не отображается
         if (searchHistory.trackListSearchHistory.isEmpty())
             linearLayoutSearchHistory.visibility = View.GONE
-
 
         // кнопка "назад"
         val buttonSearchBack = findViewById<ImageView>(id.button_search_back)
@@ -122,11 +122,10 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         // для истории поиска
         val rvItemsSearchHistory: RecyclerView = findViewById(R.id.rvSearchHistoryItems)
         rvItemsSearchHistory.apply {
-            adapter = searchHistory.trackAdapterSearchHistory
+            adapter = trackAdapterSearchHistory //adapter = searchHistory.trackAdapterSearchHistory //3
             layoutManager =
                 LinearLayoutManager(this@SearchActivity, LinearLayoutManager.VERTICAL, false)
         }
-        // trackAdapterSearchHistory.items = trackListSearchHistory
 
         // кнопка "Обновить"
         val buttonRefresh = findViewById<Button>(id.buttonRefresh)
@@ -210,6 +209,8 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         buttonCleanSearchHistory.setOnClickListener {
 
             searchHistory.clean()
+            trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory //4
+            trackAdapterSearchHistory.notifyDataSetChanged()         //4
 
             linearLayoutSearchHistory.visibility = View.GONE
 
@@ -286,8 +287,8 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
 
         searchHistory.trackListSearchHistory =
             savedInstanceState.getParcelableArrayList("track_list_search_history")!!
-        searchHistory.trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory
-        searchHistory.trackAdapterSearchHistory.notifyDataSetChanged()
+        trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory //searchHistory.trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory  //5
+        trackAdapterSearchHistory.notifyDataSetChanged() //searchHistory.trackAdapterSearchHistory.notifyDataSetChanged()                        //5
 
         val linearLayoutSearchHistory = findViewById<LinearLayout>(id.searchHistoryLinearLayout)
         linearLayoutSearchHistory.visibility =
@@ -317,10 +318,13 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
             if (searchHistory.trackListSearchHistory.size > 10)
                 searchHistory.trackListSearchHistory.removeAt(10)//(trackListSearchHistory[10])
 
-            searchHistory.trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory
-            searchHistory.trackAdapterSearchHistory.notifyDataSetChanged()
+            trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory //searchHistory.trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory //6
+            trackAdapterSearchHistory.notifyDataSetChanged() //searchHistory.trackAdapterSearchHistory.notifyDataSetChanged() //6
 
             searchHistory.addItem(item)
+            trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory //7
+            trackAdapterSearchHistory.notifyDataSetChanged() //7
+
             searchHistory.writeToSharedPreferences()
 
             // переход на экран аудиоплейера, передаем выбранный трек
