@@ -1,6 +1,5 @@
 package com.example.playlistmaker.domain.entity
 
-import android.os.Parcel
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
@@ -18,19 +17,6 @@ data class Track(
     var country: String = "", // Страна исполнителя
     var previewUrl: String = "" //  Ссылка на отрывок трека в формате String
 ) : Parcelable {
-    /* constructor(parcel: Parcel) : this(
-         parcel.readInt(),
-         parcel.readString().toString(),
-         parcel.readString().toString(),
-         parcel.readLong(),
-         parcel.readString().toString(),
-         parcel.readString().toString(),
-         parcel.readString().toString(),
-         parcel.readString().toString(),
-         parcel.readString().toString(),
-         parcel.readString().toString()
-     ) {
-     }*/
     fun getCoverArtwork() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
 }
 

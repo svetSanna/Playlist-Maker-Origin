@@ -31,7 +31,8 @@ class TrackRepositoryImpl(private val networkClient: NetworkClient) : TrackRepos
             }
             return Resource.Success(results) //results
         } else {
-            return Resource.Error("Произошла сетевая ошибка") //emptyList()
+            return Resource.Error("Произошла сетевая ошибка")
+        //return Resource.Error(R.string.network_err.toString())
         }
 
         /*if (response.resultCode == 200) {

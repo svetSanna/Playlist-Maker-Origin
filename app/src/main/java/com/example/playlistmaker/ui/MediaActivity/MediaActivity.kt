@@ -2,8 +2,6 @@ package com.example.playlistmaker.ui.MediaActivity
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -15,16 +13,20 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.TRACK
 import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.domain.entity.Track
+import com.example.playlistmaker.domain.use_case.MediaPlayerInteractor
 import com.example.playlistmaker.presentation.mapper.SimpleDateFormatMapper
 
 
 class MediaActivity : AppCompatActivity() {
 
     //private var mediaPlayer = MediaPlayer()
-    private var getMediaPlayerUseCase = Creator.provideGetMediaPlayerUseCase()
-    private var mediaPlayer = getMediaPlayerUseCase()
 
-    companion object {
+    //private var getMediaPlayerUseCase = Creator.provideMediaPlayerInteractor() //p1
+    //private var mediaPlayer = getMediaPlayerUseCase() //р1
+
+    lateinit private var mediaPlayerInteractor: MediaPlayerInteractor//p1
+
+   /* companion object {
         private const val STATE_DEFAULT = 0 // освобожден
         private const val STATE_PREPARED = 1 // подготовлен
         private const val STATE_PLAYING = 2 // воспроизводится
@@ -34,10 +36,11 @@ class MediaActivity : AppCompatActivity() {
     }
 
     private var playerState = STATE_DEFAULT // cостояние плейера
+    */ //p1
 
     private var url: String? = ""
 
-    private val handlerMain = Handler(Looper.getMainLooper())
+    //private val handlerMain = Handler(Looper.getMainLooper()) //p1
 
     @SuppressLint("MissingInflatedId", "WrongViewCast")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,34 +88,35 @@ class MediaActivity : AppCompatActivity() {
 
             // ссылка на отрывок
             url = item?.previewUrl
+            mediaPlayerInteractor = Creator.provideMediaPlayerInteractor(this)
 
             // подготавливаем плейер
-            preparePlayer()
+            mediaPlayerInteractor.preparePlayer(url) //preparePlayer() //p1
 
             buttonPlayPause.setOnClickListener {
-                playbackControl()
+                mediaPlayerInteractor.playbackControl()// playbackControl() //p1
             }
         } else {
             Toast.makeText(
                 this,
-                "Пока посмотреть на работу плейера можно, зайдя через экран поиска",
+                R.string.my_message/*"Пока посмотреть на работу плейера можно, зайдя через экран поиска"*/,
                 Toast.LENGTH_LONG
             ).show()
         }
     }
 
-    private val timeTrackRunnable = object : Runnable {
+    /*private val timeTrackRunnable = object : Runnable {
         override fun run() {
             var timeTrack = findViewById<TextView>(R.id.time)
             // обновляем время
-            // timeTrack.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
-            timeTrack.text = SimpleDateFormatMapper.map(mediaPlayer.currentPosition)
+            //timeTrack.text = SimpleDateFormatMapper.map(mediaPlayer.currentPosition) //p1
+            timeTrack.text = SimpleDateFormatMapper.map(mediaPlayerInteractor.getCurrentPosition()) //p1
             handlerMain?.postDelayed(this, TIME_DEBOUNCE)
         }
-    }
+    }*/
 
     // подготовка плейера
-    private fun preparePlayer() {
+    /*private fun preparePlayer() {
         // кнопка "Play"/"Pause"
         val buttonPlayPause = findViewById<ImageView>(R.id.button_media_play_pause)
         // отображение времени трека
@@ -131,10 +135,10 @@ class MediaActivity : AppCompatActivity() {
             timeTrack.text = "00:00"
             handlerMain?.removeCallbacks(timeTrackRunnable) // удаляем из очереди все сообщения Runnable, чтобы таймер не обновлялся
         }
-    }
+    }*/ //p1
 
     // запустить плейер
-    private fun startPlayer() {
+   /* private fun startPlayer() {
         // кнопка "Play"/"Pause"
         val buttonPlayPause = findViewById<ImageView>(R.id.button_media_play_pause)
 
@@ -146,10 +150,10 @@ class MediaActivity : AppCompatActivity() {
             timeTrackRunnable,
             TIME_DEBOUNCE
         )  // ставим в очередь обновление таймера
-    }
+    }*/ //p1
 
     // поставить плейер на паузу
-    private fun pausePlayer() {
+    /*private fun pausePlayer() {
         // кнопка "Play"/"Pause"
         val buttonPlayPause = findViewById<ImageView>(R.id.button_media_play_pause)
 
@@ -158,10 +162,10 @@ class MediaActivity : AppCompatActivity() {
         playerState = STATE_PAUSED
 
         handlerMain?.removeCallbacks(timeTrackRunnable) // удаляем из очереди все сообщения Runnable, чтобы таймер не обновлялся
-    }
+    }*/ //p1
 
     // функция вызывается при нажатии на кнопку Play/Pause
-    private fun playbackControl() {
+   /* private fun playbackControl() {
         when (playerState) {
             STATE_PLAYING -> {
                 pausePlayer()
@@ -171,17 +175,17 @@ class MediaActivity : AppCompatActivity() {
                 startPlayer()
             }
         }
-    }
+    }*/ //p1
 
     // Активити на паузу
     override fun onPause() {
         super.onPause()
-        pausePlayer()
+        mediaPlayerInteractor.pausePlayer() //pausePlayer() //p1
     }
 
     // Активити закрывается
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer.release()
+        mediaPlayerInteractor.onDestroy()        //mediaPlayer.release() //p1
     }
 }

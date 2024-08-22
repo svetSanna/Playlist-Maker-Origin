@@ -19,4 +19,5 @@
   <string name="release_date_text">Year</string>
   <string name="primary_genre_name_text">Genre</string>
   <string name="country_text">Country</string>
+  <string name="network_err">A network error occurred</string>
 </resources>
