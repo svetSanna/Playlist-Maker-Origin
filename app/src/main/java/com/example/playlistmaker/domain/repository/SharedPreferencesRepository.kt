@@ -1,5 +1,6 @@
 package com.example.playlistmaker.domain.repository
 
 interface SharedPreferencesRepository {
-    fun editSharePreferences(str: String)
+    fun edit(str: String)
+    fun getString(key: String): String?
 }

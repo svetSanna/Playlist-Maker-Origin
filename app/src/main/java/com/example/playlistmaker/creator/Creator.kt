@@ -15,10 +15,10 @@ import com.example.playlistmaker.domain.repository.MediaPlayerRepository
 import com.example.playlistmaker.domain.repository.SearchHistoryRepository
 import com.example.playlistmaker.domain.repository.SharedPreferencesRepository
 import com.example.playlistmaker.domain.repository.TrackRepository
-import com.example.playlistmaker.domain.use_case.EditSharedPreferencesUseCase
 import com.example.playlistmaker.domain.use_case.GetTrackListUseCase
 import com.example.playlistmaker.domain.use_case.MediaPlayerInteractor
 import com.example.playlistmaker.domain.use_case.SearchHistoryInteractor
+import com.example.playlistmaker.domain.use_case.SharedPreferencesInteractor
 
 object Creator {
     // поле, которое отвечает за контекст
@@ -51,8 +51,8 @@ object Creator {
         return MediaPlayerRepositoryImpl(activity)
     }
 
-    fun provideEditSharedPreferences(): EditSharedPreferencesUseCase {
-        return EditSharedPreferencesUseCase(provideSharedPreferencesRepository())
+    fun provideSharedPreferencesInteractor(): SharedPreferencesInteractor {
+        return SharedPreferencesInteractor(provideSharedPreferencesRepository())
     }
 
     private fun provideSharedPreferencesRepository(): SharedPreferencesRepository{

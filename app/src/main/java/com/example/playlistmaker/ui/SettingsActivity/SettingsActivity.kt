@@ -51,12 +51,12 @@ class SettingsActivity : AppCompatActivity() {
 
         //val sharedPrefs = Creator.provideSharedPreferences() //p3
 
-        val editSharedPreferencesUseCase = Creator.provideEditSharedPreferences()
+        val sharedPreferencesInteractor = Creator.provideSharedPreferencesInteractor()
 
         val selectorSwitch = findViewById<SwitchCompat>(R.id.selector_switch)
         selectorSwitch.setOnCheckedChangeListener { _, checked ->
             (applicationContext as App).switchTheme(checked)
-            editSharedPreferencesUseCase(checked.toString())
+            sharedPreferencesInteractor.edit(checked.toString())
             /*sharedPrefs.edit()
                 .putString(THEME_SWITCH_KEY, checked.toString())
                 .apply()*/

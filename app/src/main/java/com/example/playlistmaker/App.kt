@@ -29,11 +29,14 @@ class App : Application() {
         // Получаем тему приложения, выбранную пользователем, из SharedPreferences, а если
         // ничего туда не успели сохранить, то применим текущую тему приложения
 
-        var sharedPrefs = Creator.provideSharedPreferences()
+        //var sharedPrefs = Creator.provideSharedPreferences() //p4
+
         //var sharedPrefs = getSharedPreferences(PLAYLISTMAKER_PREFERENCES, MODE_PRIVATE) //p3
         // MODE_PRIVATE - чтобы данные были доступны только нашему приложению
 
-        var stringFromSharedPrefs = sharedPrefs.getString(THEME_SWITCH_KEY, "")
+        //var stringFromSharedPrefs = sharedPrefs.getString(THEME_SWITCH_KEY, "") //p4
+        var stringFromSharedPrefs = Creator.provideSharedPreferencesInteractor().getString(THEME_SWITCH_KEY)
+
         when (stringFromSharedPrefs) {
             "false" -> darkTheme = false
             "true" -> darkTheme = true

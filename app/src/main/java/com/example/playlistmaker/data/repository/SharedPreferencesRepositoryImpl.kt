@@ -5,10 +5,14 @@ import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.domain.repository.SharedPreferencesRepository
 
 class SharedPreferencesRepositoryImpl: SharedPreferencesRepository {
-    override fun editSharePreferences(str: String) {
-        val sharedPrefs = Creator.provideSharedPreferences()
+    private val sharedPrefs = Creator.provideSharedPreferences()
+    override fun edit(str: String) {
         sharedPrefs.edit()
             .putString(THEME_SWITCH_KEY, str)
             .apply()
+    }
+
+    override fun getString(key: String): String? {
+        return sharedPrefs.getString(key, "")
     }
 }
