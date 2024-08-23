@@ -98,11 +98,12 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         searchHistory = SearchHistory(sharedPrefs)*/ //v1
 
         //Creator.initApplication(this) //v1 //p2
-        val sharedPrefs = Creator.provideSharedPreferences() //v1
+        //val sharedPrefs = Creator.provideSharedPreferences() //v1 //p3
+
         //searchHistory = Creator.provideGetSearchHistoryInteractor(sharedPrefs) //v1
 
         //trackAdapterSearchHistory.items = searchHistory.trackListSearchHistory //2 //v1
-        historyInteractor = Creator.provideGetSearchHistoryInteractor(sharedPrefs) //V1
+        historyInteractor = Creator.provideGetSearchHistoryInteractor() // historyInteractor = Creator.provideGetSearchHistoryInteractor(sharedPrefs) //v1   //p3
         trackAdapterSearchHistory.items = historyInteractor.getTrackListSearchHistory() //2 //v1
         trackAdapterSearchHistory.onItemClickListener =
             this // searchHistory.trackAdapterSearchHistory.onItemClickListener = this //2

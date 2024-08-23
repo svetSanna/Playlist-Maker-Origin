@@ -1,12 +1,15 @@
 package com.example.playlistmaker.data.history
 
 import com.example.playlistmaker.SEARCH_HISTORY_KEY
+import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.domain.entity.Track
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class SearchHistory (val sharedPrefs: android.content.SharedPreferences){
+//class SearchHistory (val sharedPrefs: android.content.SharedPreferences){ //p3
+class SearchHistory (){
     var trackListSearchHistory: ArrayList<Track> = arrayListOf()
+    private val sharedPrefs = Creator.provideSharedPreferences()
 
     // создаем адаптер для Track для истории поиска
     //var trackAdapterSearchHistory = TrackAdapter() //1

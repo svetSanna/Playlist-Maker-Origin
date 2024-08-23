@@ -60,11 +60,17 @@ object Creator {
         return RetrofitNetworkClient()
     }
 
-    fun provideGetSearchHistoryInteractor(sharedPrefs: SharedPreferences): SearchHistoryInteractor {
+    /*fun provideGetSearchHistoryInteractor(sharedPrefs: SharedPreferences): SearchHistoryInteractor {
         return SearchHistoryInteractor(provideSearchHistoryInteractor(sharedPrefs))
+    }*/ //p3
+    fun provideGetSearchHistoryInteractor(): SearchHistoryInteractor {
+        return SearchHistoryInteractor(provideSearchHistoryInteractor())
     }
 
-    private fun provideSearchHistoryInteractor(sharedPrefs: SharedPreferences): SearchHistoryRepository {
+    /*private fun provideSearchHistoryInteractor(sharedPrefs: SharedPreferences): SearchHistoryRepository {
         return SearchHistoryRepositoryImpl(sharedPrefs)
+    }*/ //p3
+    private fun provideSearchHistoryInteractor(): SearchHistoryRepository {
+        return SearchHistoryRepositoryImpl()
     }
 }
