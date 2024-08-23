@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat.getString
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.repository.MediaPlayerRepository
 import com.example.playlistmaker.presentation.mapper.SimpleDateFormatMapper
@@ -33,7 +34,7 @@ class MediaPlayerRepositoryImpl(private val activity: Activity) : MediaPlayerRep
 
     private var timeTrack = activity.findViewById<TextView>(R.id.time)//p6
     init {
-        timeTrack.text = R.string.time_00_00.toString() //"00:00" //p6
+        timeTrack.text = getString(activity, R.string.time_00_00)//.toString() //"00:00" //p6
     }
 
     //private var url: String? = ""
@@ -64,12 +65,12 @@ class MediaPlayerRepositoryImpl(private val activity: Activity) : MediaPlayerRep
         mediaPlayer.setOnPreparedListener {
             buttonPlayPause.setImageResource(R.drawable.button_media_play)
             playerState = STATE_PREPARED
-            timeTrack.text = R.string.time_00_00.toString()//"00:00" //p5
+            timeTrack.text = getString(activity, R.string.time_00_00)//R.string.time_00_00.toString()//"00:00" //p5
         }
         mediaPlayer.setOnCompletionListener {// отслеживание завершения воспроизведения
             buttonPlayPause.setImageResource(R.drawable.button_media_play)
             playerState = STATE_PREPARED
-            timeTrack.text = R.string.time_00_00.toString()//"00:00" //p5
+            timeTrack.text = getString(activity, R.string.time_00_00)//R.string.time_00_00.toString()//"00:00" //p5
             handlerMain?.removeCallbacks(timeTrackRunnable) // удаляем из очереди все сообщения Runnable, чтобы таймер не обновлялся
         }
     }
