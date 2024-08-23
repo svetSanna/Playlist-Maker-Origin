@@ -30,10 +30,10 @@ object Creator {
     */
     private lateinit var application: Application    //private lateinit var application: AppCompatActivity //p2
 
-/*    fun initApplication(application: AppCompatActivity) { // передаем сюда контекст приложения
-        this.application = application
-    }
-*/ //p2
+    /*    fun initApplication(application: AppCompatActivity) { // передаем сюда контекст приложения
+            this.application = application
+        }
+    */ //p2
     fun initApplication(application: Application) { // передаем сюда контекст приложения  //p2
         this.application = application
     }
@@ -44,7 +44,8 @@ object Creator {
     }
 
     fun provideMediaPlayerInteractor(activity: Activity): MediaPlayerInteractor {
-        return MediaPlayerInteractor(activity, provideMediaPlayer(activity))
+        //  return MediaPlayerInteractor(activity, provideMediaPlayer(activity))
+        return MediaPlayerInteractor(provideMediaPlayer(activity))
     }
 
     private fun provideMediaPlayer(activity: Activity): MediaPlayerRepository {
@@ -55,7 +56,7 @@ object Creator {
         return SharedPreferencesInteractor(provideSharedPreferencesRepository())
     }
 
-    private fun provideSharedPreferencesRepository(): SharedPreferencesRepository{
+    private fun provideSharedPreferencesRepository(): SharedPreferencesRepository {
         return SharedPreferencesRepositoryImpl()
     }
 

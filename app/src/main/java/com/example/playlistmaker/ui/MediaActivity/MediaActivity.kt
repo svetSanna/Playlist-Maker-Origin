@@ -26,17 +26,17 @@ class MediaActivity : AppCompatActivity() {
 
     lateinit private var mediaPlayerInteractor: MediaPlayerInteractor//p1
 
-   /* companion object {
-        private const val STATE_DEFAULT = 0 // освобожден
-        private const val STATE_PREPARED = 1 // подготовлен
-        private const val STATE_PLAYING = 2 // воспроизводится
-        private const val STATE_PAUSED = 3 // пауза
-        private const val TIME_DEBOUNCE =
-            400L // время, через которое будет обновляться поле, показывающее, сколько времени от начала отрывка проиграно в формате
-    }
+    /* companion object {
+         private const val STATE_DEFAULT = 0 // освобожден
+         private const val STATE_PREPARED = 1 // подготовлен
+         private const val STATE_PLAYING = 2 // воспроизводится
+         private const val STATE_PAUSED = 3 // пауза
+         private const val TIME_DEBOUNCE =
+             400L // время, через которое будет обновляться поле, показывающее, сколько времени от начала отрывка проиграно в формате
+     }
 
-    private var playerState = STATE_DEFAULT // cостояние плейера
-    */ //p1
+     private var playerState = STATE_DEFAULT // cостояние плейера
+     */ //p1
 
     private var url: String? = ""
 
@@ -138,19 +138,19 @@ class MediaActivity : AppCompatActivity() {
     }*/ //p1
 
     // запустить плейер
-   /* private fun startPlayer() {
-        // кнопка "Play"/"Pause"
-        val buttonPlayPause = findViewById<ImageView>(R.id.button_media_play_pause)
+    /* private fun startPlayer() {
+         // кнопка "Play"/"Pause"
+         val buttonPlayPause = findViewById<ImageView>(R.id.button_media_play_pause)
 
-        mediaPlayer.start()
-        buttonPlayPause.setImageResource(R.drawable.button_media_pause)
-        playerState = STATE_PLAYING
+         mediaPlayer.start()
+         buttonPlayPause.setImageResource(R.drawable.button_media_pause)
+         playerState = STATE_PLAYING
 
-        handlerMain?.postDelayed(
-            timeTrackRunnable,
-            TIME_DEBOUNCE
-        )  // ставим в очередь обновление таймера
-    }*/ //p1
+         handlerMain?.postDelayed(
+             timeTrackRunnable,
+             TIME_DEBOUNCE
+         )  // ставим в очередь обновление таймера
+     }*/ //p1
 
     // поставить плейер на паузу
     /*private fun pausePlayer() {
@@ -165,17 +165,17 @@ class MediaActivity : AppCompatActivity() {
     }*/ //p1
 
     // функция вызывается при нажатии на кнопку Play/Pause
-   /* private fun playbackControl() {
-        when (playerState) {
-            STATE_PLAYING -> {
-                pausePlayer()
-            }
+    /* private fun playbackControl() {
+         when (playerState) {
+             STATE_PLAYING -> {
+                 pausePlayer()
+             }
 
-            STATE_PREPARED, STATE_PAUSED -> {
-                startPlayer()
-            }
-        }
-    }*/ //p1
+             STATE_PREPARED, STATE_PAUSED -> {
+                 startPlayer()
+             }
+         }
+     }*/ //p1
 
     // Активити на паузу
     override fun onPause() {

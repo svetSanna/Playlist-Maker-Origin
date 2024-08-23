@@ -35,7 +35,8 @@ class App : Application() {
         // MODE_PRIVATE - чтобы данные были доступны только нашему приложению
 
         //var stringFromSharedPrefs = sharedPrefs.getString(THEME_SWITCH_KEY, "") //p4
-        var stringFromSharedPrefs = Creator.provideSharedPreferencesInteractor().getString(THEME_SWITCH_KEY)
+        var stringFromSharedPrefs =
+            Creator.provideSharedPreferencesInteractor().getString(THEME_SWITCH_KEY)
 
         when (stringFromSharedPrefs) {
             "false" -> darkTheme = false

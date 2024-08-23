@@ -7,20 +7,21 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 //class SearchHistory (val sharedPrefs: android.content.SharedPreferences){ //p3
-class SearchHistory (){
+class SearchHistory() {
     var trackListSearchHistory: ArrayList<Track> = arrayListOf()
     private val sharedPrefs = Creator.provideSharedPreferences()
 
     // создаем адаптер для Track для истории поиска
     //var trackAdapterSearchHistory = TrackAdapter() //1
 
-     init{
-         val json = sharedPrefs.getString(SEARCH_HISTORY_KEY, "")
-         when (json) {
+    init {
+        val json = sharedPrefs.getString(SEARCH_HISTORY_KEY, "")
+        when (json) {
             "" -> {
                 trackListSearchHistory.clear()
-               // linearLayoutSearchHistory.visibility = View.GONE
+                // linearLayoutSearchHistory.visibility = View.GONE
             }
+
             else -> {
                 val trackListType = object : TypeToken<ArrayList<Track>>() {}.type
                 trackListSearchHistory = Gson().fromJson(json, trackListType)
@@ -29,27 +30,26 @@ class SearchHistory (){
         // trackAdapterSearchHistory.items = trackListSearchHistory //2
     }
 
-    fun clean()
-    {
+    fun clean() {
         trackListSearchHistory.clear()
         //        trackAdapterSearchHistory.items = trackListSearchHistory //4
         //        trackAdapterSearchHistory.notifyDataSetChanged() //4
     }
 
-    fun writeToSharedPreferences(){
+    fun writeToSharedPreferences() {
         val json = Gson().toJson(trackListSearchHistory)
         sharedPrefs.edit()
             .putString(SEARCH_HISTORY_KEY, json)
             .apply()
     }
 
-    fun addItem(item: Track){
+    fun addItem(item: Track) {
         var itemSearchHistory = trackListSearchHistory.firstOrNull { it.trackId == item.trackId }
-        if (itemSearchHistory!=null)
+        if (itemSearchHistory != null)
             trackListSearchHistory.remove(itemSearchHistory)
-        trackListSearchHistory.add(0,item)
+        trackListSearchHistory.add(0, item)
 
-        if(trackListSearchHistory.size>10)
+        if (trackListSearchHistory.size > 10)
             trackListSearchHistory.removeAt(10)//(trackListSearchHistory[10])
 
         //trackAdapterSearchHistory.items = trackListSearchHistory //7

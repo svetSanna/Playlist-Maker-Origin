@@ -17,6 +17,7 @@ import com.example.playlistmaker.presentation.mapper.SimpleDateFormatMapper
 }*/ //p1
 class MediaPlayerRepositoryImpl(private val activity: Activity) : MediaPlayerRepository { //p1
     private var mediaPlayer = MediaPlayer()
+
     companion object {
         private const val STATE_DEFAULT = 0 // освобожден
         private const val STATE_PREPARED = 1 // подготовлен
@@ -47,25 +48,25 @@ class MediaPlayerRepositoryImpl(private val activity: Activity) : MediaPlayerRep
 
     override fun preparePlayer(url: String?) {
         // подготовка плейера
-            // кнопка "Play"/"Pause"
-            val buttonPlayPause = activity.findViewById<ImageView>(R.id.button_media_play_pause)
-            // отображение времени трека
-            var timeTrack = activity.findViewById<TextView>(R.id.time)
+        // кнопка "Play"/"Pause"
+        val buttonPlayPause = activity.findViewById<ImageView>(R.id.button_media_play_pause)
+        // отображение времени трека
+        var timeTrack = activity.findViewById<TextView>(R.id.time)
 
-            mediaPlayer.setDataSource(url) // установить источник
-            mediaPlayer.prepareAsync() // подготовка
-            mediaPlayer.setOnPreparedListener {
-                buttonPlayPause.setImageResource(R.drawable.button_media_play)
-                playerState = STATE_PREPARED
-                timeTrack.text = "00:00"
-            }
-            mediaPlayer.setOnCompletionListener {// отслеживание завершения воспроизведения
-                buttonPlayPause.setImageResource(R.drawable.button_media_play)
-                playerState = STATE_PREPARED
-                timeTrack.text = "00:00"
-                handlerMain?.removeCallbacks(timeTrackRunnable) // удаляем из очереди все сообщения Runnable, чтобы таймер не обновлялся
-            }
+        mediaPlayer.setDataSource(url) // установить источник
+        mediaPlayer.prepareAsync() // подготовка
+        mediaPlayer.setOnPreparedListener {
+            buttonPlayPause.setImageResource(R.drawable.button_media_play)
+            playerState = STATE_PREPARED
+            timeTrack.text = R.string.time_00_00.toString()//"00:00" //p5
         }
+        mediaPlayer.setOnCompletionListener {// отслеживание завершения воспроизведения
+            buttonPlayPause.setImageResource(R.drawable.button_media_play)
+            playerState = STATE_PREPARED
+            timeTrack.text = R.string.time_00_00.toString()//"00:00" //p5
+            handlerMain?.removeCallbacks(timeTrackRunnable) // удаляем из очереди все сообщения Runnable, чтобы таймер не обновлялся
+        }
+    }
 
     override fun startPlayer() {
         // запустить плейер        // кнопка "Play"/"Pause"
@@ -80,6 +81,7 @@ class MediaPlayerRepositoryImpl(private val activity: Activity) : MediaPlayerRep
             TIME_DEBOUNCE
         )  // ставим в очередь обновление таймера
     }
+
     override fun pausePlayer() {
         // кнопка "Play"/"Pause"
         val buttonPlayPause = activity.findViewById<ImageView>(R.id.button_media_play_pause)
@@ -104,7 +106,7 @@ class MediaPlayerRepositoryImpl(private val activity: Activity) : MediaPlayerRep
         }
     }
 
-    override fun onDestroy(){
+    override fun onDestroy() {
         mediaPlayer.release()
     }
 }

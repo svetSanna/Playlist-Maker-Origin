@@ -1,5 +1,6 @@
 package com.example.playlistmaker.domain.use_case
 
+import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.consumer.Consumer
 import com.example.playlistmaker.domain.consumer.ConsumerData
 import com.example.playlistmaker.domain.entity.Resource
@@ -20,7 +21,8 @@ class GetTrackListUseCase(private val repository: TrackRepository) {
                 }
 
                 is Resource.Error -> {
-                    consumer.consume(ConsumerData.Error("Ошибка поиска"))
+                    //consumer.consume(ConsumerData.Error("Ошибка поиска")) // p5
+                    consumer.consume(ConsumerData.Error(R.string.search_err.toString())) // p5
                 }
             }
         }

@@ -1,5 +1,6 @@
 package com.example.playlistmaker.data.repository
 
+import com.example.playlistmaker.R
 import com.example.playlistmaker.data.dto.TrackSearchRequest
 import com.example.playlistmaker.data.dto.TrackSearchResponse
 import com.example.playlistmaker.domain.entity.Resource
@@ -31,8 +32,8 @@ class TrackRepositoryImpl(private val networkClient: NetworkClient) : TrackRepos
             }
             return Resource.Success(results) //results
         } else {
-            return Resource.Error("Произошла сетевая ошибка")
-        //return Resource.Error(R.string.network_err.toString())
+            //return Resource.Error("Произошла сетевая ошибка") // p5
+            return Resource.Error(R.string.network_err.toString())
         }
 
         /*if (response.resultCode == 200) {
