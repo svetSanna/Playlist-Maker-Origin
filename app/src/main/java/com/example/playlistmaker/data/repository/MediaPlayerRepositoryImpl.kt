@@ -31,6 +31,11 @@ class MediaPlayerRepositoryImpl(private val activity: Activity) : MediaPlayerRep
 
     private val handlerMain = Handler(Looper.getMainLooper())
 
+    private var timeTrack = activity.findViewById<TextView>(R.id.time)//p6
+    init {
+        timeTrack.text = R.string.time_00_00.toString() //"00:00" //p6
+    }
+
     //private var url: String? = ""
     private val timeTrackRunnable = object : Runnable {
         override fun run() {
@@ -51,7 +56,8 @@ class MediaPlayerRepositoryImpl(private val activity: Activity) : MediaPlayerRep
         // кнопка "Play"/"Pause"
         val buttonPlayPause = activity.findViewById<ImageView>(R.id.button_media_play_pause)
         // отображение времени трека
-        var timeTrack = activity.findViewById<TextView>(R.id.time)
+        //var timeTrack = activity.findViewById<TextView>(R.id.time)
+       // timeTrack.text = R.string.time_00_00.toString() //"00:00" //p6
 
         mediaPlayer.setDataSource(url) // установить источник
         mediaPlayer.prepareAsync() // подготовка

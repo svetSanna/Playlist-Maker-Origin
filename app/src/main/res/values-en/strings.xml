@@ -20,4 +20,6 @@
   <string name="primary_genre_name_text">Genre</string>
   <string name="country_text">Country</string>
   <string name="network_err">A network error occurred</string>
+  <string name="search_err">Search error</string>
+  <string name="time_00_00">00:00</string>
 </resources>

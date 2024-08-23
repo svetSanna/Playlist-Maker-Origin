@@ -438,13 +438,27 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
                                     }
                                 }
 
-                                is ConsumerData.Error -> {
+                              /*  is ConsumerData.Error -> {
                                     //  progressBar.visibility =
                                     //     View.GONE // Прячем ProgressBar после выполнения запроса с ошибкой
                                     buttonRefresh.visibility = View.VISIBLE
                                     showMessage(
                                         getString(string.something_went_wrong),
                                         data.message
+                                        //response.code().toString()//t.message.toString()
+                                    )
+                                }*/ //p7
+                                is ConsumerData.Error -> {
+                                    //  progressBar.visibility =
+                                    //     View.GONE // Прячем ProgressBar после выполнения запроса с ошибкой
+                                    buttonRefresh.visibility = View.VISIBLE
+                                    var message = ""
+                                    if(data.code == -1) {
+                                            message = getString(string.search_err)
+                                    }
+                                    showMessage(
+                                        getString(string.something_went_wrong),
+                                        message
                                         //response.code().toString()//t.message.toString()
                                     )
                                 }
