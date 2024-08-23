@@ -9,10 +9,13 @@ import com.example.playlistmaker.data.network.RetrofitNetworkClient
 import com.example.playlistmaker.data.repository.MediaPlayerRepositoryImpl
 import com.example.playlistmaker.data.repository.NetworkClient
 import com.example.playlistmaker.data.repository.SearchHistoryRepositoryImpl
+import com.example.playlistmaker.data.repository.SharedPreferencesRepositoryImpl
 import com.example.playlistmaker.data.repository.TrackRepositoryImpl
 import com.example.playlistmaker.domain.repository.MediaPlayerRepository
 import com.example.playlistmaker.domain.repository.SearchHistoryRepository
+import com.example.playlistmaker.domain.repository.SharedPreferencesRepository
 import com.example.playlistmaker.domain.repository.TrackRepository
+import com.example.playlistmaker.domain.use_case.EditSharedPreferencesUseCase
 import com.example.playlistmaker.domain.use_case.GetTrackListUseCase
 import com.example.playlistmaker.domain.use_case.MediaPlayerInteractor
 import com.example.playlistmaker.domain.use_case.SearchHistoryInteractor
@@ -46,6 +49,14 @@ object Creator {
 
     private fun provideMediaPlayer(activity: Activity): MediaPlayerRepository {
         return MediaPlayerRepositoryImpl(activity)
+    }
+
+    fun provideEditSharedPreferences(): EditSharedPreferencesUseCase {
+        return EditSharedPreferencesUseCase(provideSharedPreferencesRepository())
+    }
+
+    private fun provideSharedPreferencesRepository(): SharedPreferencesRepository{
+        return SharedPreferencesRepositoryImpl()
     }
 
     fun provideGetTrackListUseCase(): GetTrackListUseCase {

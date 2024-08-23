@@ -14,7 +14,6 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.R.id.button_settings_allow_forward
 import com.example.playlistmaker.R.id.button_settings_share
 import com.example.playlistmaker.R.id.button_settings_support
-import com.example.playlistmaker.THEME_SWITCH_KEY
 import com.example.playlistmaker.creator.Creator
 
 class SettingsActivity : AppCompatActivity() {
@@ -50,14 +49,18 @@ class SettingsActivity : AppCompatActivity() {
 
         //Creator.initApplication(this) //p2
 
-        val sharedPrefs = Creator.provideSharedPreferences() //p3
+        //val sharedPrefs = Creator.provideSharedPreferences() //p3
+
+        val editSharedPreferencesUseCase = Creator.provideEditSharedPreferences()
 
         val selectorSwitch = findViewById<SwitchCompat>(R.id.selector_switch)
         selectorSwitch.setOnCheckedChangeListener { _, checked ->
             (applicationContext as App).switchTheme(checked)
-            sharedPrefs.edit()
+            editSharedPreferencesUseCase(checked.toString())
+            /*sharedPrefs.edit()
                 .putString(THEME_SWITCH_KEY, checked.toString())
-                .apply()
+                .apply()*/
+
         }
         selectorSwitch.isChecked = (applicationContext as App).darkTheme
     }
