@@ -1,9 +1,9 @@
 package com.example.playlistmaker.creator
 
 import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.PLAYLISTMAKER_PREFERENCES
 import com.example.playlistmaker.data.network.RetrofitNetworkClient
 import com.example.playlistmaker.data.repository.MediaPlayerRepositoryImpl
@@ -25,9 +25,13 @@ object Creator {
         this.application = application
     }
     */
-    private lateinit var application: AppCompatActivity
+    private lateinit var application: Application    //private lateinit var application: AppCompatActivity //p2
 
-    fun initApplication(application: AppCompatActivity) { // передаем сюда контекст приложения
+/*    fun initApplication(application: AppCompatActivity) { // передаем сюда контекст приложения
+        this.application = application
+    }
+*/ //p2
+    fun initApplication(application: Application) { // передаем сюда контекст приложения  //p2
         this.application = application
     }
 

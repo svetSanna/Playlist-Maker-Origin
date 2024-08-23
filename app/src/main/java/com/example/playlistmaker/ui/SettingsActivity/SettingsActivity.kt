@@ -47,10 +47,10 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         //val sharedPrefs = getSharedPreferences(PLAYLISTMAKER_PREFERENCES, MODE_PRIVATE)
-        //Creator.initApplication(this.application)
-        Creator.initApplication(this)
 
-        val sharedPrefs = Creator.provideSharedPreferences()
+        //Creator.initApplication(this) //p2
+
+        val sharedPrefs = Creator.provideSharedPreferences() //p3
 
         val selectorSwitch = findViewById<SwitchCompat>(R.id.selector_switch)
         selectorSwitch.setOnCheckedChangeListener { _, checked ->
