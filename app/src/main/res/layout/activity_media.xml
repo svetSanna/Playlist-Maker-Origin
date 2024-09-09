@@ -8,7 +8,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MediaActivity">
+    tools:context=".ui.MediaActivity.MediaActivity">
   <androidx.appcompat.widget.Toolbar
        android:id="@+id/toolbar"
        app:navigationIcon="@drawable/arrow_back"

@@ -21,4 +21,8 @@
     <string name="release_date_text">Год</string>
     <string name="primary_genre_name_text">Жанр</string>
     <string name="country_text">Страна</string>
+    <string name="network_err">Произошла сетевая ошибка</string>
+    <string name="search_err">Ошибка поиска</string>
+    <string name="my_message" translatable="false">Пока посмотреть на работу плейера можно, зайдя через экран поиска"</string>
+    <string name="time_00_00">00:00</string>
 </resources>
