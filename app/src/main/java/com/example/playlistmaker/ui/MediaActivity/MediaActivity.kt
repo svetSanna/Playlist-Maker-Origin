@@ -6,12 +6,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.TRACK
 import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.databinding.ActivityMediaBinding
 import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.domain.use_case.MediaPlayerInteractor
 import com.example.playlistmaker.presentation.mapper.SimpleDateFormatMapper
@@ -24,7 +24,12 @@ class MediaActivity : AppCompatActivity() {
     //private var getMediaPlayerUseCase = Creator.provideMediaPlayerInteractor() //p1
     //private var mediaPlayer = getMediaPlayerUseCase() //р1
 
-    lateinit private var mediaPlayerInteractor: MediaPlayerInteractor//p1
+    private lateinit var binding: ActivityMediaBinding
+
+    //private lateinit var mediaPlayerInteractor: MediaPlayerInteractor//p1
+    private val mediaPlayerInteractor: MediaPlayerInteractor by lazy{
+        Creator.provideMediaPlayerInteractor(this)
+    }
 
     /* companion object {
          private const val STATE_DEFAULT = 0 // освобожден
@@ -45,29 +50,33 @@ class MediaActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId", "WrongViewCast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_media)
+
+        binding = ActivityMediaBinding.inflate(layoutInflater)
+
+        val view = binding.root
+        setContentView(view)        //setContentView(R.layout.activity_media)
 
         // кнопка "Назад"
-        val buttonBackMedia = findViewById<Toolbar>(R.id.toolbar)
+        val buttonBackMedia = binding.toolbar //findViewById<Toolbar>(R.id.toolbar)
         buttonBackMedia.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
         // кнопка "Play"/"Pause"
-        val buttonPlayPause = findViewById<ImageView>(R.id.button_media_play_pause)
+        val buttonPlayPause = binding.buttonMediaPlayPause //findViewById<ImageView>(R.id.button_media_play_pause)
 
         // получаем данные трека из Intent
         var item: Track? = getIntent().getParcelableExtra(TRACK)
 
         // раскладываем эти данные по соответствующим вьюшкам
-        var ivTrackImage: ImageView = findViewById(R.id.track_image)
-        var tvTrackName: TextView = findViewById(R.id.track_name_data)
-        var tvArtistName: TextView = findViewById(R.id.artist_name_data)
-        var tvTrackTime: TextView = findViewById(R.id.track_time_millis_data) // длительность
-        var tvCollectionName: TextView = findViewById(R.id.collection_name_data)
-        var tvReleaseDate: TextView = findViewById(R.id.release_date_data)
-        var tvPrimaryGenreName: TextView = findViewById(R.id.primary_genre_name_data)
-        var tvCountry: TextView = findViewById(R.id.country_data)
+        var ivTrackImage: ImageView = binding.trackImage //findViewById(R.id.track_image)
+        var tvTrackName: TextView = binding.trackNameData //findViewById(R.id.track_name_data)
+        var tvArtistName: TextView = binding.artistNameData //findViewById(R.id.artist_name_data)
+        var tvTrackTime: TextView = binding.trackTimeMillisData //findViewById(R.id.track_time_millis_data) // длительность
+        var tvCollectionName: TextView = binding.collectionNameData //findViewById(R.id.collection_name_data)
+        var tvReleaseDate: TextView = binding.releaseDateData //findViewById(R.id.release_date_data)
+        var tvPrimaryGenreName: TextView = binding.primaryGenreNameData //findViewById(R.id.primary_genre_name_data)
+        var tvCountry: TextView = binding.countryData //findViewById(R.id.country_data)
 
         if (item != null) {
             Glide.with(this)
@@ -88,7 +97,7 @@ class MediaActivity : AppCompatActivity() {
 
             // ссылка на отрывок
             url = item?.previewUrl
-            mediaPlayerInteractor = Creator.provideMediaPlayerInteractor(this)
+           // mediaPlayerInteractor = Creator.provideMediaPlayerInteractor(this)
 
             // подготавливаем плейер
             mediaPlayerInteractor.preparePlayer(url) //preparePlayer() //p1

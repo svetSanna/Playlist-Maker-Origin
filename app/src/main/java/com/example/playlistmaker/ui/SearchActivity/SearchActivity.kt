@@ -11,22 +11,18 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
-import com.example.playlistmaker.R.id
-import com.example.playlistmaker.R.layout
 import com.example.playlistmaker.R.string
 import com.example.playlistmaker.TRACK
 import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.domain.consumer.Consumer
 import com.example.playlistmaker.domain.consumer.ConsumerData
 import com.example.playlistmaker.domain.entity.Track
@@ -36,6 +32,8 @@ import com.example.playlistmaker.ui.MediaActivity.MediaActivity
 class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener {
     private var editString: String = ""
     private var trackList: ArrayList<Track> = arrayListOf()
+
+    private lateinit var binding: ActivitySearchBinding
 
     /* // базовый URL для Retrofit
      private val baseUrlStr =
@@ -84,7 +82,11 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-        setContentView(layout.activity_search)
+
+        binding = ActivitySearchBinding.inflate(layoutInflater)
+
+        val view = binding.root
+        setContentView(view)        //setContentView(layout.activity_search)
 
         /*searchHistory = SearchHistory(
              getSharedPreferences(
@@ -112,7 +114,7 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         trackAdapter.onItemClickListener = this
 
         // LinearLayout истории поиска
-        val linearLayoutSearchHistory = findViewById<LinearLayout>(id.searchHistoryLinearLayout)
+        val linearLayoutSearchHistory = binding.searchHistoryLinearLayout//findViewById<LinearLayout>(id.searchHistoryLinearLayout)
 
         // Получаем историю поиска из SharedPreferences, а если
         // ничего туда не успели сохранить, то список пустой и не отображается
@@ -122,14 +124,14 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
             linearLayoutSearchHistory.visibility = View.GONE
 
         // кнопка "назад"
-        val buttonSearchBack = findViewById<ImageView>(id.button_search_back)
+        val buttonSearchBack = binding.buttonSearchBack //findViewById<ImageView>(id.button_search_back)
         buttonSearchBack.setOnClickListener {
             onBackPressed()
         }
 
-        val inputEditText = findViewById<EditText>(id.edit_search_window)
+        val inputEditText = binding.editSearchWindow //findViewById<EditText>(id.edit_search_window)
 
-        val rvItems: RecyclerView = findViewById(R.id.rvItems)
+        val rvItems: RecyclerView = binding.rvItems //findViewById(R.id.rvItems)
         rvItems.apply {
             adapter = trackAdapter
             layoutManager =
@@ -138,7 +140,7 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         trackAdapter.items = trackList
 
         // для истории поиска
-        val rvItemsSearchHistory: RecyclerView = findViewById(R.id.rvSearchHistoryItems)
+        val rvItemsSearchHistory: RecyclerView = binding.rvSearchHistoryItems //findViewById(R.id.rvSearchHistoryItems)
         rvItemsSearchHistory.apply {
             adapter =
                 trackAdapterSearchHistory //adapter = searchHistory.trackAdapterSearchHistory //3
@@ -147,7 +149,7 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         }
 
         // кнопка "Обновить"
-        val buttonRefresh = findViewById<Button>(id.buttonRefresh)
+        val buttonRefresh = binding.buttonRefresh //findViewById<Button>(id.buttonRefresh)
         buttonRefresh.visibility = View.GONE
         buttonRefresh.setOnClickListener {
             inputEditText.onEditorAction(EditorInfo.IME_ACTION_DONE)
@@ -155,7 +157,7 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
 
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                val placeholderLayout: LinearLayout = findViewById(id.placeholderLinearLayout)
+                val placeholderLayout: LinearLayout = binding.placeholderLinearLayout //findViewById(id.placeholderLinearLayout)
                 placeholderLayout.visibility = View.GONE
                 rvItems.visibility = View.GONE
 
@@ -166,7 +168,7 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         }
 
         // кнопка "очистить поле ввода"
-        val clearButton = findViewById<ImageView>(id.button_close_clear_cancel)
+        val clearButton = binding.buttonCloseClearCancel //findViewById<ImageView>(id.button_close_clear_cancel)
         clearButton.setOnClickListener {
             inputEditText.setText("")
             val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
@@ -175,7 +177,7 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
             trackAdapter.items.clear()
             trackAdapter.notifyDataSetChanged()
 
-            val placeholderLayout: LinearLayout = findViewById(id.placeholderLinearLayout)
+            val placeholderLayout: LinearLayout = binding.placeholderLinearLayout //findViewById(id.placeholderLinearLayout)
             placeholderLayout.visibility = View.GONE
         }
 
@@ -190,8 +192,7 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
                 editString = s?.toString() ?: ""
                 clearButton.visibility = clearButtonVisibility(s)
 
-                val linearLayoutSearchHistory =
-                    findViewById<LinearLayout>(id.searchHistoryLinearLayout)
+                val linearLayoutSearchHistory = binding.searchHistoryLinearLayout   // findViewById<LinearLayout>(id.searchHistoryLinearLayout)
                 linearLayoutSearchHistory.visibility =
                     if (inputEditText.hasFocus() && (s?.isEmpty() == true) && !historyInteractor.getTrackListSearchHistory()
                             .isEmpty()
@@ -203,7 +204,7 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
                 trackAdapter.items = trackList
                 trackAdapter.notifyDataSetChanged()
 
-                val placeholderLinearLayout = findViewById<LinearLayout>(id.placeholderLinearLayout)
+                val placeholderLinearLayout = binding.placeholderLinearLayout // findViewById<LinearLayout>(id.placeholderLinearLayout)
                 placeholderLinearLayout.visibility = View.GONE
 
                 SearchDebounce()
@@ -229,7 +230,7 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         inputEditText.requestFocus()
 
         // кнопка "Очистить историю"
-        val buttonCleanSearchHistory = findViewById<Button>(id.buttonCleanSearchHistory)
+        val buttonCleanSearchHistory = binding.buttonCleanSearchHistory // findViewById<Button>(id.buttonCleanSearchHistory)
         buttonCleanSearchHistory.setOnClickListener {
 
             historyInteractor.searchHistoryClean() //searchHistory.clean() //v1
@@ -244,10 +245,10 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
     }
 
     private fun showMessage(text: String, additionalMessage: String) {
-        val placeholderLayout: LinearLayout = findViewById(id.placeholderLinearLayout)
-        val placeholderMessage: TextView = findViewById(id.placeholderMessage)
-        val placeholderImage: ImageView = findViewById(id.placeholderImage)
-        val rvItems: RecyclerView = findViewById(id.rvItems)
+        val placeholderLayout: LinearLayout = binding.placeholderLinearLayout // findViewById(id.placeholderLinearLayout)
+        val placeholderMessage: TextView = binding.placeholderMessage // findViewById(id.placeholderMessage)
+        val placeholderImage: ImageView = binding.placeholderImage // findViewById(id.placeholderImage)
+        val rvItems: RecyclerView = binding.rvItems // findViewById(id.rvItems)
 
         if (text.isNotEmpty()) {
             rvItems.visibility = View.GONE
@@ -286,7 +287,7 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
 
         outState.putParcelableArrayList("track_list", trackList as ArrayList<out Parcelable?>?)
 
-        val linearLayoutSearchHistory = findViewById<LinearLayout>(id.searchHistoryLinearLayout)
+        val linearLayoutSearchHistory = binding.searchHistoryLinearLayout // findViewById<LinearLayout>(id.searchHistoryLinearLayout)
         outState.putString(
             "search_history_visibility",
             linearLayoutSearchHistory.visibility.toString()
@@ -305,7 +306,7 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         super.onRestoreInstanceState(savedInstanceState)
         // Вторым параметром мы передаём значение по умолчанию
         editString = savedInstanceState.getString("editString", "")
-        val inputEditText = findViewById<EditText>(id.edit_search_window)
+        val inputEditText = binding.editSearchWindow // findViewById<EditText>(id.edit_search_window)
         inputEditText.setText(editString)
 
         trackList = savedInstanceState.getParcelableArrayList("track_list")!!
@@ -327,7 +328,7 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         trackAdapterSearchHistory.notifyDataSetChanged() //searchHistory.trackAdapterSearchHistory.notifyDataSetChanged()                        //5  //v1
 
 
-        val linearLayoutSearchHistory = findViewById<LinearLayout>(id.searchHistoryLinearLayout)
+        val linearLayoutSearchHistory = binding.searchHistoryLinearLayout // findViewById<LinearLayout>(id.searchHistoryLinearLayout)
         linearLayoutSearchHistory.visibility =
             when (savedInstanceState.getString("search_history_visibility", "0")) {
                 "4" -> View.INVISIBLE
@@ -337,8 +338,8 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
     }
 
     private fun hidePlaceholder() {
-        val placeholderLayout: LinearLayout = findViewById(id.placeholderLinearLayout)
-        val rvItems: RecyclerView = findViewById(id.rvItems)
+        val placeholderLayout: LinearLayout = binding.placeholderLinearLayout // findViewById(id.placeholderLinearLayout)
+        val rvItems: RecyclerView = binding.rvItems // findViewById(id.rvItems)
 
         rvItems.visibility = View.VISIBLE
         placeholderLayout.visibility = View.GONE
@@ -394,9 +395,9 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
 
     // Поисковый запрос
     private fun SearchRequest() {
-        val inputEditText = findViewById<EditText>(id.edit_search_window)
-        val buttonRefresh = findViewById<Button>(id.buttonRefresh)
-        var progressBar = findViewById<ProgressBar>(id.progressBar)
+        val inputEditText = binding.editSearchWindow // findViewById<EditText>(id.edit_search_window)
+        val buttonRefresh = binding.buttonRefresh // findViewById<Button>(id.buttonRefresh)
+        var progressBar = binding.progressBar // findViewById<ProgressBar>(id.progressBar)
 
         //progressBar.visibility = View.VISIBLE // Показываем ProgressBar перед выполнением запроса
 
