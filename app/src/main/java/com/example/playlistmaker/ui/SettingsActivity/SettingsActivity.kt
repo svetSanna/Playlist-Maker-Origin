@@ -80,7 +80,7 @@ class SettingsActivity : AppCompatActivity() {
 
     @SuppressLint("IntentReset")
     fun onButtonSupport() {
-        val emailIntent = Intent(Intent.ACTION_SENDTO);
+        val emailIntent = Intent(Intent.ACTION_SENDTO)
         emailIntent.setType("text/plain")
         emailIntent.data = Uri.parse("mailto:")
         emailIntent.putExtra(
