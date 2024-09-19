@@ -43,13 +43,13 @@ object Creator {
         return application.getSharedPreferences(PLAYLISTMAKER_PREFERENCES, Context.MODE_PRIVATE)
     }
 
-    fun provideMediaPlayerInteractor(activity: Activity): MediaPlayerInteractor {
+    fun provideMediaPlayerInteractor(): MediaPlayerInteractor {//(activity: Activity): MediaPlayerInteractor {
         //  return MediaPlayerInteractor(activity, provideMediaPlayer(activity))
-        return MediaPlayerInteractor(provideMediaPlayer(activity))
+        return MediaPlayerInteractor(provideMediaPlayer())//(provideMediaPlayer(activity))
     }
 
-    private fun provideMediaPlayer(activity: Activity): MediaPlayerRepository {
-        return MediaPlayerRepositoryImpl(activity)
+    private fun provideMediaPlayer(): MediaPlayerRepository {//(activity: Activity): MediaPlayerRepository {
+        return MediaPlayerRepositoryImpl()//(activity)
     }
 
     fun provideSharedPreferencesInteractor(): SharedPreferencesInteractor {

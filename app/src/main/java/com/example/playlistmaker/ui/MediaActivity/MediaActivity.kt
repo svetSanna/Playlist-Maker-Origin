@@ -2,6 +2,7 @@ package com.example.playlistmaker.ui.MediaActivity
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -14,6 +15,7 @@ import com.example.playlistmaker.TRACK
 import com.example.playlistmaker.databinding.ActivityMediaBinding
 import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.presentation.mapper.SimpleDateFormatMapper
+import com.example.playlistmaker.presentation.state.MediaPlayerState
 import com.example.playlistmaker.presentation.view_model.MediaViewModel
 
 
@@ -57,6 +59,7 @@ class MediaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        Log.i("MyTest", "MediaActivity.onCreare-1")
         binding = ActivityMediaBinding.inflate(layoutInflater)
 
         val view = binding.root
@@ -65,6 +68,7 @@ class MediaActivity : AppCompatActivity() {
         // кнопка "Назад"
         val buttonBackMedia = binding.toolbar
         buttonBackMedia.setOnClickListener {
+            Log.i("MyTest", "MediaActivity.OnCreate-2.buttonBackMedia.setOnClickListener")
             onBackPressedDispatcher.onBackPressed()
         }
 
@@ -104,15 +108,38 @@ class MediaActivity : AppCompatActivity() {
             url = item?.previewUrl
            // mediaPlayerInteractor = Creator.provideMediaPlayerInteractor(this)
 
+            // подписываемся на состояние MediaViewModel
+            viewModel.getMediaPlayerState().observe(this) { state ->
+                when(state) {
+                    is MediaPlayerState.Playing -> {
+                        //progressBarVisibility(true)
+                        Log.i("MyTest", "MediaActivity.onCreate.observe.playing")
+                    }
+                    is MediaPlayerState.Paused -> {
+                        //progressBarVisibility(false)
+                        //showError(state.message)
+                        Log.i("MyTest", "MediaActivity.onCreate.observe.paused")
+                    }
+                    is MediaPlayerState.Prepared -> {
+                        //progressBarVisibility(false)
+                        //showContent(state.data)
+                        Log.i("MyTest", "MediaActivity.onCreate.observe.prepared")
+                    }
+                }
+            }
+
             // подготовка плейера
             // кнопка "Play"/"Pause"
             val buttonPlayPause = binding.buttonMediaPlayPause
             // подготавливаем плейер
             // mediaPlayerInteractor.preparePlayer(url)
+            Log.i("MyTest", "MediaActivity.onCreate-3")
             viewModel.preparePlayer(url)
+            Log.i("MyTest", "MediaActivity.onCreate-4")
 
             buttonPlayPause.setOnClickListener {
                 //mediaPlayerInteractor.playbackControl()
+                Log.i("MyTest", "MediaActivity.onCreate-5.buttonPlayPause.setOnClickListener")
                 viewModel.playbackControl()
             }
         } else {
@@ -200,12 +227,14 @@ class MediaActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         //mediaPlayerInteractor.pausePlayer()
+        Log.i("MyTest", "MediaActivity.onPause")
         viewModel.pausePlayer()
     }
 
     // Активити закрывается
     override fun onDestroy() {
         super.onDestroy()
+        Log.i("MyTest", "MediaActivity.onDestroy")
         //mediaPlayerInteractor.onDestroy()
         viewModel.onDestroymediaPlayer()
     }
