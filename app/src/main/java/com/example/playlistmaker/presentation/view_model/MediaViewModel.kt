@@ -1,72 +1,65 @@
 package com.example.playlistmaker.presentation.view_model
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.domain.use_case.MediaPlayerInteractor
 import com.example.playlistmaker.presentation.state.MediaPlayerState
 
-class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor) : ViewModel() {
+class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor, private val url: String?) : ViewModel() {
     private val state = MutableLiveData<MediaPlayerState>()
-    fun getMediaPlayerState() : LiveData<MediaPlayerState> = state
+    init{
+        preparePlayer(url)
+    }
+    fun getMediaPlayerState(): LiveData<MediaPlayerState> = state
     fun preparePlayer(url: String?) {
-        Log.i("MyTest", "MediaViewModel.preparePlayer")
         mediaPlayerInteractor.preparePlayer(url)
+        state.postValue(MediaPlayerState.Prepared)
     }
 
     fun playbackControl() {
-        Log.i("MyTest", "MediaViewModel.playbackControl")
         mediaPlayerInteractor.playbackControl()
+        if (mediaPlayerInteractor.isStateIsPlaying())
+            state.postValue(MediaPlayerState.Playing)
+        else
+            state.postValue(MediaPlayerState.Paused)
     }
 
     fun pausePlayer() {
-        Log.i("MyTest", "MediaViewModel.pausePlayer")
         mediaPlayerInteractor.pausePlayer()
+        state.postValue(MediaPlayerState.Paused)
     }
 
-    fun onDestroymediaPlayer() {
-        Log.i("MyTest", "MediaViewModel.onDestroymediaPlayer")
+    fun onDestroyMediaPlayer() {
         mediaPlayerInteractor.onDestroy()
     }
 
-
-    //private val mediaPlayerInteractor = Creator.provideMediaPlayerInteractor(this)
+    fun getCurrentPosition(): Int {
+        return mediaPlayerInteractor.getCurrentPosition()
+    }
 
     // фабрика нужна,если для создания ViewModel необходимо в конструктор передать параметр либо ссылку на активити или application
     companion object {
-        fun getMediaViewModelfactory() : ViewModelProvider.Factory =
+        fun getMediaViewModelfactory(url: String?): ViewModelProvider.Factory =
             object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(
                     modelClass: Class<T>,
                     extras: CreationExtras,
-                    ): T {
-                    val activity = checkNotNull(extras[APPLICATION_KEY])
-
+                ): T {
                     return MediaViewModel(
-                        Creator.provideMediaPlayerInteractor()//activity)
+                        Creator.provideMediaPlayerInteractor(), url//activity)
                     ) as T
-                    Log.i("MyTest", "MediaViewModel.getMediaViewModelFactory")
                 }
             }
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        onDestroyMediaPlayer()
+    }
 
-
-    /* companion object {
-        fun getMediaViewModelfactory() : ViewModelProvider.Factory =
-            object : ViewModelProvider.Factory {
-                @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return MediaViewModel(
-                        Creator.provideMediaPlayerInteractor(this)
-                    ) as T
-                }
-            }
-    }*/
 }

@@ -12,4 +12,5 @@ interface MediaPlayerRepository {
     fun pausePlayer()
     fun playbackControl()
     fun onDestroy()
+    fun isStateIsPlaying(): Boolean
 }

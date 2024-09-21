@@ -2,7 +2,8 @@ package com.example.playlistmaker.ui.MediaActivity
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
+import android.os.Handler
+import android.os.Looper
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -20,47 +21,40 @@ import com.example.playlistmaker.presentation.view_model.MediaViewModel
 
 
 class MediaActivity : AppCompatActivity() {
-    //private var mediaPlayer = MediaPlayer()
-
-    //private var getMediaPlayerUseCase = Creator.provideMediaPlayerInteractor() //p1
-    //private var mediaPlayer = getMediaPlayerUseCase() //р1
-
+    //Log.i("MyTest", "MediaActivity.onCreate-4")
+    companion object {
+        private const val TIME_DEBOUNCE = 400L // время, через которое будет обновляться поле, показывающее, сколько времени от начала отрывка проиграно в формате
+    }
 
     private lateinit var binding: ActivityMediaBinding
 
-    //private lateinit var mediaPlayerInteractor: MediaPlayerInteractor//p1
-    /*private val mediaPlayerInteractor: MediaPlayerInteractor by lazy{
-        Creator.provideMediaPlayerInteractor(this)
-    }*/
-
-    /* companion object {
-            private const val STATE_DEFAULT = 0 // освобожден
-            private const val STATE_PREPARED = 1 // подготовлен
-            private const val STATE_PLAYING = 2 // воспроизводится
-            private const val STATE_PAUSED = 3 // пауза
-            private const val TIME_DEBOUNCE =
-                400L // время, через которое будет обновляться поле, показывающее, сколько времени от начала отрывка проиграно в формате
-        }
-
-        private var playerState = STATE_DEFAULT // cостояние плейера
-        */ //p1
-
-    private val viewModel by lazy {
-        ViewModelProvider(this, MediaViewModel.getMediaViewModelfactory()
-        )[MediaViewModel::class.java]
-       // ViewModelProvider(this)[MediaViewModel::class.java]
-    }
+    private lateinit var timeTrack :TextView
 
     private var url: String? = ""
 
-    //private val handlerMain = Handler(Looper.getMainLooper()) //p1
+    private val viewModel by lazy {
+        ViewModelProvider(this, MediaViewModel.getMediaViewModelfactory(url)
+        )[MediaViewModel::class.java]
+    }
 
+    private val handlerMain = Handler(Looper.getMainLooper())
+
+    private val timeTrackRunnable = object : Runnable {
+        override fun run() {
+            // обновляем время
+            timeTrack.text = SimpleDateFormatMapper.map(viewModel.getCurrentPosition())
+
+            handlerMain?.postDelayed(this, TIME_DEBOUNCE)
+        }
+    }
     @SuppressLint("MissingInflatedId", "WrongViewCast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Log.i("MyTest", "MediaActivity.onCreare-1")
         binding = ActivityMediaBinding.inflate(layoutInflater)
+
+        timeTrack = binding.time
+        timeTrack.text = getString(R.string.time_00_00)
 
         val view = binding.root
         setContentView(view)
@@ -68,12 +62,8 @@ class MediaActivity : AppCompatActivity() {
         // кнопка "Назад"
         val buttonBackMedia = binding.toolbar
         buttonBackMedia.setOnClickListener {
-            Log.i("MyTest", "MediaActivity.OnCreate-2.buttonBackMedia.setOnClickListener")
             onBackPressedDispatcher.onBackPressed()
         }
-
-        // кнопка "Play"/"Pause"
-        val buttonPlayPause = binding.buttonMediaPlayPause //findViewById<ImageView>(R.id.button_media_play_pause)
 
         // получаем данные трека из Intent
         var item: Track? = getIntent().getParcelableExtra(TRACK)
@@ -106,40 +96,28 @@ class MediaActivity : AppCompatActivity() {
 
             // ссылка на отрывок
             url = item?.previewUrl
-           // mediaPlayerInteractor = Creator.provideMediaPlayerInteractor(this)
 
             // подписываемся на состояние MediaViewModel
             viewModel.getMediaPlayerState().observe(this) { state ->
                 when(state) {
                     is MediaPlayerState.Playing -> {
-                        //progressBarVisibility(true)
-                        Log.i("MyTest", "MediaActivity.onCreate.observe.playing")
+                        showPlaying()
                     }
                     is MediaPlayerState.Paused -> {
-                        //progressBarVisibility(false)
-                        //showError(state.message)
-                        Log.i("MyTest", "MediaActivity.onCreate.observe.paused")
+                        showPaused()
                     }
                     is MediaPlayerState.Prepared -> {
-                        //progressBarVisibility(false)
-                        //showContent(state.data)
-                        Log.i("MyTest", "MediaActivity.onCreate.observe.prepared")
+                        showPrepared()
                     }
                 }
             }
+            // обновляем время
+            timeTrack.text = SimpleDateFormatMapper.map(viewModel.getCurrentPosition())
 
-            // подготовка плейера
             // кнопка "Play"/"Pause"
             val buttonPlayPause = binding.buttonMediaPlayPause
-            // подготавливаем плейер
-            // mediaPlayerInteractor.preparePlayer(url)
-            Log.i("MyTest", "MediaActivity.onCreate-3")
-            viewModel.preparePlayer(url)
-            Log.i("MyTest", "MediaActivity.onCreate-4")
 
             buttonPlayPause.setOnClickListener {
-                //mediaPlayerInteractor.playbackControl()
-                Log.i("MyTest", "MediaActivity.onCreate-5.buttonPlayPause.setOnClickListener")
                 viewModel.playbackControl()
             }
         } else {
@@ -226,16 +204,38 @@ class MediaActivity : AppCompatActivity() {
     // Активити на паузу
     override fun onPause() {
         super.onPause()
-        //mediaPlayerInteractor.pausePlayer()
-        Log.i("MyTest", "MediaActivity.onPause")
-        viewModel.pausePlayer()
+            // viewModel.pausePlayer()
     }
 
     // Активити закрывается
     override fun onDestroy() {
         super.onDestroy()
-        Log.i("MyTest", "MediaActivity.onDestroy")
-        //mediaPlayerInteractor.onDestroy()
-        viewModel.onDestroymediaPlayer()
+       // viewModel.onDestroyMediaPlayer() - убрала, чтобы медиаплейер не перезапускался снова при повороте
+    }
+
+    fun showPlaying(){
+        // запустить плейер        // кнопка "Play"/"Pause"
+        val buttonPlayPause = binding.buttonMediaPlayPause
+        buttonPlayPause.setImageResource(R.drawable.button_media_pause)
+
+        handlerMain?.postDelayed(
+            timeTrackRunnable,
+            TIME_DEBOUNCE
+        )  // ставим в очередь обновление таймера
+    }
+
+    fun showPaused(){
+        // кнопка "Play"/"Pause"
+        val buttonPlayPause = binding.buttonMediaPlayPause
+        buttonPlayPause.setImageResource(R.drawable.button_media_play)
+
+        handlerMain?.removeCallbacks(timeTrackRunnable) // удаляем из очереди все сообщения Runnable, чтобы таймер не обновлялся
+    }
+    fun showPrepared() {
+        var timeTrack = binding.time
+        timeTrack.text = getString(R.string.time_00_00)
+
+        handlerMain?.removeCallbacks(timeTrackRunnable) // удаляем из очереди все сообщения Runnable, чтобы таймер не обновлялся
+
     }
 }
