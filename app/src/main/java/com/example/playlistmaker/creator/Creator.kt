@@ -1,6 +1,5 @@
 package com.example.playlistmaker.creator
 
-import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
@@ -17,6 +16,7 @@ import com.example.playlistmaker.domain.repository.SharedPreferencesRepository
 import com.example.playlistmaker.domain.repository.TrackRepository
 import com.example.playlistmaker.domain.use_case.GetTrackListUseCase
 import com.example.playlistmaker.domain.use_case.MediaPlayerInteractor
+import com.example.playlistmaker.domain.use_case.MediaPlayerInteractorImpl
 import com.example.playlistmaker.domain.use_case.SearchHistoryInteractor
 import com.example.playlistmaker.domain.use_case.SharedPreferencesInteractor
 
@@ -43,9 +43,9 @@ object Creator {
         return application.getSharedPreferences(PLAYLISTMAKER_PREFERENCES, Context.MODE_PRIVATE)
     }
 
-    fun provideMediaPlayerInteractor(): MediaPlayerInteractor {//(activity: Activity): MediaPlayerInteractor {
-        //  return MediaPlayerInteractor(activity, provideMediaPlayer(activity))
-        return MediaPlayerInteractor(provideMediaPlayer())//(provideMediaPlayer(activity))
+    fun provideMediaPlayerInteractor(): MediaPlayerInteractor {//MediaPlayerInteractorImpl {
+
+        return MediaPlayerInteractorImpl(provideMediaPlayer())
     }
 
     private fun provideMediaPlayer(): MediaPlayerRepository {//(activity: Activity): MediaPlayerRepository {

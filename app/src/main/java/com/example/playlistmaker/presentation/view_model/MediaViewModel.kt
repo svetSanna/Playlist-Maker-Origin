@@ -51,7 +51,7 @@ class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor, p
                     extras: CreationExtras,
                 ): T {
                     return MediaViewModel(
-                        Creator.provideMediaPlayerInteractor(), url//activity)
+                        Creator.provideMediaPlayerInteractor(), url
                     ) as T
                 }
             }
