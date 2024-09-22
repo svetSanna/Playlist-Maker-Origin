@@ -54,10 +54,13 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
     // создаем адаптер для Track для истории поиска
     private var trackAdapterSearchHistory = TrackAdapter()
 
-    private val viewModel by lazy {
+    /*private val viewModel by lazy {
         ViewModelProvider(this)[SearchViewModel::class.java]
+    }*/
+    private val viewModel by lazy {
+        ViewModelProvider(this, SearchViewModel.getSearchViewModelfactory()
+        )[SearchViewModel::class.java]
     }
-
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY =
             2000L     // для поиска при задержке ввода на 2 секунды

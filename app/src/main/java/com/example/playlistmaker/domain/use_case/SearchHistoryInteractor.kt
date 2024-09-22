@@ -6,9 +6,6 @@ import com.example.playlistmaker.domain.repository.SearchHistoryRepository
 class SearchHistoryInteractor(
     private val repositoryImpl: SearchHistoryRepository
 ) {
-    /* fun getSearchHistory(sharedPrefs: SharedPreferences): SearchHistory {
-         return repositoryImpl.getSearchHistory(sharedPrefs)
-     }*/
     fun searchHistoryClean() {
         return repositoryImpl.searchHistoryClean()
     }
