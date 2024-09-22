@@ -63,6 +63,10 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
             2000L     // для поиска при задержке ввода на 2 секунды
         private const val CLICK_DEBOUNCE_DELAY =
             1000L      // для предотвращения нажатия два раза подряд на элемент списка
+        private const val EDIT_STRING = "editString"
+        private const val TRACK_LIST = "track_list"
+        private const val SEARCH_HISTORY_VISIBILITY = "search_history_visibility"
+        private const val TRACK_LIST_SEARCH_HISTORY = "track_list_search_history"
     }
 
     // Создаём Handler, привязанный к ГЛАВНОМУ потоку
@@ -145,7 +149,7 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
 
         inputEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                val placeholderLayout: LinearLayout = binding.placeholderLinearLayout //findViewById(id.placeholderLinearLayout)
+                val placeholderLayout: LinearLayout = binding.placeholderLinearLayout
                 placeholderLayout.visibility = View.GONE
                 rvItems.visibility = View.GONE
                 SearchRequest()
@@ -176,7 +180,6 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                var editString = s?.toString() ?: ""
                 clearButton.visibility = clearButtonVisibility(s)
 
                 val linearLayoutSearchHistory = binding.searchHistoryLinearLayout
@@ -215,13 +218,13 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         val buttonCleanSearchHistory = binding.buttonCleanSearchHistory
         buttonCleanSearchHistory.setOnClickListener {
 
-            viewModel.searchHistoryClean() // historyInteractor.searchHistoryClean()
-            trackAdapterSearchHistory.items.clear()   // = historyInteractor.getTrackListSearchHistory()
+            viewModel.searchHistoryClean()
+            trackAdapterSearchHistory.items.clear()
             trackAdapterSearchHistory.notifyDataSetChanged()
 
             linearLayoutSearchHistory.visibility = View.GONE
 
-            viewModel.writeToSharedPreferences() // historyInteractor.writeToSharedPreferences()
+            viewModel.writeToSharedPreferences()
         }
     }
 
@@ -326,41 +329,41 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-         outState.putString("editString", editString)
+         outState.putString(EDIT_STRING, editString)
 
-         outState.putParcelableArrayList("track_list", trackList as ArrayList<out Parcelable?>?)
+         outState.putParcelableArrayList(TRACK_LIST, trackList as ArrayList<out Parcelable?>?)
 
          val linearLayoutSearchHistory = binding.searchHistoryLinearLayout
          outState.putString(
-             "search_history_visibility",
+             SEARCH_HISTORY_VISIBILITY,
              linearLayoutSearchHistory.visibility.toString()
          )
          outState.putParcelableArrayList(
-             "track_list_search_history",
-            viewModel.getTrackListSearchHistory() // historyInteractor.getTrackListSearchHistory() as ArrayList<out Parcelable?>?
+             TRACK_LIST_SEARCH_HISTORY,
+            viewModel.getTrackListSearchHistory()
          )
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         // Вторым параметром мы передаём значение по умолчанию
-        editString = savedInstanceState.getString("editString", "")
+        editString = savedInstanceState.getString(EDIT_STRING, "")
         val inputEditText = binding.editSearchWindow
         inputEditText.setText(editString)
 
-        trackList = savedInstanceState.getParcelableArrayList("track_list")!!
+        trackList = savedInstanceState.getParcelableArrayList(TRACK_LIST)!!
         trackAdapter.items = trackList
         trackAdapter.notifyDataSetChanged()
 
         hidePlaceholder()
 
-        viewModel.setTrackListSearchHistory(savedInstanceState.getParcelableArrayList("track_list_search_history")!!)
+        viewModel.setTrackListSearchHistory(savedInstanceState.getParcelableArrayList(TRACK_LIST_SEARCH_HISTORY)!!)
         trackAdapterSearchHistory.items = viewModel.getTrackListSearchHistory()
         trackAdapterSearchHistory.notifyDataSetChanged()
 
         val linearLayoutSearchHistory = binding.searchHistoryLinearLayout
         linearLayoutSearchHistory.visibility =
-            when (savedInstanceState.getString("search_history_visibility", "0")) {
+            when (savedInstanceState.getString(SEARCH_HISTORY_VISIBILITY, "0")) {
                 "4" -> View.INVISIBLE
                 "8" -> View.GONE
                 else -> View.VISIBLE
