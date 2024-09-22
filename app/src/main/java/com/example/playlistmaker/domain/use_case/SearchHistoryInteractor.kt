@@ -28,4 +28,8 @@ class SearchHistoryInteractor(
     fun addItem(item: Track) {
         return repositoryImpl.addItem(item)
     }
+
+    fun itemClick(item: Track) {
+        return repositoryImpl.itemClick(item)
+    }
 }

@@ -73,4 +73,8 @@ class SearchViewModel() : ViewModel() {
     fun addItemToTrackListSearchHistory(item: Track) {
         historyInteractor.addItem(item)
     }
+
+    fun itemClick(item: Track) {
+        historyInteractor.itemClick(item)
+    }
 }

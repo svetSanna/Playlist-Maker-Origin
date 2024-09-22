@@ -9,4 +9,5 @@ interface SearchHistoryRepository {
     fun writeToSharedPreferences()
     fun setTrackListSearchHistory(parcelableArrayList: ArrayList<Track>)
     fun addItem(item: Track)
+    fun itemClick(item: Track)
 }

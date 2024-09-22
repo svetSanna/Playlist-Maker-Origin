@@ -380,15 +380,20 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
 
     override fun onItemClick(item: Track) {
         if (clickDebounce()) { // если между нажатиями на элемент прошло не меньше 1 секунды
-            var itemSearchHistory = viewModel.getTrackListSearchHistory().firstOrNull { it.trackId == item.trackId }
 
-            if (itemSearchHistory != null)
+            viewModel.itemClick(item)
+
+            /*
+             var itemSearchHistory = viewModel.getTrackListSearchHistory().firstOrNull { it.trackId == item.trackId }
+
+             if (itemSearchHistory != null)
                 viewModel.getTrackListSearchHistory().remove(itemSearchHistory)
 
             viewModel.getTrackListSearchHistory().add(0, item)
 
             if (viewModel.getTrackListSearchHistory().size > 10)
                 viewModel.getTrackListSearchHistory().removeAt(10)
+                */
 
             trackAdapterSearchHistory.items = viewModel.getTrackListSearchHistory()
             trackAdapterSearchHistory.notifyDataSetChanged()
