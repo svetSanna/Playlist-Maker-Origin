@@ -20,6 +20,7 @@ import com.example.playlistmaker.domain.use_case.MediaPlayerInteractorImpl
 import com.example.playlistmaker.domain.use_case.SearchHistoryInteractor
 import com.example.playlistmaker.domain.use_case.SearchHistoryInteractorImpl
 import com.example.playlistmaker.domain.use_case.SharedPreferencesInteractor
+import com.example.playlistmaker.domain.use_case.SharedPreferencesInteractorImpl
 
 object Creator {
     // поле, которое отвечает за контекст
@@ -53,8 +54,8 @@ object Creator {
         return MediaPlayerRepositoryImpl()
     }
 
-    fun provideSharedPreferencesInteractor(): SharedPreferencesInteractor {
-        return SharedPreferencesInteractor(provideSharedPreferencesRepository())
+    fun provideSharedPreferencesInteractor(): SharedPreferencesInteractor { //SharedPreferencesInteractorImpl {
+        return SharedPreferencesInteractorImpl(provideSharedPreferencesRepository())
     }
 
     private fun provideSharedPreferencesRepository(): SharedPreferencesRepository {
