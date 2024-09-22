@@ -14,7 +14,8 @@ import com.example.playlistmaker.domain.use_case.SearchHistoryInteractor
 import com.example.playlistmaker.presentation.state.SearchScreenState
 
 class SearchViewModel( private var getTrackListUseCase : GetTrackListUseCase,
-                       private var historyInteractor : SearchHistoryInteractor) : ViewModel() {
+                       private var historyInteractor : SearchHistoryInteractor
+) : ViewModel() {
     private val state = MutableLiveData<SearchScreenState>()
     //getTrackListUseCase = Creator.provideGetTrackListUseCase()
     //historyInteractor = Creator.provideGetSearchHistoryInteractor()

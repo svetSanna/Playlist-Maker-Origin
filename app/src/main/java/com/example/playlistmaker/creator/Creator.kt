@@ -18,6 +18,7 @@ import com.example.playlistmaker.domain.use_case.GetTrackListUseCase
 import com.example.playlistmaker.domain.use_case.MediaPlayerInteractor
 import com.example.playlistmaker.domain.use_case.MediaPlayerInteractorImpl
 import com.example.playlistmaker.domain.use_case.SearchHistoryInteractor
+import com.example.playlistmaker.domain.use_case.SearchHistoryInteractorImpl
 import com.example.playlistmaker.domain.use_case.SharedPreferencesInteractor
 
 object Creator {
@@ -48,8 +49,8 @@ object Creator {
         return MediaPlayerInteractorImpl(provideMediaPlayer())
     }
 
-    private fun provideMediaPlayer(): MediaPlayerRepository {//(activity: Activity): MediaPlayerRepository {
-        return MediaPlayerRepositoryImpl()//(activity)
+    private fun provideMediaPlayer(): MediaPlayerRepository {
+        return MediaPlayerRepositoryImpl()
     }
 
     fun provideSharedPreferencesInteractor(): SharedPreferencesInteractor {
@@ -76,7 +77,7 @@ object Creator {
         return SearchHistoryInteractor(provideSearchHistoryInteractor(sharedPrefs))
     }*/ //p3
     fun provideGetSearchHistoryInteractor(): SearchHistoryInteractor {
-        return SearchHistoryInteractor(provideSearchHistoryInteractor())
+        return SearchHistoryInteractorImpl(provideSearchHistoryInteractor())
     }
 
     /*private fun provideSearchHistoryInteractor(sharedPrefs: SharedPreferences): SearchHistoryRepository {
