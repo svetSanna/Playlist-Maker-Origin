@@ -5,76 +5,62 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SwitchCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.App
 import com.example.playlistmaker.R
-import com.example.playlistmaker.R.id.button_settings_allow_forward
-import com.example.playlistmaker.R.id.button_settings_share
-import com.example.playlistmaker.R.id.button_settings_support
-import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.databinding.ActivitySettingsBinding
+import com.example.playlistmaker.presentation.view_model.SettingsViewModel
 
 class SettingsActivity : AppCompatActivity() {
+    private lateinit var binding: ActivitySettingsBinding
+
+    private val viewModel by lazy {
+        ViewModelProvider(this)[SettingsViewModel::class.java]
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
 
-        val buttonSettingsBack = findViewById<ImageView>(R.id.button_settings_back)
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
+
+        val view = binding.root
+        setContentView(view)      // setContentView(R.layout.activity_settings)
+
+        val buttonSettingsBack = binding.buttonSettingsBack // findViewById<ImageView>(R.id.button_settings_back)
         // вернуться назад
         buttonSettingsBack.setOnClickListener {
             onBackPressed()
         }
 
-        val buttonSettingsShare = findViewById<ImageView>(button_settings_share)
+        val buttonSettingsShare = binding.buttonSettingsShare
         // поделиться приложением
         buttonSettingsShare.setOnClickListener {
             onButtonShare()
         }
 
-        val buttonSettingsSupport = findViewById<ImageView>(button_settings_support)
+        val buttonSettingsSupport = binding.buttonSettingsSupport
         // написать в поддержку
         buttonSettingsSupport.setOnClickListener {
             onButtonSupport()
         }
 
-        val buttonSettingsAllowForward = findViewById<ImageView>(button_settings_allow_forward)
+        val buttonSettingsAllowForward = binding.buttonSettingsAllowForward
         // пользовательское соглашение
         buttonSettingsAllowForward.setOnClickListener {
             onButtonAllowForward()
         }
 
-        //val sharedPrefs = getSharedPreferences(PLAYLISTMAKER_PREFERENCES, MODE_PRIVATE)
+       // val sharedPreferencesInteractor = Creator.provideSharedPreferencesInteractor()
 
-        //Creator.initApplication(this) //p2
-
-        //val sharedPrefs = Creator.provideSharedPreferences() //p3
-
-        val sharedPreferencesInteractor = Creator.provideSharedPreferencesInteractor()
-
-        val selectorSwitch = findViewById<SwitchCompat>(R.id.selector_switch)
+        val selectorSwitch = binding.selectorSwitch
         selectorSwitch.setOnCheckedChangeListener { _, checked ->
             (applicationContext as App).switchTheme(checked)
-            sharedPreferencesInteractor.edit(checked.toString())
-            /*sharedPrefs.edit()
-                .putString(THEME_SWITCH_KEY, checked.toString())
-                .apply()*/
-
+            viewModel.editTheme(checked.toString())
+            //sharedPreferencesInteractor.edit(checked.toString())
         }
         selectorSwitch.isChecked = (applicationContext as App).darkTheme
-    }
-
-    override fun onResume() { // в задании этого пока не было, решила попробовать.
-        super.onResume()
-        // setContentView(R.layout.activity_settings)
-        /* Выставляла переключатель по заданной теме, потом переделала с помощью sharedPrefernces
-            val selectorSwitch = findViewById<SwitchCompat>(R.id.selector_switch)
-
-            when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-            Configuration.UI_MODE_NIGHT_YES -> { selectorSwitch.setChecked(true)}
-            Configuration.UI_MODE_NIGHT_NO -> {selectorSwitch.setChecked(false)}
-        } */
     }
 
     fun onButtonShare() {
@@ -94,7 +80,7 @@ class SettingsActivity : AppCompatActivity() {
 
     @SuppressLint("IntentReset")
     fun onButtonSupport() {
-        val emailIntent = Intent(Intent.ACTION_SENDTO);
+        val emailIntent = Intent(Intent.ACTION_SENDTO)
         emailIntent.setType("text/plain")
         emailIntent.data = Uri.parse("mailto:")
         emailIntent.putExtra(

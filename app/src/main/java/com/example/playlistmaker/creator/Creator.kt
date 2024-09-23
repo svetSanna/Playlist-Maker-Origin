@@ -1,6 +1,5 @@
 package com.example.playlistmaker.creator
 
-import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
@@ -17,8 +16,11 @@ import com.example.playlistmaker.domain.repository.SharedPreferencesRepository
 import com.example.playlistmaker.domain.repository.TrackRepository
 import com.example.playlistmaker.domain.use_case.GetTrackListUseCase
 import com.example.playlistmaker.domain.use_case.MediaPlayerInteractor
+import com.example.playlistmaker.domain.use_case.MediaPlayerInteractorImpl
 import com.example.playlistmaker.domain.use_case.SearchHistoryInteractor
+import com.example.playlistmaker.domain.use_case.SearchHistoryInteractorImpl
 import com.example.playlistmaker.domain.use_case.SharedPreferencesInteractor
+import com.example.playlistmaker.domain.use_case.SharedPreferencesInteractorImpl
 
 object Creator {
     // поле, которое отвечает за контекст
@@ -43,17 +45,17 @@ object Creator {
         return application.getSharedPreferences(PLAYLISTMAKER_PREFERENCES, Context.MODE_PRIVATE)
     }
 
-    fun provideMediaPlayerInteractor(activity: Activity): MediaPlayerInteractor {
-        //  return MediaPlayerInteractor(activity, provideMediaPlayer(activity))
-        return MediaPlayerInteractor(provideMediaPlayer(activity))
+    fun provideMediaPlayerInteractor(): MediaPlayerInteractor {//MediaPlayerInteractorImpl {
+
+        return MediaPlayerInteractorImpl(provideMediaPlayer())
     }
 
-    private fun provideMediaPlayer(activity: Activity): MediaPlayerRepository {
-        return MediaPlayerRepositoryImpl(activity)
+    private fun provideMediaPlayer(): MediaPlayerRepository {
+        return MediaPlayerRepositoryImpl()
     }
 
-    fun provideSharedPreferencesInteractor(): SharedPreferencesInteractor {
-        return SharedPreferencesInteractor(provideSharedPreferencesRepository())
+    fun provideSharedPreferencesInteractor(): SharedPreferencesInteractor { //SharedPreferencesInteractorImpl {
+        return SharedPreferencesInteractorImpl(provideSharedPreferencesRepository())
     }
 
     private fun provideSharedPreferencesRepository(): SharedPreferencesRepository {
@@ -76,7 +78,7 @@ object Creator {
         return SearchHistoryInteractor(provideSearchHistoryInteractor(sharedPrefs))
     }*/ //p3
     fun provideGetSearchHistoryInteractor(): SearchHistoryInteractor {
-        return SearchHistoryInteractor(provideSearchHistoryInteractor())
+        return SearchHistoryInteractorImpl(provideSearchHistoryInteractor())
     }
 
     /*private fun provideSearchHistoryInteractor(sharedPrefs: SharedPreferences): SearchHistoryRepository {

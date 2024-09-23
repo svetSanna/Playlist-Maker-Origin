@@ -2,72 +2,81 @@ package com.example.playlistmaker.ui.MediaActivity
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.TRACK
-import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.databinding.ActivityMediaBinding
 import com.example.playlistmaker.domain.entity.Track
-import com.example.playlistmaker.domain.use_case.MediaPlayerInteractor
 import com.example.playlistmaker.presentation.mapper.SimpleDateFormatMapper
+import com.example.playlistmaker.presentation.state.MediaPlayerState
+import com.example.playlistmaker.presentation.view_model.MediaViewModel
 
 
 class MediaActivity : AppCompatActivity() {
+    //Log.i("MyTest", "MediaActivity.onCreate-4")
+    companion object {
+        private const val TIME_DEBOUNCE = 400L // время, через которое будет обновляться поле, показывающее, сколько времени от начала отрывка проиграно в формате
+    }
 
-    //private var mediaPlayer = MediaPlayer()
+    private lateinit var binding: ActivityMediaBinding
 
-    //private var getMediaPlayerUseCase = Creator.provideMediaPlayerInteractor() //p1
-    //private var mediaPlayer = getMediaPlayerUseCase() //р1
-
-    lateinit private var mediaPlayerInteractor: MediaPlayerInteractor//p1
-
-    /* companion object {
-         private const val STATE_DEFAULT = 0 // освобожден
-         private const val STATE_PREPARED = 1 // подготовлен
-         private const val STATE_PLAYING = 2 // воспроизводится
-         private const val STATE_PAUSED = 3 // пауза
-         private const val TIME_DEBOUNCE =
-             400L // время, через которое будет обновляться поле, показывающее, сколько времени от начала отрывка проиграно в формате
-     }
-
-     private var playerState = STATE_DEFAULT // cостояние плейера
-     */ //p1
+    private lateinit var timeTrack :TextView
 
     private var url: String? = ""
 
-    //private val handlerMain = Handler(Looper.getMainLooper()) //p1
+    private val viewModel by lazy {
+        ViewModelProvider(this, MediaViewModel.getMediaViewModelfactory(url)
+        )[MediaViewModel::class.java]
+    }
 
+    private val handlerMain = Handler(Looper.getMainLooper())
+
+    private val timeTrackRunnable = object : Runnable {
+        override fun run() {
+            // обновляем время
+            timeTrack.text = SimpleDateFormatMapper.map(viewModel.getCurrentPosition())
+
+            handlerMain?.postDelayed(this, TIME_DEBOUNCE)
+        }
+    }
     @SuppressLint("MissingInflatedId", "WrongViewCast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_media)
+
+        binding = ActivityMediaBinding.inflate(layoutInflater)
+
+        timeTrack = binding.time
+        timeTrack.text = getString(R.string.time_00_00)
+
+        val view = binding.root
+        setContentView(view)
 
         // кнопка "Назад"
-        val buttonBackMedia = findViewById<Toolbar>(R.id.toolbar)
+        val buttonBackMedia = binding.toolbar
         buttonBackMedia.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
-
-        // кнопка "Play"/"Pause"
-        val buttonPlayPause = findViewById<ImageView>(R.id.button_media_play_pause)
 
         // получаем данные трека из Intent
         var item: Track? = getIntent().getParcelableExtra(TRACK)
 
         // раскладываем эти данные по соответствующим вьюшкам
-        var ivTrackImage: ImageView = findViewById(R.id.track_image)
-        var tvTrackName: TextView = findViewById(R.id.track_name_data)
-        var tvArtistName: TextView = findViewById(R.id.artist_name_data)
-        var tvTrackTime: TextView = findViewById(R.id.track_time_millis_data) // длительность
-        var tvCollectionName: TextView = findViewById(R.id.collection_name_data)
-        var tvReleaseDate: TextView = findViewById(R.id.release_date_data)
-        var tvPrimaryGenreName: TextView = findViewById(R.id.primary_genre_name_data)
-        var tvCountry: TextView = findViewById(R.id.country_data)
+        var ivTrackImage: ImageView = binding.trackImage //findViewById(R.id.track_image)
+        var tvTrackName: TextView = binding.trackNameData //findViewById(R.id.track_name_data)
+        var tvArtistName: TextView = binding.artistNameData //findViewById(R.id.artist_name_data)
+        var tvTrackTime: TextView = binding.trackTimeMillisData //findViewById(R.id.track_time_millis_data) // длительность
+        var tvCollectionName: TextView = binding.collectionNameData //findViewById(R.id.collection_name_data)
+        var tvReleaseDate: TextView = binding.releaseDateData //findViewById(R.id.release_date_data)
+        var tvPrimaryGenreName: TextView = binding.primaryGenreNameData //findViewById(R.id.primary_genre_name_data)
+        var tvCountry: TextView = binding.countryData //findViewById(R.id.country_data)
 
         if (item != null) {
             Glide.with(this)
@@ -79,7 +88,6 @@ class MediaActivity : AppCompatActivity() {
 
             tvTrackName.text = item.trackName
             tvArtistName.text = item.artistName
-            //tvTrackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis)
             tvTrackTime.text = SimpleDateFormatMapper.map(item.trackTimeMillis)
             tvCollectionName.text = item.collectionName
             tvReleaseDate.text = item.releaseDate.substring(0, 4)
@@ -88,32 +96,48 @@ class MediaActivity : AppCompatActivity() {
 
             // ссылка на отрывок
             url = item?.previewUrl
-            mediaPlayerInteractor = Creator.provideMediaPlayerInteractor(this)
 
-            // подготавливаем плейер
-            mediaPlayerInteractor.preparePlayer(url) //preparePlayer() //p1
+            // подписываемся на состояние MediaViewModel
+            viewModel.getMediaPlayerState().observe(this) { state ->
+                when(state) {
+                    is MediaPlayerState.Playing -> {
+                        showPlaying()
+                    }
+                    is MediaPlayerState.Paused -> {
+                        showPaused()
+                    }
+                    is MediaPlayerState.Prepared -> {
+                        showPrepared()
+                    }
+                }
+            }
+            // обновляем время
+            timeTrack.text = SimpleDateFormatMapper.map(viewModel.getCurrentPosition())
+
+            // кнопка "Play"/"Pause"
+            val buttonPlayPause = binding.buttonMediaPlayPause
 
             buttonPlayPause.setOnClickListener {
-                mediaPlayerInteractor.playbackControl()// playbackControl() //p1
+                viewModel.playbackControl()
             }
         } else {
             Toast.makeText(
                 this,
-                R.string.my_message/*"Пока посмотреть на работу плейера можно, зайдя через экран поиска"*/,
+                R.string.my_message,
                 Toast.LENGTH_LONG
             ).show()
         }
     }
 
     /*private val timeTrackRunnable = object : Runnable {
-        override fun run() {
-            var timeTrack = findViewById<TextView>(R.id.time)
-            // обновляем время
-            //timeTrack.text = SimpleDateFormatMapper.map(mediaPlayer.currentPosition) //p1
-            timeTrack.text = SimpleDateFormatMapper.map(mediaPlayerInteractor.getCurrentPosition()) //p1
-            handlerMain?.postDelayed(this, TIME_DEBOUNCE)
-        }
-    }*/
+           override fun run() {
+               var timeTrack = findViewById<TextView>(R.id.time)
+               // обновляем время
+               //timeTrack.text = SimpleDateFormatMapper.map(mediaPlayer.currentPosition) //p1
+               timeTrack.text = SimpleDateFormatMapper.map(mediaPlayerInteractor.getCurrentPosition()) //p1
+               handlerMain?.postDelayed(this, TIME_DEBOUNCE)
+           }
+       }*/
 
     // подготовка плейера
     /*private fun preparePlayer() {
@@ -180,12 +204,38 @@ class MediaActivity : AppCompatActivity() {
     // Активити на паузу
     override fun onPause() {
         super.onPause()
-        mediaPlayerInteractor.pausePlayer() //pausePlayer() //p1
+            // viewModel.pausePlayer()
     }
 
     // Активити закрывается
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayerInteractor.onDestroy()        //mediaPlayer.release() //p1
+       // viewModel.onDestroyMediaPlayer() - убрала, чтобы медиаплейер не перезапускался снова при повороте
+    }
+
+    fun showPlaying(){
+        // запустить плейер        // кнопка "Play"/"Pause"
+        val buttonPlayPause = binding.buttonMediaPlayPause
+        buttonPlayPause.setImageResource(R.drawable.button_media_pause)
+
+        handlerMain?.postDelayed(
+            timeTrackRunnable,
+            TIME_DEBOUNCE
+        )  // ставим в очередь обновление таймера
+    }
+
+    fun showPaused(){
+        // кнопка "Play"/"Pause"
+        val buttonPlayPause = binding.buttonMediaPlayPause
+        buttonPlayPause.setImageResource(R.drawable.button_media_play)
+
+        handlerMain?.removeCallbacks(timeTrackRunnable) // удаляем из очереди все сообщения Runnable, чтобы таймер не обновлялся
+    }
+    fun showPrepared() {
+        var timeTrack = binding.time
+        timeTrack.text = getString(R.string.time_00_00)
+
+        handlerMain?.removeCallbacks(timeTrackRunnable) // удаляем из очереди все сообщения Runnable, чтобы таймер не обновлялся
+
     }
 }

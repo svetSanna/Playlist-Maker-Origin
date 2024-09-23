@@ -3,20 +3,26 @@ package com.example.playlistmaker.ui.MainActivity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import com.example.playlistmaker.R
+import com.example.playlistmaker.databinding.ActivityMainBinding
 import com.example.playlistmaker.ui.MediaActivity.MediaActivity
 import com.example.playlistmaker.ui.SearchActivity.SearchActivity
 import com.example.playlistmaker.ui.SettingsActivity.SettingsActivity
 
+//import com.example.playlistmaker.
+
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        val buttonSearch = findViewById<Button>(R.id.button_search)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+
+        val view = binding.root
+        setContentView(view)
+
+        val buttonSearch = binding.buttonSearch //findViewById<Button>(R.id.button_search)
 
         val displayIntent = Intent(this, SearchActivity::class.java)
         val buttonClickListener: View.OnClickListener = object : View.OnClickListener {
@@ -27,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         }
         buttonSearch.setOnClickListener(buttonClickListener)
 
-        val buttonMedia = findViewById<Button>(R.id.button_media)
+        val buttonMedia = binding.buttonMedia //findViewById<Button>(R.id.button_media)
 
         buttonMedia.setOnClickListener {
             val displayIntent = Intent(this, MediaActivity::class.java)
@@ -35,7 +41,7 @@ class MainActivity : AppCompatActivity() {
             // Toast.makeText(this@MainActivity, "Нажали на кнопку \"Медиатека\"!", Toast.LENGTH_SHORT).show()
         }
 
-        val buttonSettings = findViewById<Button>(R.id.button_settings)
+        val buttonSettings = binding.buttonSettings //findViewById<Button>(R.id.button_settings)
 
         buttonSettings.setOnClickListener {
             val displayIntent = Intent(this, SettingsActivity::class.java)

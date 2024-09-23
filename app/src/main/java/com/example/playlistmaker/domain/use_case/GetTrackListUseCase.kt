@@ -20,38 +20,10 @@ class GetTrackListUseCase(private val repository: TrackRepository) {
                 }
 
                 is Resource.Error -> {
-                    //consumer.consume(ConsumerData.Error("Ошибка поиска")) // p5
-                    consumer.consume(ConsumerData.Error(-1))//R.string.search_err.toString())) // p5 //p7
+                    consumer.consume(ConsumerData.Error(-1))
                 }
             }
         }
     }
 }
 
-/*class GetTrackListUseCase (private val repository: TrackRepository) {
-
-    private val executor = Executors.newSingleThreadExecutor()
-
-    operator fun invoke(str: String, consumer: Consumer>) {
-        executor.execute {
-            val trackResponse = repository.searchTrack(str)
-            consumer.consume(trackResponse)
-
-        }
-    }
-}*/
-
-
-/*
-// Реализация интерфейса TrackInteractor
-class GetTrackListUseCase (private val repository: TrackRepository) : TrackInteractor {
-
-    private val executor = Executors.newCachedThreadPool()
-
-    override fun searchTrack(str: String, consumer: TrackInteractor.TrackConsumer) {
-        executor.execute {
-            consumer.consume(ConsumerData.Data(repository.searchTrack(str)))
-            //consumer.consume(repository.searchTrack(str))
-        }
-    }
-}*/
