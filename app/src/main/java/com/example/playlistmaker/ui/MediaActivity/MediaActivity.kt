@@ -8,7 +8,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
@@ -18,6 +17,8 @@ import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.presentation.mapper.SimpleDateFormatMapper
 import com.example.playlistmaker.presentation.state.MediaPlayerState
 import com.example.playlistmaker.presentation.view_model.MediaViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 
 class MediaActivity : AppCompatActivity() {
@@ -32,10 +33,11 @@ class MediaActivity : AppCompatActivity() {
 
     private var url: String? = ""
 
-    private val viewModel by lazy {
+    /*private val viewModel by lazy {
         ViewModelProvider(this, MediaViewModel.getMediaViewModelfactory(url)
         )[MediaViewModel::class.java]
-    }
+    }*/
+    private val viewModel by viewModel<MediaViewModel>{parametersOf(url)}
 
     private val handlerMain = Handler(Looper.getMainLooper())
 
@@ -69,21 +71,21 @@ class MediaActivity : AppCompatActivity() {
         var item: Track? = getIntent().getParcelableExtra(TRACK)
 
         // раскладываем эти данные по соответствующим вьюшкам
-        var ivTrackImage: ImageView = binding.trackImage //findViewById(R.id.track_image)
-        var tvTrackName: TextView = binding.trackNameData //findViewById(R.id.track_name_data)
-        var tvArtistName: TextView = binding.artistNameData //findViewById(R.id.artist_name_data)
-        var tvTrackTime: TextView = binding.trackTimeMillisData //findViewById(R.id.track_time_millis_data) // длительность
-        var tvCollectionName: TextView = binding.collectionNameData //findViewById(R.id.collection_name_data)
-        var tvReleaseDate: TextView = binding.releaseDateData //findViewById(R.id.release_date_data)
-        var tvPrimaryGenreName: TextView = binding.primaryGenreNameData //findViewById(R.id.primary_genre_name_data)
-        var tvCountry: TextView = binding.countryData //findViewById(R.id.country_data)
+        var ivTrackImage: ImageView = binding.trackImage
+        var tvTrackName: TextView = binding.trackNameData
+        var tvArtistName: TextView = binding.artistNameData
+        var tvTrackTime: TextView = binding.trackTimeMillisData  // длительность
+        var tvCollectionName: TextView = binding.collectionNameData
+        var tvReleaseDate: TextView = binding.releaseDateData
+        var tvPrimaryGenreName: TextView = binding.primaryGenreNameData
+        var tvCountry: TextView = binding.countryData
 
         if (item != null) {
             Glide.with(this)
                 .load(item.getCoverArtwork())
                 .placeholder(R.drawable.place_holder)
                 .fitCenter()
-                .transform(RoundedCorners(8))//(R.dimen.corner_radius_8))
+                .transform(RoundedCorners(8))
                 .into(ivTrackImage)
 
             tvTrackName.text = item.trackName

@@ -33,20 +33,18 @@ class MainActivity : AppCompatActivity() {
         }
         buttonSearch.setOnClickListener(buttonClickListener)
 
-        val buttonMedia = binding.buttonMedia //findViewById<Button>(R.id.button_media)
+        val buttonMedia = binding.buttonMedia
 
         buttonMedia.setOnClickListener {
             val displayIntent = Intent(this, MediaActivity::class.java)
             startActivity(displayIntent)
-            // Toast.makeText(this@MainActivity, "Нажали на кнопку \"Медиатека\"!", Toast.LENGTH_SHORT).show()
         }
 
-        val buttonSettings = binding.buttonSettings //findViewById<Button>(R.id.button_settings)
+        val buttonSettings = binding.buttonSettings
 
         buttonSettings.setOnClickListener {
             val displayIntent = Intent(this, SettingsActivity::class.java)
             startActivity(displayIntent)
-            //Toast.makeText(this@MainActivity, "Нажали на кнопку \"Настройки\"!", Toast.LENGTH_SHORT).show()
         }
     }
 }

@@ -4,15 +4,9 @@ import com.example.playlistmaker.data.history.SearchHistory
 import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.domain.repository.SearchHistoryRepository
 
-/*class SearchHistoryRepositoryImpl(sharedPrefs: SharedPreferences) : SearchHistoryRepository {
-    var searchHistory = SearchHistory(sharedPrefs)*/ //p3
-class SearchHistoryRepositoryImpl() : SearchHistoryRepository {
-    var searchHistory = SearchHistory()
+class SearchHistoryRepositoryImpl(var searchHistory: SearchHistory) : SearchHistoryRepository {
+    //var searchHistory = SearchHistory()
 
-    /*override fun getSearchHistory(sharedPrefs: SharedPreferences): SearchHistory {
-        return SearchHistory(sharedPrefs)
-    }
-*/
     override fun searchHistoryClean() {
         searchHistory.clean()
     }
@@ -26,7 +20,7 @@ class SearchHistoryRepositoryImpl() : SearchHistoryRepository {
     }
 
     override fun setTrackListSearchHistory(parcelableArrayList: ArrayList<Track>) {
-        searchHistory.trackListSearchHistory = parcelableArrayList //as ArrayList<Track>
+        searchHistory.trackListSearchHistory = parcelableArrayList
     }
 
     override fun addItem(item: Track) {

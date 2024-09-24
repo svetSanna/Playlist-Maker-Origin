@@ -3,14 +3,12 @@ package com.example.playlistmaker.data.network
 import com.example.playlistmaker.data.dto.Response
 import com.example.playlistmaker.data.dto.TrackSearchRequest
 import com.example.playlistmaker.data.repository.NetworkClient
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 // реализация интерфейса NetworkClient
-class RetrofitNetworkClient : NetworkClient {
+class RetrofitNetworkClient( private val trackApiService: TrackApi) : NetworkClient {
 
     // базовый URL для Retrofit
-    private val baseUrlStr =
+    /*private val baseUrlStr =
         "https://itunes.apple.com"  //https://itunes.apple.com/search?entity=song&term="мама"
 
     // подключаем библиотеку Retrofit
@@ -22,7 +20,7 @@ class RetrofitNetworkClient : NetworkClient {
     // получаем реализацию нашего com.example.playlistmaker.data.network.TrackApi
     private val trackApiService =
         retrofit.create(TrackApi::class.java) //val trackApiService = retrofit.create<TrackApi>()
-
+*/
     override fun doRequest(dto: Any): Response {
         try {
             if (dto is TrackSearchRequest) {

@@ -3,7 +3,15 @@ package com.example.playlistmaker
 import android.app.Application
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatDelegate
-import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.di.dataModule
+import com.example.playlistmaker.di.domainModule
+import com.example.playlistmaker.di.viewModelModule
+import com.example.playlistmaker.domain.use_case.SharedPreferencesInteractor
+import org.koin.android.ext.android.getKoin
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
+import org.koin.core.logger.Level
 
 const val PLAYLISTMAKER_PREFERENCES = "playlist_preferences" // ключ для SharedPreferences
 const val THEME_SWITCH_KEY = "key_for_selectorSwitch" // ключ для перелючателя темы
@@ -25,18 +33,23 @@ class App : Application() {
     // private lateinit var sharedPrefs: SharedPreferences
 
     override fun onCreate() {
-        Creator.initApplication(this)
+       // Creator.initApplication(this)
         // Получаем тему приложения, выбранную пользователем, из SharedPreferences, а если
         // ничего туда не успели сохранить, то применим текущую тему приложения
 
-        //var sharedPrefs = Creator.provideSharedPreferences() //p4
+        // Функция, которая настраивает библиотеку Koin, нужно вызвать перед использованием
+        startKoin {
+            androidLogger(Level.DEBUG)
+            // Метод специального класса, переданного как this, для добавления контекста в граф
+            androidContext(this@App)
+            // Передаём все модули, чтобы их содержимое было передано в граф
+            modules(listOf(dataModule, domainModule, viewModelModule)) // (listOf(dataModule,...))
+        }
 
-        //var sharedPrefs = getSharedPreferences(PLAYLISTMAKER_PREFERENCES, MODE_PRIVATE) //p3
-        // MODE_PRIVATE - чтобы данные были доступны только нашему приложению
+        var stringFromSharedPrefs = getKoin().get<SharedPreferencesInteractor>().getString(THEME_SWITCH_KEY)
+            //Creator.provideSharedPreferencesInteractor().getString(THEME_SWITCH_KEY)
 
-        //var stringFromSharedPrefs = sharedPrefs.getString(THEME_SWITCH_KEY, "") //p4
-        var stringFromSharedPrefs =
-            Creator.provideSharedPreferencesInteractor().getString(THEME_SWITCH_KEY)
+        //getKoin().get<Interactor>().notifyResultSaved()
 
         when (stringFromSharedPrefs) {
             "false" -> darkTheme = false
@@ -49,9 +62,30 @@ class App : Application() {
             }
         }
         switchTheme(darkTheme)
+
         super.onCreate()
     }
 
+    /*fun switchTheme(stringFromSharedPrefs: String?) {
+        when (stringFromSharedPrefs) {
+            "false" -> darkTheme = false
+            "true" -> darkTheme = true
+            "" -> {
+                when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+                    Configuration.UI_MODE_NIGHT_YES -> darkTheme = true
+                    Configuration.UI_MODE_NIGHT_NO -> darkTheme = false
+                }
+            }
+        }
+       // darkTheme = darkThemeEnabled
+        AppCompatDelegate.setDefaultNightMode(
+            if (darkTheme) {
+                AppCompatDelegate.MODE_NIGHT_YES
+            } else {
+                AppCompatDelegate.MODE_NIGHT_NO
+            }
+        )
+    }*/
     fun switchTheme(darkThemeEnabled: Boolean) {
         darkTheme = darkThemeEnabled
         AppCompatDelegate.setDefaultNightMode(
