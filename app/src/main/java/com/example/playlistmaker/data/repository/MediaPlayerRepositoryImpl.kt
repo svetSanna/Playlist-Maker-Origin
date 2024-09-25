@@ -3,9 +3,9 @@ package com.example.playlistmaker.data.repository
 import android.media.MediaPlayer
 import com.example.playlistmaker.domain.repository.MediaPlayerRepository
 
-class MediaPlayerRepositoryImpl() :
+class MediaPlayerRepositoryImpl(private var mediaPlayer : MediaPlayer) :
     MediaPlayerRepository {
-    private var mediaPlayer = MediaPlayer()
+    //private var mediaPlayer = MediaPlayer()
 
     companion object {
         private const val STATE_DEFAULT = 0 // освобожден

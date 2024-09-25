@@ -3,9 +3,6 @@ package com.example.playlistmaker.presentation.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.CreationExtras
-import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.domain.use_case.MediaPlayerInteractor
 import com.example.playlistmaker.presentation.state.MediaPlayerState
 
@@ -42,7 +39,7 @@ class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor, p
     }
 
     // фабрика нужна,если для создания ViewModel необходимо в конструктор передать параметр либо ссылку на активити или application
-    companion object {
+   /* companion object {
         fun getMediaViewModelfactory(url: String?): ViewModelProvider.Factory =
             object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
@@ -55,11 +52,10 @@ class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor, p
                     ) as T
                 }
             }
-    }
+    }*/
 
     override fun onCleared() {
         super.onCleared()
         onDestroyMediaPlayer()
     }
-
 }

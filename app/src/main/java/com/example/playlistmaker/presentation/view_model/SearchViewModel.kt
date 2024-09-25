@@ -3,9 +3,6 @@ package com.example.playlistmaker.presentation.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.CreationExtras
-import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.domain.consumer.Consumer
 import com.example.playlistmaker.domain.consumer.ConsumerData
 import com.example.playlistmaker.domain.entity.Track
@@ -25,7 +22,7 @@ class SearchViewModel( private var getTrackListUseCase : GetTrackListUseCase,
 
     fun getScreenState(): LiveData<SearchScreenState> = state
 
-    companion object {
+  /*  companion object {
         fun getSearchViewModelfactory(): ViewModelProvider.Factory =
             object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
@@ -38,7 +35,7 @@ class SearchViewModel( private var getTrackListUseCase : GetTrackListUseCase,
                     ) as T
                 }
             }
-    }
+    }*/
 
     fun loadData(inputSearchEditText: String) {
         state.postValue(SearchScreenState.Loading)

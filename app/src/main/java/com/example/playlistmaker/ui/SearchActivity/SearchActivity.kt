@@ -16,7 +16,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
@@ -27,6 +26,7 @@ import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.presentation.state.SearchScreenState
 import com.example.playlistmaker.presentation.view_model.SearchViewModel
 import com.example.playlistmaker.ui.MediaActivity.MediaActivity
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener {
     private var editString: String = ""
@@ -55,12 +55,11 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
     private var trackAdapterSearchHistory = TrackAdapter()
 
     /*private val viewModel by lazy {
-        ViewModelProvider(this)[SearchViewModel::class.java]
-    }*/
-    private val viewModel by lazy {
         ViewModelProvider(this, SearchViewModel.getSearchViewModelfactory()
         )[SearchViewModel::class.java]
-    }
+    }*/
+    private val viewModel by viewModel<SearchViewModel>()
+
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY =
             2000L     // для поиска при задержке ввода на 2 секунды
@@ -386,18 +385,6 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
 
             viewModel.itemClick(item)
 
-            /*
-             var itemSearchHistory = viewModel.getTrackListSearchHistory().firstOrNull { it.trackId == item.trackId }
-
-             if (itemSearchHistory != null)
-                viewModel.getTrackListSearchHistory().remove(itemSearchHistory)
-
-            viewModel.getTrackListSearchHistory().add(0, item)
-
-            if (viewModel.getTrackListSearchHistory().size > 10)
-                viewModel.getTrackListSearchHistory().removeAt(10)
-                */
-
             trackAdapterSearchHistory.items = viewModel.getTrackListSearchHistory()
             trackAdapterSearchHistory.notifyDataSetChanged()
 
@@ -430,15 +417,4 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
         }
         return current
     }
-
-   /* override fun onDestroy() {
-        // перед тем как уничтожить нашу activity, мы должны проверить,
-        // если наш consumerRunnable не равен null, то мы можем удалить
-        // его из handler
-        val currentRunnable = responseRunnable
-        if (currentRunnable != null) {
-            mainHandler?.removeCallbacks(currentRunnable)
-        }
-        super.onDestroy()
-    }*/
 }
