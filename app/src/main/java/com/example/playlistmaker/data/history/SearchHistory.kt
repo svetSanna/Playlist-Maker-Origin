@@ -8,7 +8,6 @@ import com.google.gson.reflect.TypeToken
 
 class SearchHistory(private val sharedPrefs: SharedPreferences, private val json: Gson) {
     var trackListSearchHistory: ArrayList<Track> = arrayListOf()
-    //private val sharedPrefs = Creator.provideSharedPreferences()
 
     init {
         val jsonString = sharedPrefs.getString(SEARCH_HISTORY_KEY, "")
@@ -20,7 +19,6 @@ class SearchHistory(private val sharedPrefs: SharedPreferences, private val json
             else -> {
                 val trackListType = object : TypeToken<ArrayList<Track>>() {}.type
                 trackListSearchHistory = json.fromJson(jsonString, trackListType)
-                //trackListSearchHistory = Gson().fromJson(jsonString, trackListType)
             }
         }
     }
@@ -31,7 +29,6 @@ class SearchHistory(private val sharedPrefs: SharedPreferences, private val json
 
     fun writeToSharedPreferences() {
         val jsonString = json.toJson(trackListSearchHistory)
-        //val jsonString = Gson().toJson(trackListSearchHistory)
         sharedPrefs.edit()
             .putString(SEARCH_HISTORY_KEY, jsonString)
             .apply()
