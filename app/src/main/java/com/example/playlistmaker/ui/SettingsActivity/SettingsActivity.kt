@@ -16,9 +16,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsBinding
 
-    /*private val viewModel by lazy {
-        ViewModelProvider(this)[SettingsViewModel::class.java]
-    }*/
     private val viewModel by viewModel<SettingsViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,9 +24,9 @@ class SettingsActivity : AppCompatActivity() {
         binding = ActivitySettingsBinding.inflate(layoutInflater)
 
         val view = binding.root
-        setContentView(view)      // setContentView(R.layout.activity_settings)
+        setContentView(view)
 
-        val buttonSettingsBack = binding.buttonSettingsBack // findViewById<ImageView>(R.id.button_settings_back)
+        val buttonSettingsBack = binding.buttonSettingsBack
         // вернуться назад
         buttonSettingsBack.setOnClickListener {
             onBackPressed()
@@ -53,13 +50,10 @@ class SettingsActivity : AppCompatActivity() {
             onButtonAllowForward()
         }
 
-       // val sharedPreferencesInteractor = Creator.provideSharedPreferencesInteractor()
-
         val selectorSwitch = binding.selectorSwitch
         selectorSwitch.setOnCheckedChangeListener { _, checked ->
             (applicationContext as App).switchTheme(checked)
             viewModel.editTheme(checked.toString())
-            //sharedPreferencesInteractor.edit(checked.toString())
         }
         selectorSwitch.isChecked = (applicationContext as App).darkTheme
     }

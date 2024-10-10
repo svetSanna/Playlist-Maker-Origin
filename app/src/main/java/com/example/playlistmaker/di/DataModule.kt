@@ -22,18 +22,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 val dataModule = module {
-
-    /*single<IMDbApiService> {
-        Retrofit.Builder()
-            .baseUrl("https://tv-api.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(IMDbApiService::class.java)
-    }
-    single<SearchHistoryStorage> {
-        SharedPreferencesSearchHistoryStorage(get(), get())
-    }
-*/
     single {
         androidContext()
             .getSharedPreferences(PLAYLISTMAKER_PREFERENCES, Context.MODE_PRIVATE)

@@ -34,30 +34,12 @@ class SearchActivity : AppCompatActivity(), TrackViewHolder.OnItemClickListener 
 
     private lateinit var binding: ActivitySearchBinding
 
-    /* // базовый URL для Retrofit
-     private val baseUrlStr =
-         "https://itunes.apple.com"  //https://itunes.apple.com/search?entity=song&term="мама"
-
-     // подключаем библиотеку Retrofit
-     private val retrofit = Retrofit.Builder()
-         .baseUrl(baseUrlStr)
-         .addConverterFactory(GsonConverterFactory.create())
-         .build()
-
-     // получаем реализацию нашего com.example.playlistmaker.data.network.TrackApi
-     private val trackApiService =
-         retrofit.create(TrackApi::class.java) //val trackApiService = retrofit.create<TrackApi>()
- */
     // создаем адаптер для Track
     private val trackAdapter = TrackAdapter()
 
     // создаем адаптер для Track для истории поиска
     private var trackAdapterSearchHistory = TrackAdapter()
 
-    /*private val viewModel by lazy {
-        ViewModelProvider(this, SearchViewModel.getSearchViewModelfactory()
-        )[SearchViewModel::class.java]
-    }*/
     private val viewModel by viewModel<SearchViewModel>()
 
     companion object {

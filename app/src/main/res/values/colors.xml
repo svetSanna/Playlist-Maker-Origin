@@ -34,6 +34,8 @@
     <color name="track_attribute_data">#1A1B22</color>
 
     <color name="progressbar">#6200EE</color>
+
+    <color name="fragment_background">#FFFFFF</color>
 </resources>
 
 <!--     <color name="selector_checked">#3772E7</color>

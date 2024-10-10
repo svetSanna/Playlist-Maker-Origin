@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <!-- <string name="title">Hello Practicum</string>-->
   <string name="button1_text_search">Search</string>
-  <string name="button2_text_media">Media library</string>
+  <!--<string name="button2_text_media">Media library</string> -->
   <string name="button3_text_settings">Settings</string>
-    <string name="dark_theme">Dark theme</string>
+  <string name="button4_text_mediateka">Media library</string>
+  <string name="dark_theme">Dark theme</string>
   <string name="share_the_app">Share the app</string>
   <string name="write_to_support">Write to support</string>
   <string name="user_agreement">User agreement</string>
@@ -22,4 +22,9 @@
   <string name="network_err">A network error occurred</string>
   <string name="search_err">Search error</string>
   <string name="time_00_00">00:00</string>
+  <string name="favorite_tracks">Favorites</string>
+  <string name="playlists">Playlists</string>
+  <string name="your_mediateka_is_empty">Your media library is empty</string>
+  <string name="new_playlist">New playlist</string>
+    <string name="no_playlists">You haven\'t created \n any playlists yet</string>
 </resources>

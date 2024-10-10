@@ -6,7 +6,6 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -33,10 +32,6 @@ class MediaActivity : AppCompatActivity() {
 
     private var url: String? = ""
 
-    /*private val viewModel by lazy {
-        ViewModelProvider(this, MediaViewModel.getMediaViewModelfactory(url)
-        )[MediaViewModel::class.java]
-    }*/
     private val viewModel by viewModel<MediaViewModel>{parametersOf(url)}
 
     private val handlerMain = Handler(Looper.getMainLooper())
@@ -122,91 +117,19 @@ class MediaActivity : AppCompatActivity() {
             buttonPlayPause.setOnClickListener {
                 viewModel.playbackControl()
             }
-        } else {
+        }
+        /*else {
             Toast.makeText(
                 this,
                 R.string.my_message,
                 Toast.LENGTH_LONG
             ).show()
-        }
+        }*/
     }
-
-    /*private val timeTrackRunnable = object : Runnable {
-           override fun run() {
-               var timeTrack = findViewById<TextView>(R.id.time)
-               // обновляем время
-               //timeTrack.text = SimpleDateFormatMapper.map(mediaPlayer.currentPosition) //p1
-               timeTrack.text = SimpleDateFormatMapper.map(mediaPlayerInteractor.getCurrentPosition()) //p1
-               handlerMain?.postDelayed(this, TIME_DEBOUNCE)
-           }
-       }*/
-
-    // подготовка плейера
-    /*private fun preparePlayer() {
-        // кнопка "Play"/"Pause"
-        val buttonPlayPause = findViewById<ImageView>(R.id.button_media_play_pause)
-        // отображение времени трека
-        var timeTrack = findViewById<TextView>(R.id.time)
-
-        mediaPlayer.setDataSource(url) // установить источник
-        mediaPlayer.prepareAsync() // подготовка
-        mediaPlayer.setOnPreparedListener {
-            buttonPlayPause.setImageResource(R.drawable.button_media_play)
-            playerState = STATE_PREPARED
-            timeTrack.text = "00:00"
-        }
-        mediaPlayer.setOnCompletionListener {// отслеживание завершения воспроизведения
-            buttonPlayPause.setImageResource(R.drawable.button_media_play)
-            playerState = STATE_PREPARED
-            timeTrack.text = "00:00"
-            handlerMain?.removeCallbacks(timeTrackRunnable) // удаляем из очереди все сообщения Runnable, чтобы таймер не обновлялся
-        }
-    }*/ //p1
-
-    // запустить плейер
-    /* private fun startPlayer() {
-         // кнопка "Play"/"Pause"
-         val buttonPlayPause = findViewById<ImageView>(R.id.button_media_play_pause)
-
-         mediaPlayer.start()
-         buttonPlayPause.setImageResource(R.drawable.button_media_pause)
-         playerState = STATE_PLAYING
-
-         handlerMain?.postDelayed(
-             timeTrackRunnable,
-             TIME_DEBOUNCE
-         )  // ставим в очередь обновление таймера
-     }*/ //p1
-
-    // поставить плейер на паузу
-    /*private fun pausePlayer() {
-        // кнопка "Play"/"Pause"
-        val buttonPlayPause = findViewById<ImageView>(R.id.button_media_play_pause)
-
-        mediaPlayer.pause()
-        buttonPlayPause.setImageResource(R.drawable.button_media_play)
-        playerState = STATE_PAUSED
-
-        handlerMain?.removeCallbacks(timeTrackRunnable) // удаляем из очереди все сообщения Runnable, чтобы таймер не обновлялся
-    }*/ //p1
-
-    // функция вызывается при нажатии на кнопку Play/Pause
-    /* private fun playbackControl() {
-         when (playerState) {
-             STATE_PLAYING -> {
-                 pausePlayer()
-             }
-
-             STATE_PREPARED, STATE_PAUSED -> {
-                 startPlayer()
-             }
-         }
-     }*/ //p1
 
     // Активити на паузу
     override fun onPause() {
         super.onPause()
-            // viewModel.pausePlayer()
     }
 
     // Активити закрывается

@@ -32,7 +32,7 @@
         style="@style/ButtonMainWindow"
         android:layout_margin="@dimen/margin_8"
         android:layout_weight="1"
-        android:text="@string/button2_text_media"
+        android:text="@string/button4_text_mediateka"
         app:icon="@drawable/media"></Button>
 
     <Button

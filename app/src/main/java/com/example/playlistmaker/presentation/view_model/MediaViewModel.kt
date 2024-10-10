@@ -38,22 +38,6 @@ class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor, p
         return mediaPlayerInteractor.getCurrentPosition()
     }
 
-    // фабрика нужна,если для создания ViewModel необходимо в конструктор передать параметр либо ссылку на активити или application
-   /* companion object {
-        fun getMediaViewModelfactory(url: String?): ViewModelProvider.Factory =
-            object : ViewModelProvider.Factory {
-                @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel> create(
-                    modelClass: Class<T>,
-                    extras: CreationExtras,
-                ): T {
-                    return MediaViewModel(
-                        Creator.provideMediaPlayerInteractor(), url
-                    ) as T
-                }
-            }
-    }*/
-
     override fun onCleared() {
         super.onCleared()
         onDestroyMediaPlayer()
