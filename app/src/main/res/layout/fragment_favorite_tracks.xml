@@ -1,19 +1,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="@color/fragment_background">
 
-    <TextView
-        android:id="@+id/number1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="favotite_tracks" />
-    <ImageView
-        android:id="@+id/fragment_favourite_tracks"
+    <LinearLayout
+        android:id="@+id/error_layout_favourite_tracks"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:background="@color/thumb_check"/>
-
+        android:layout_marginTop="@dimen/margin_106"
+        android:orientation="vertical"
+        android:background="@color/fragment_background">
+        <ImageView
+            android:id="@+id/error_image_favourite_tracks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"/>
+        <TextView
+            android:id="@+id/error_message_favorite_tracks"
+            style="@style/PlaceHolderMessageText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_16"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:lines="3"
+            android:text="@string/your_mediateka_is_empty"/>
+    </LinearLayout>
 </LinearLayout>

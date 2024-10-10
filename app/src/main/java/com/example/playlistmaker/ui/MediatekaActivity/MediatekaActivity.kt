@@ -4,10 +4,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityMediatekaBinding
-import com.example.playlistmaker.presentation.repository.SelectPage
 import com.google.android.material.tabs.TabLayoutMediator
 
-class MediatekaActivity : AppCompatActivity(), SelectPage {
+class MediatekaActivity : AppCompatActivity(){//, SelectPage {
     private lateinit var binding: ActivityMediatekaBinding
 
     private lateinit var tabMediator: TabLayoutMediator
@@ -15,8 +14,6 @@ class MediatekaActivity : AppCompatActivity(), SelectPage {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMediatekaBinding.inflate(layoutInflater)
-
-        setContentView(R.layout.activity_mediateka)
 
         val adapter = MediatekaViewPagerAdapter(
             fragmentManager = supportFragmentManager,
@@ -32,14 +29,16 @@ class MediatekaActivity : AppCompatActivity(), SelectPage {
         }
         tabMediator.attach()
 
-        //adapter.createFragment(1)
-        //navigateTo(1)
+        setContentView(binding.root)
+
+        // кнопка "Назад"
+        val buttonBackMedia = binding.buttonSearchBack
+        buttonBackMedia.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
     }
     override fun onDestroy() {
         super.onDestroy()
         tabMediator.detach()
-    }
-    override fun navigateTo(page: Int) {
-        binding.viewPager.currentItem = page
     }
 }

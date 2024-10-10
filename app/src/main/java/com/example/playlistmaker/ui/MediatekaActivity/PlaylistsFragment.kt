@@ -4,19 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.example.playlistmaker.presentation.view_model.PlaylistsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment :Fragment() {
     companion object {
-        private const val NUMBER_PLAYLIST = "number_playlist"
-          fun newInstance(number: Int) = PlaylistsFragment().apply {
-            arguments = Bundle().apply {
-                putInt(PlaylistsFragment.NUMBER_PLAYLIST, number)
-            }
-        }
+          fun newInstance() = PlaylistsFragment()
     }
     private lateinit var binding: FragmentPlaylistsBinding
 
@@ -34,12 +32,11 @@ class PlaylistsFragment :Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.observePlaylists().observe(viewLifecycleOwner) {
-            showNumber(it)
-        }
-    }
+        val placeholderImage: ImageView = binding.errorImagePlaylist
+        val placeholderLayout: LinearLayout = binding.errorLayoutPlaylists
 
-    private fun showNumber(num: Int) {
-        binding.number2.text = requireArguments().getInt(PlaylistsFragment.NUMBER_PLAYLIST).toString()
+        placeholderLayout.visibility = View.VISIBLE
+
+        placeholderImage.setImageResource(R.drawable.nothing_found)
     }
 }

@@ -8,8 +8,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 class MediatekaViewPagerAdapter(
     fragmentManager: FragmentManager,
     lifecycle: Lifecycle,
-    //private val posterUrl: String,
-    //private val movieId: String,
 ) : FragmentStateAdapter(fragmentManager, lifecycle){
     override fun getItemCount(): Int {
         return 2
@@ -17,8 +15,8 @@ class MediatekaViewPagerAdapter(
 
     override fun createFragment(position: Int): Fragment {
         return when(position) {
-            0 -> FavoriteTracksFragment.newInstance(111)
-            else -> PlaylistsFragment.newInstance(222)
+            0 -> FavoriteTracksFragment.newInstance()
+            else -> PlaylistsFragment.newInstance()
         }
     }
 }

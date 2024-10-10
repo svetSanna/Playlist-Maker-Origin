@@ -22,6 +22,9 @@
   <string name="network_err">A network error occurred</string>
   <string name="search_err">Search error</string>
   <string name="time_00_00">00:00</string>
-    <string name="favorite_tracks">Favorites</string>
+  <string name="favorite_tracks">Favorites</string>
   <string name="playlists">Playlists</string>
+  <string name="your_mediateka_is_empty">Your media library is empty</string>
+  <string name="new_playlist">New playlist</string>
+    <string name="no_playlists">You haven\'t created \n any playlists yet</string>
 </resources>

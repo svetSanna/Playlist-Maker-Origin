@@ -14,8 +14,6 @@ class SearchViewModel( private var getTrackListUseCase : GetTrackListUseCase,
                        private var historyInteractor : SearchHistoryInteractor
 ) : ViewModel() {
     private val state = MutableLiveData<SearchScreenState>()
-    //getTrackListUseCase = Creator.provideGetTrackListUseCase()
-    //historyInteractor = Creator.provideGetSearchHistoryInteractor()
     init {
         loadData("")
     }

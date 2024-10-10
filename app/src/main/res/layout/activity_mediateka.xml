@@ -29,25 +29,21 @@
             android:text="@string/button4_text_mediateka"
             android:textColor="@color/text_button_settings_window"></TextView>
     </LinearLayout>
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-        app:tabRippleColor="@color/thumb_check"
-        app:tabTextColor="@color/black"
-        app:tabIndicatorColor="@color/black"
-        android:visibility="visible"
+        app:tabBackground="@color/background_settings_window"
+        app:tabIndicatorColor="@color/text_button_settings_window"
+        app:tabIndicatorFullWidth="true"
         app:tabMode="fixed"
-     />
-
-    <!--android:layout_marginLeft="@dimen/margin_4"
-    android:layout_marginRight="@dimen/margin_4"-->
+        app:tabTextAppearance="@style/Tab"
+        app:tabTextColor="@color/text_button_settings_window" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"/>
-
+        android:orientation="horizontal" />
 </LinearLayout>

@@ -1,18 +1,41 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/fragment_background"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/number2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="playlists" />
-    <ImageView
-        android:id="@+id/fragment_playlists"
+    <LinearLayout
+        android:id="@+id/error_layout_playlists"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:background="@color/edit_text"/>
+        android:layout_marginTop="@dimen/margin_24"
+        android:background="@color/fragment_background"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/buttonRefresh"
+            style="@style/ButtonRefresh"
+            android:layout_marginTop="@dimen/margin_24"
+            android:text="@string/new_playlist" />
+
+        <ImageView
+            android:id="@+id/error_image_playlist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_46"
+            android:layout_gravity="center_horizontal|center_vertical" />
+
+        <TextView
+            android:id="@+id/error_message_playlist"
+            style="@style/PlaceHolderMessageText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_marginTop="@dimen/margin_16"
+            android:text="@string/no_playlists"
+            android:lines="2"
+            />
+    </LinearLayout>
 </LinearLayout>

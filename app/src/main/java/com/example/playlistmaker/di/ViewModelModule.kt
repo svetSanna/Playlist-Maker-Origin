@@ -19,9 +19,9 @@ val viewModelModule = module {
         MediaViewModel(mediaPlayerInteractor = get(), url)
     }
     viewModel<FavoriteTracksViewModel>{
-        FavoriteTracksViewModel(number = get())
+        FavoriteTracksViewModel()
     }
     viewModel<PlaylistsViewModel>{
-        PlaylistsViewModel(number_playlist = get())
+        PlaylistsViewModel()
     }
 }
