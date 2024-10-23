@@ -118,13 +118,6 @@ class MediaActivity : AppCompatActivity() {
                 viewModel.playbackControl()
             }
         }
-        /*else {
-            Toast.makeText(
-                this,
-                R.string.my_message,
-                Toast.LENGTH_LONG
-            ).show()
-        }*/
     }
 
     // Активити на паузу

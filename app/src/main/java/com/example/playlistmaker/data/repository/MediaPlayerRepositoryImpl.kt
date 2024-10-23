@@ -5,7 +5,6 @@ import com.example.playlistmaker.domain.repository.MediaPlayerRepository
 
 class MediaPlayerRepositoryImpl(private var mediaPlayer : MediaPlayer) :
     MediaPlayerRepository {
-    //private var mediaPlayer = MediaPlayer()
 
     companion object {
         private const val STATE_DEFAULT = 0 // освобожден

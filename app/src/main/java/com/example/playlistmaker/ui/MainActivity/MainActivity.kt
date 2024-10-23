@@ -1,12 +1,12 @@
 package com.example.playlistmaker.ui.MainActivity
-
+/*
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.databinding.ActivityMainBinding
 import com.example.playlistmaker.ui.MediatekaActivity.MediatekaActivity
-import com.example.playlistmaker.ui.SearchActivity.SearchActivity
+import com.example.playlistmaker.ui.SearchFragment.SearchActivity
 import com.example.playlistmaker.ui.SettingsActivity.SettingsActivity
 
 class MainActivity : AppCompatActivity() {
@@ -43,4 +43,4 @@ class MainActivity : AppCompatActivity() {
             startActivity(displayIntent)
         }
     }
-}
+}*/

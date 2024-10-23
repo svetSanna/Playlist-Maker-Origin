@@ -5,7 +5,6 @@ import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.domain.repository.SearchHistoryRepository
 
 class SearchHistoryRepositoryImpl(var searchHistory: SearchHistory) : SearchHistoryRepository {
-    //var searchHistory = SearchHistory()
 
     override fun searchHistoryClean() {
         searchHistory.clean()
