@@ -9,23 +9,21 @@ import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
-import com.example.playlistmaker.presentation.view_model.PlaylistsViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment :Fragment() {
     companion object {
           fun newInstance() = PlaylistsFragment()
     }
-    private lateinit var binding: FragmentPlaylistsBinding
-
-    private val viewModel by viewModel<PlaylistsViewModel>()
+    private var _binding: FragmentPlaylistsBinding? = null
+    // This property is only valid between onCreateView and onDestroyView.
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
+        _binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -38,5 +36,9 @@ class PlaylistsFragment :Fragment() {
         placeholderLayout.visibility = View.VISIBLE
 
         placeholderImage.setImageResource(R.drawable.nothing_found)
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
