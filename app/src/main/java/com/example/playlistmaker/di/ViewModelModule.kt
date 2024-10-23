@@ -1,6 +1,8 @@
 package com.example.playlistmaker.di
 
+import com.example.playlistmaker.presentation.view_model.FavoriteTracksViewModel
 import com.example.playlistmaker.presentation.view_model.MediaViewModel
+import com.example.playlistmaker.presentation.view_model.PlaylistsViewModel
 import com.example.playlistmaker.presentation.view_model.SearchViewModel
 import com.example.playlistmaker.presentation.view_model.SettingsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -16,5 +18,10 @@ val viewModelModule = module {
     viewModel<MediaViewModel>{(url : String?) ->
         MediaViewModel(mediaPlayerInteractor = get(), url)
     }
+    viewModel<FavoriteTracksViewModel>{
+        FavoriteTracksViewModel()
+    }
+    viewModel<PlaylistsViewModel>{
+        PlaylistsViewModel()
+    }
 }
-

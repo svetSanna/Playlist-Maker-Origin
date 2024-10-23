@@ -5,12 +5,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.databinding.ActivityMainBinding
-import com.example.playlistmaker.ui.MediaActivity.MediaActivity
+import com.example.playlistmaker.ui.MediatekaActivity.MediatekaActivity
 import com.example.playlistmaker.ui.SearchActivity.SearchActivity
 import com.example.playlistmaker.ui.SettingsActivity.SettingsActivity
-
-//import com.example.playlistmaker.
-
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -22,13 +19,12 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        val buttonSearch = binding.buttonSearch //findViewById<Button>(R.id.button_search)
+        val buttonSearch = binding.buttonSearch
 
         val displayIntent = Intent(this, SearchActivity::class.java)
         val buttonClickListener: View.OnClickListener = object : View.OnClickListener {
             override fun onClick(v: View?) {
                 startActivity(displayIntent)
-                //Toast.makeText(this@MainActivity, "Нажали на кнопку \"Поиск\"!", Toast.LENGTH_SHORT).show()
             }
         }
         buttonSearch.setOnClickListener(buttonClickListener)
@@ -36,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         val buttonMedia = binding.buttonMedia
 
         buttonMedia.setOnClickListener {
-            val displayIntent = Intent(this, MediaActivity::class.java)
+            val displayIntent = Intent(this, MediatekaActivity::class.java)
             startActivity(displayIntent)
         }
 

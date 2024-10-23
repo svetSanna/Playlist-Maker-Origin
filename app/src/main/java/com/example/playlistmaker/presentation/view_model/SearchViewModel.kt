@@ -14,28 +14,11 @@ class SearchViewModel( private var getTrackListUseCase : GetTrackListUseCase,
                        private var historyInteractor : SearchHistoryInteractor
 ) : ViewModel() {
     private val state = MutableLiveData<SearchScreenState>()
-    //getTrackListUseCase = Creator.provideGetTrackListUseCase()
-    //historyInteractor = Creator.provideGetSearchHistoryInteractor()
     init {
         loadData("")
     }
 
     fun getScreenState(): LiveData<SearchScreenState> = state
-
-  /*  companion object {
-        fun getSearchViewModelfactory(): ViewModelProvider.Factory =
-            object : ViewModelProvider.Factory {
-                @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel> create(
-                    modelClass: Class<T>,
-                    extras: CreationExtras,
-                ): T {
-                    return SearchViewModel(
-                        Creator.provideGetTrackListUseCase(), Creator.provideGetSearchHistoryInteractor()
-                    ) as T
-                }
-            }
-    }*/
 
     fun loadData(inputSearchEditText: String) {
         state.postValue(SearchScreenState.Loading)
