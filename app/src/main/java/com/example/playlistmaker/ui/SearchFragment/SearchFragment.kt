@@ -1,6 +1,5 @@
 package com.example.playlistmaker.ui.SearchFragment
 
-import android.app.AppOpsManager
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -148,7 +147,8 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
         val clearButton = binding.buttonCloseClearCancel
         clearButton.setOnClickListener {
             inputEditText.setText("")
-            val imm = requireContext().getSystemService(AppOpsManager::class.java) as InputMethodManager
+            val imm = requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            //val imm = requireContext().getSystemService(AppOpsManager::class.java) as InputMethodManager
                 //val imm = getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
             imm?.hideSoftInputFromWindow(inputEditText.getWindowToken(), 0)
 

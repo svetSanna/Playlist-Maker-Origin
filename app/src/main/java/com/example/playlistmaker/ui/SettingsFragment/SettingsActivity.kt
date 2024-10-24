@@ -1,5 +1,5 @@
-package com.example.playlistmaker.ui.SettingsActivity
-
+package com.example.playlistmaker.ui.SettingsFragment
+/*
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
@@ -111,4 +111,4 @@ class SettingsActivity : AppCompatActivity() {
             ).show()
         }
     }
-}
+}*/

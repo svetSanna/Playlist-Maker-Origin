@@ -18,23 +18,24 @@
         <activity
             android:name=".ui.RootActivity.RootActivity"
             android:exported="true" >
+            <!--   android:windowSoftInputMode="adjustNothing" -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.MediatekaActivity.MediatekaActivity"
-            android:exported="false"/>
+      <!--  <activity
+            android:name=".ui.MediatekaFragment.MediatekaActivity"
+            android:exported="false"/> -->
       <!--  <activity
             android:name=".ui.SearchFragment.SearchActivity"
             android:exported="false" /> -->
         <activity
             android:name=".ui.MediaActivity.MediaActivity"
             android:exported="false" />
-        <activity
-            android:name=".ui.SettingsActivity.SettingsActivity"
-            android:exported="false" />
+      <!--  <activity
+            android:name=".ui.SettingsFragment.SettingsActivity"
+            android:exported="false" /> -->
         <!--<activity
             android:name=".ui.MainActivity.MainActivity"
             android:exported="true"> -->

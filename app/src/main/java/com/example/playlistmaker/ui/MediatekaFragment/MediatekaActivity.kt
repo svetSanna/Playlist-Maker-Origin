@@ -1,5 +1,5 @@
-package com.example.playlistmaker.ui.MediatekaActivity
-
+package com.example.playlistmaker.ui.MediatekaFragment
+/*
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.R
@@ -41,4 +41,4 @@ class MediatekaActivity : AppCompatActivity(){//, SelectPage {
         super.onDestroy()
         tabMediator.detach()
     }
-}
+}*/
