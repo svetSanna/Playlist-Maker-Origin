@@ -1,6 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.fragment.app.FragmentContainerView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rootFragmentContainerView"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-</androidx.fragment.app.FragmentContainerView>
+    android:layout_height="match_parent"
+    tools:context=".ui.RootActivity.RootActivity">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/rootFragmentContainerView"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/main_navigation_graph" />
+
+    <!--
+1. android:name="androidx.navigation.fragment.NavHostFragment" - Так мы связали контейнер
+ в файле вёрстки нашей активити с классом NavHostFragment.
+2. app:navGraph="@navigation/main_navigation_graph" - В качестве значения этого атрибута следует
+использовать идентификатор графа навигации, который будет связан с этим контейнером.
+В нашем случае граф навигации один, поэтому его идентификатор мы и указываем.
+3. app:defaultNavHost="true" - . Задавая этому атрибуту значение true, мы гарантируем, что,
+помимо доступа к графу навигации, NavHostFragment будет реагировать на нажатие
+системной кнопки «Назад».
+-->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:menu="@menu/bottom_navigation_menu"
+        app:itemIconTint="@color/selector_bottom_icons"
+        app:itemTextColor="@color/selector_bottom_icons"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

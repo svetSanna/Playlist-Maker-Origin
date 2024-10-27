@@ -58,12 +58,20 @@ class SettingsFragment: Fragment() {
         }
 
         val selectorSwitch = binding.selectorSwitch
+        val application = requireContext().getApplicationContext()
         selectorSwitch.setOnCheckedChangeListener { _, checked ->
-           // (applicationContext as App).switchTheme(checked)
-            (requireContext() as App).switchTheme(checked)
+            (application as App).switchTheme(checked)
             viewModel.editTheme(checked.toString())
         }
-        selectorSwitch.isChecked = (requireContext() as App).darkTheme
+        selectorSwitch.isChecked = (application as App).darkTheme
+
+            /*
+            *  val selectorSwitch = binding.selectorSwitch
+        selectorSwitch.setOnCheckedChangeListener { _, checked ->
+            (applicationContext as App).switchTheme(checked)
+            viewModel.editTheme(checked.toString())
+        }
+        selectorSwitch.isChecked = (applicationContext as App).darkTheme*/
     }
 
     fun onButtonShare() {

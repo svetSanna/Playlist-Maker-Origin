@@ -9,8 +9,6 @@ import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentFavoriteTracksBinding
-import com.example.playlistmaker.presentation.view_model.FavoriteTracksViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavoriteTracksFragment : Fragment() {
     companion object {
@@ -19,7 +17,7 @@ class FavoriteTracksFragment : Fragment() {
 
     private lateinit var binding: FragmentFavoriteTracksBinding
 
-    private val viewModel by viewModel<FavoriteTracksViewModel>()
+   // private val viewModel by viewModel<FavoriteTracksViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,

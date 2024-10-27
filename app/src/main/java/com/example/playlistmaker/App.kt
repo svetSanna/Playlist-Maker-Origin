@@ -66,26 +66,6 @@ class App : Application() {
         super.onCreate()
     }
 
-    /*fun switchTheme(stringFromSharedPrefs: String?) {
-        when (stringFromSharedPrefs) {
-            "false" -> darkTheme = false
-            "true" -> darkTheme = true
-            "" -> {
-                when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-                    Configuration.UI_MODE_NIGHT_YES -> darkTheme = true
-                    Configuration.UI_MODE_NIGHT_NO -> darkTheme = false
-                }
-            }
-        }
-       // darkTheme = darkThemeEnabled
-        AppCompatDelegate.setDefaultNightMode(
-            if (darkTheme) {
-                AppCompatDelegate.MODE_NIGHT_YES
-            } else {
-                AppCompatDelegate.MODE_NIGHT_NO
-            }
-        )
-    }*/
     fun switchTheme(darkThemeEnabled: Boolean) {
         darkTheme = darkThemeEnabled
         AppCompatDelegate.setDefaultNightMode(

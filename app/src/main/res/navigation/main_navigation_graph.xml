@@ -1,6 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main_navigation_graph">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation_graph"
+    app:startDestination="@id/searchFragment">
 
+    <fragment
+        android:id="@+id/mediatekaFragment"
+        android:name="com.example.playlistmaker.ui.MediatekaFragment.MediatekaFragment"
+        android:label="fragment_mediateka"
+        tools:layout="@layout/fragment_mediateka" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.playlistmaker.ui.SearchFragment.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_mediaActivity"
+            app:destination="@id/mediaActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.playlistmaker.ui.SettingsFragment.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+    <activity
+        android:id="@+id/mediaActivity"
+        android:name="com.example.playlistmaker.ui.MediaActivity.MediaActivity"
+        android:label="activity_media"
+        tools:layout="@layout/activity_media" >
+        <argument
+            android:name="item"
+            app:argType="com.example.playlistmaker.domain.entity.Track" />
+    </activity>
+    <argument
+        android:name="item"
+        app:argType="com.example.playlistmaker.domain.entity.Track" />
 </navigation>

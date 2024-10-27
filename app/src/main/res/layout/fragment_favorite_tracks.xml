@@ -3,7 +3,8 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:background="@color/fragment_background">
+    android:background="@color/fragment_background"
+    tools:context=".ui.MediatekaFragment.FavoriteTracksFragment">>
 
     <LinearLayout
         android:id="@+id/error_layout_favourite_tracks"

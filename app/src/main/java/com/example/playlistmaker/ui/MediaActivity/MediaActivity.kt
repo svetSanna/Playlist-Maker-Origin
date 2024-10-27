@@ -7,10 +7,11 @@ import android.os.Looper
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
+import androidx.navigation.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.TRACK
 import com.example.playlistmaker.databinding.ActivityMediaBinding
 import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.presentation.mapper.SimpleDateFormatMapper
@@ -24,6 +25,10 @@ class MediaActivity : AppCompatActivity() {
     //Log.i("MyTest", "MediaActivity.onCreate-4")
     companion object {
         private const val TIME_DEBOUNCE = 400L // время, через которое будет обновляться поле, показывающее, сколько времени от начала отрывка проиграно в формате
+        const val ARGS_TRACK = "track"
+        fun createArgs(track: Track): Bundle {
+            return bundleOf(ARGS_TRACK to track)
+        }
     }
 
     private lateinit var binding: ActivityMediaBinding
@@ -60,10 +65,18 @@ class MediaActivity : AppCompatActivity() {
         val buttonBackMedia = binding.toolbar
         buttonBackMedia.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
+
+            //val navHostFragment = supportFragmentManager.findFragmentById(R.id.searchFragment) as NavHostFragment
+            //val navController = navHostFragment.navController
+            //navController.navigateUp()
+
+            //findNavController(R.id.searchFragment).navigateUp()
         }
 
         // получаем данные трека из Intent
-        var item: Track? = getIntent().getParcelableExtra(TRACK)
+        //var item: Track? = getIntent().getParcelableExtra(TRACK)
+        val args: MediaActivityArgs by navArgs()
+        var item: Track? = args.item
 
         // раскладываем эти данные по соответствующим вьюшкам
         var ivTrackImage: ImageView = binding.trackImage
@@ -154,6 +167,5 @@ class MediaActivity : AppCompatActivity() {
         timeTrack.text = getString(R.string.time_00_00)
 
         handlerMain?.removeCallbacks(timeTrackRunnable) // удаляем из очереди все сообщения Runnable, чтобы таймер не обновлялся
-
     }
 }

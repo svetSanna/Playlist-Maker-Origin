@@ -1,6 +1,5 @@
 package com.example.playlistmaker.ui.SearchFragment
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -17,15 +16,14 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
-import com.example.playlistmaker.TRACK
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.presentation.state.SearchScreenState
 import com.example.playlistmaker.presentation.view_model.SearchViewModel
-import com.example.playlistmaker.ui.MediaActivity.MediaActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
@@ -52,7 +50,7 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
             1000L      // для предотвращения нажатия два раза подряд на элемент списка
         private const val EDIT_STRING = "editString"
         private const val TRACK_LIST = "track_list"
-        private const val SEARCH_HISTORY_VISIBILITY = "search_history_visibility"
+       // private const val SEARCH_HISTORY_VISIBILITY = "search_history_visibility"
         private const val TRACK_LIST_SEARCH_HISTORY = "track_list_search_history"
     }
 
@@ -320,11 +318,11 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
 
         outState.putParcelableArrayList(TRACK_LIST, trackList as ArrayList<out Parcelable?>?)
 
-        val linearLayoutSearchHistory = binding.searchHistoryLinearLayout
+      /*  val linearLayoutSearchHistory = binding.searchHistoryLinearLayout
         outState.putString(
             SEARCH_HISTORY_VISIBILITY,
             linearLayoutSearchHistory.visibility.toString()
-        )
+        )*/
         outState.putParcelableArrayList(
             TRACK_LIST_SEARCH_HISTORY,
             viewModel.getTrackListSearchHistory()
@@ -355,13 +353,13 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
             trackAdapterSearchHistory.items = viewModel.getTrackListSearchHistory()
             trackAdapterSearchHistory.notifyDataSetChanged()
 
-            val linearLayoutSearchHistory = binding.searchHistoryLinearLayout
+            /*val linearLayoutSearchHistory = binding.searchHistoryLinearLayout
             linearLayoutSearchHistory.visibility =
                 when (savedInstanceState.getString(SEARCH_HISTORY_VISIBILITY, "0")) {
                     "4" -> View.INVISIBLE
                     "8" -> View.GONE
                     else -> View.VISIBLE
-                }
+                }*/
         }
     }
 
@@ -388,15 +386,33 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
             viewModel.writeToSharedPreferences()
 
             // переход на экран аудиоплейера, передаем выбранный трек
-            val displayIntent = Intent(requireContext(), MediaActivity::class.java)//Intent(this, MediaActivity::class.java)
+            val direction = SearchFragmentDirections.actionSearchFragmentToMediaActivity(item)
+            findNavController().navigate(direction)
+
+
+            // переход на экран аудиоплейера, передаем выбранный трек
+                /* val displayIntent = Intent(requireContext(), MediaActivity::class.java)
             displayIntent.putExtra(TRACK, item)
 
             startActivity(displayIntent)
+*/
 
-            /*parentFragmentManager.commit{
-                replace(R.id.rootFragmentContainerView, MediaActivity::class.java)
-                addToBackStack(null)
-            }*/
+            /*   val navHostFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
+ val navController = navHostFragment.navController
+
+ binding.bottomNavigationView.setupWithNavController(navController)
+
+ navController.addOnDestinationChangedListener { _, destination, _ ->
+     when (destination.id) {
+         R.id.detailsFragment, R.id.moviesCastFragment -> {
+             binding.bottomNavigationView.visibility = View.GONE
+         }
+         else -> {
+             binding.bottomNavigationView.visibility = View.VISIBLE
+         }
+     }
+
+ }*/
         }
     }
 
