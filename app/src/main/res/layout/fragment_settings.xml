@@ -15,13 +15,6 @@
         android:layout_marginBottom="@dimen/margin_28"
         android:gravity="center_vertical">
 
-     <!--   <ImageView
-            android:id="@+id/button_settings_back"
-            style="@style/ImageViewLayoutSettingsWindow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/arrow_back" /> -->
-
         <TextView
             style="@style/TextTitle"
             android:layout_width="wrap_content"
@@ -43,7 +36,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right|center_vertical"
             android:checked="false" />
-        <!--style="@style/MySwitchStyle"-->
     </FrameLayout>
 
     <FrameLayout style="@style/FrameLayoutSettingsWindow">

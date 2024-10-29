@@ -42,8 +42,7 @@ class SearchViewModel( private var getTrackListUseCase : GetTrackListUseCase,
                             }
 
                             is ConsumerData.Data -> {
-                                val content =
-                                    SearchScreenState.Content(data.value)//productDetailsInfo)
+                                val content = SearchScreenState.Content(data.value)//productDetailsInfo)
                                 state.postValue(content)
                             }
                         }

@@ -17,8 +17,6 @@ class FavoriteTracksFragment : Fragment() {
 
     private lateinit var binding: FragmentFavoriteTracksBinding
 
-   // private val viewModel by viewModel<FavoriteTracksViewModel>()
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

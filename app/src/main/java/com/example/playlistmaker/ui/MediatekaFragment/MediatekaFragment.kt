@@ -26,10 +26,8 @@ class MediatekaFragment: Fragment()  {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //_binding = FragmentMediatekaBinding.inflate(layoutInflater)
-
         val adapter = MediatekaViewPagerAdapter(
-            fragmentManager = childFragmentManager,//supportFragmentManager,
+            fragmentManager = childFragmentManager,
             lifecycle = lifecycle,
         )
         binding.viewPager.adapter = adapter
@@ -41,14 +39,6 @@ class MediatekaFragment: Fragment()  {
             }
         }
         tabMediator.attach()
-
-       //setContentView(binding.root)
-
-        // кнопка "Назад"
-     /*   val buttonBackMedia = binding.buttonSearchBack
-        buttonBackMedia.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }*/
     }
 
     override fun onDestroyView() {

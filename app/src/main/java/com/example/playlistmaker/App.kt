@@ -29,11 +29,7 @@ class App : Application() {
             field = value
         }
 
-    // Переменная для работы с SharedPreferences (хранилище настроек)
-    // private lateinit var sharedPrefs: SharedPreferences
-
     override fun onCreate() {
-       // Creator.initApplication(this)
         // Получаем тему приложения, выбранную пользователем, из SharedPreferences, а если
         // ничего туда не успели сохранить, то применим текущую тему приложения
 
@@ -47,9 +43,6 @@ class App : Application() {
         }
 
         var stringFromSharedPrefs = getKoin().get<SharedPreferencesInteractor>().getString(THEME_SWITCH_KEY)
-            //Creator.provideSharedPreferencesInteractor().getString(THEME_SWITCH_KEY)
-
-        //getKoin().get<Interactor>().notifyResultSaved()
 
         when (stringFromSharedPrefs) {
             "false" -> darkTheme = false

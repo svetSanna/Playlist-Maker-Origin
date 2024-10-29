@@ -8,7 +8,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -65,17 +64,14 @@ class MediaActivity : AppCompatActivity() {
         // кнопка "Назад"
         val buttonBackMedia = binding.toolbar
         buttonBackMedia.setOnClickListener {
-          //  onBackPressedDispatcher.onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
 
-            val navHostFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
-            val navController = navHostFragment.navController
-            navController.navigateUp()
-
-            //findNavController(R.id.searchFragment).navigateUp()
+            //val navHostFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
+            //val navController = navHostFragment.navController
+            //navController.navigateUp()
         }
 
         // получаем данные трека из Intent
-        //var item: Track? = getIntent().getParcelableExtra(TRACK)
         val args: MediaActivityArgs by navArgs()
         var item: Track? = args.item
 

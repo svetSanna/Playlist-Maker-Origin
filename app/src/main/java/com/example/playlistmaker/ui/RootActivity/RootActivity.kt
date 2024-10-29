@@ -25,16 +25,6 @@ class RootActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
         val navController = navHostFragment.navController
 
-   //     val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-   //     bottomNavigationView.setupWithNavController(navController)
         binding.bottomNavigationView.setupWithNavController(navController)
-
-
-      /*  if (savedInstanceState == null) {
-            // Добавляем фрагмент в контейнер
-            supportFragmentManager.commit {
-                this.add(R.id.rootFragmentContainerView, SearchFragment())
-            }
-        }*/
     }
 }

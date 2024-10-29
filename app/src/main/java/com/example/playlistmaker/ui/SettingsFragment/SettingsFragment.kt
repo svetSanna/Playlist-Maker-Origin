@@ -33,12 +33,6 @@ class SettingsFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-       /* val buttonSettingsBack = binding.buttonSettingsBack
-        // вернуться назад
-        buttonSettingsBack.setOnClickListener {
-            onBackPressed()
-        }
-*/
         val buttonSettingsShare = binding.buttonSettingsShare
         // поделиться приложением
         buttonSettingsShare.setOnClickListener {
@@ -64,14 +58,6 @@ class SettingsFragment: Fragment() {
             viewModel.editTheme(checked.toString())
         }
         selectorSwitch.isChecked = (application as App).darkTheme
-
-            /*
-            *  val selectorSwitch = binding.selectorSwitch
-        selectorSwitch.setOnCheckedChangeListener { _, checked ->
-            (applicationContext as App).switchTheme(checked)
-            viewModel.editTheme(checked.toString())
-        }
-        selectorSwitch.isChecked = (applicationContext as App).darkTheme*/
     }
 
     fun onButtonShare() {
@@ -83,7 +69,6 @@ class SettingsFragment: Fragment() {
             startActivity(intent)
         } catch (e: ActivityNotFoundException) {
             Toast.makeText(
-                //this@SettingsActivity, getResources().getString(R.string.message_error_intent),
                 requireContext(), getResources().getString(R.string.message_error_intent),
                 Toast.LENGTH_SHORT
             ).show()
@@ -108,7 +93,6 @@ class SettingsFragment: Fragment() {
             startActivity(emailIntent)
         } catch (e: ActivityNotFoundException) {
             Toast.makeText(
-                //this@SettingsActivity, getResources().getString((R.string.message_error_intent)),
                 requireContext(), getResources().getString((R.string.message_error_intent)),
                 Toast.LENGTH_SHORT
             ).show()
@@ -123,7 +107,6 @@ class SettingsFragment: Fragment() {
             startActivity(intent)
         } catch (e: ActivityNotFoundException) {
             Toast.makeText(
-                //this@SettingsActivity,
                 requireContext(),
                 getResources().getString((R.string.message_error_intent)),
                 Toast.LENGTH_SHORT
