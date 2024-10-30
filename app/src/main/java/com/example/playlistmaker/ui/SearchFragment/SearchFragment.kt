@@ -54,6 +54,7 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
 
     // Создаём Handler, привязанный к ГЛАВНОМУ потоку
     private val searchRunnable = Runnable { searchRequest() }
+
     //lateinit var private searchRunnable: Runnable
 
     private var mainHandler: Handler? = null
@@ -394,5 +395,6 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        mainHandler?.removeCallbacks(searchRunnable)
     }
 }

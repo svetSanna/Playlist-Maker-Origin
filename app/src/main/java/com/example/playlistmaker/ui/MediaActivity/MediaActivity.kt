@@ -65,10 +65,6 @@ class MediaActivity : AppCompatActivity() {
         val buttonBackMedia = binding.toolbar
         buttonBackMedia.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
-
-            //val navHostFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
-            //val navController = navHostFragment.navController
-            //navController.navigateUp()
         }
 
         // получаем данные трека из Intent
