@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -121,7 +122,14 @@ class MediaActivity : AppCompatActivity() {
             val buttonPlayPause = binding.buttonMediaPlayPause
 
             buttonPlayPause.setOnClickListener {
-                viewModel.playbackControl()
+                //viewModel.playbackControl()
+
+                val navHostFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
+                val navController = navHostFragment.navController
+                navController.navigateUp()
+                // я сюда уже всякие фрагементы пыталась поставить))
+
+                // findNavController(R.id.rootFragmentContainerView).navigateUp()
             }
         }
     }
