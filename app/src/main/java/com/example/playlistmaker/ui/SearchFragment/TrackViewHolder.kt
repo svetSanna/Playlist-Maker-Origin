@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui.SearchActivity
+package com.example.playlistmaker.ui.SearchFragment
 
 import android.icu.text.SimpleDateFormat
 import android.view.View
@@ -26,7 +26,6 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         tvArtistName.text = item.artistName
         tvTrackTime.text =
             SimpleDateFormat("mm:ss", Locale.getDefault()).format(item.trackTimeMillis)
-        // val image = parent.findViewById<ImageView>(R.id.image)
 
         Glide.with(itemView)
             .load(item.artworkUrl100)

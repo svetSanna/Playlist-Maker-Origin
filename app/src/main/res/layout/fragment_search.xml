@@ -2,25 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_search"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_settings_window"
     android:orientation="vertical"
     android:padding="@dimen/small_padding"
-    tools:context=".ui.SearchActivity.SearchActivity">
+    tools:context=".ui.SearchFragment.SearchFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/margin_48"
         android:layout_marginBottom="@dimen/margin_4"
         android:gravity="center_vertical">
-
-        <ImageView
-            android:id="@+id/button_search_back"
-            style="@style/ImageViewLayoutSettingsWindow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/arrow_back" />
 
         <TextView
             style="@style/TextTitle"
@@ -87,9 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/margin_24"
-            android:orientation="vertical"
-            android:visibility="visible">
-
+            android:orientation="vertical" >
             <TextView
                 android:id="@+id/searchHistoryMessage"
                 style="@style/SearchHistoryMessageText"

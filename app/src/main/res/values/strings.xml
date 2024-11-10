@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">Playlist Maker</string>
     <string name="button1_text_search">Поиск</string>
-  <!--  <string name="button2_text_media">Медиатека</string> -->
+    <!--  <string name="button2_text_media">Медиатека</string> -->
     <string name="button3_text_settings">Настройки</string>
     <string name="button4_text_mediateka">Медиатека</string>
     <string name="dark_theme">Темная тема</string>

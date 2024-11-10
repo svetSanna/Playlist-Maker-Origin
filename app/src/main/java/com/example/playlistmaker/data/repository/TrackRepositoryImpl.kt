@@ -30,19 +30,9 @@ class TrackRepositoryImpl(private val networkClient: NetworkClient) : TrackRepos
                     it.previewUrl
                 )
             }
-            return Resource.Success(results) //results
+           return Resource.Success(results) //results
         } else {
-            //return Resource.Error("Произошла сетевая ошибка") // p5
             return Resource.Error(R.string.network_err.toString())
         }
-
-        /*if (response.resultCode == 200) {
-             return (response as TrackSearchResponse).results.map {
-                 Track(it.trackId, it.trackName, it.artistName, it.trackTimeMillis, it.artworkUrl100,
-                     it.collectionName, it.releaseDate, it.primaryGenreName, it.country, it.previewUrl)
-             }
-         } else {
-             return emptyList()
-         }*/
     }
 }

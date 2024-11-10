@@ -29,11 +29,7 @@ class App : Application() {
             field = value
         }
 
-    // Переменная для работы с SharedPreferences (хранилище настроек)
-    // private lateinit var sharedPrefs: SharedPreferences
-
     override fun onCreate() {
-       // Creator.initApplication(this)
         // Получаем тему приложения, выбранную пользователем, из SharedPreferences, а если
         // ничего туда не успели сохранить, то применим текущую тему приложения
 
@@ -47,9 +43,6 @@ class App : Application() {
         }
 
         var stringFromSharedPrefs = getKoin().get<SharedPreferencesInteractor>().getString(THEME_SWITCH_KEY)
-            //Creator.provideSharedPreferencesInteractor().getString(THEME_SWITCH_KEY)
-
-        //getKoin().get<Interactor>().notifyResultSaved()
 
         when (stringFromSharedPrefs) {
             "false" -> darkTheme = false
@@ -66,26 +59,6 @@ class App : Application() {
         super.onCreate()
     }
 
-    /*fun switchTheme(stringFromSharedPrefs: String?) {
-        when (stringFromSharedPrefs) {
-            "false" -> darkTheme = false
-            "true" -> darkTheme = true
-            "" -> {
-                when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-                    Configuration.UI_MODE_NIGHT_YES -> darkTheme = true
-                    Configuration.UI_MODE_NIGHT_NO -> darkTheme = false
-                }
-            }
-        }
-       // darkTheme = darkThemeEnabled
-        AppCompatDelegate.setDefaultNightMode(
-            if (darkTheme) {
-                AppCompatDelegate.MODE_NIGHT_YES
-            } else {
-                AppCompatDelegate.MODE_NIGHT_NO
-            }
-        )
-    }*/
     fun switchTheme(darkThemeEnabled: Boolean) {
         darkTheme = darkThemeEnabled
         AppCompatDelegate.setDefaultNightMode(

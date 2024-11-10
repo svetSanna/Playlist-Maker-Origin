@@ -1,36 +1,37 @@
-package com.example.playlistmaker.ui.SettingsActivity
+package com.example.playlistmaker.ui.SettingsFragment
 
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.example.playlistmaker.App
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivitySettingsBinding
+import com.example.playlistmaker.databinding.FragmentSettingsBinding
 import com.example.playlistmaker.presentation.view_model.SettingsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingsActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySettingsBinding
+class SettingsFragment: Fragment() {
+    private var _binding: FragmentSettingsBinding? = null
+    // This property is only valid between onCreateView and onDestroyView.
+    private val binding
+        get() = _binding!!
 
     private val viewModel by viewModel<SettingsViewModel>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?)
+            : View? {
+        _binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        binding = ActivitySettingsBinding.inflate(layoutInflater)
-
-        val view = binding.root
-        setContentView(view)
-
-        val buttonSettingsBack = binding.buttonSettingsBack
-        // вернуться назад
-        buttonSettingsBack.setOnClickListener {
-            onBackPressed()
-        }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val buttonSettingsShare = binding.buttonSettingsShare
         // поделиться приложением
@@ -51,11 +52,12 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         val selectorSwitch = binding.selectorSwitch
+        val application = requireContext().getApplicationContext()
         selectorSwitch.setOnCheckedChangeListener { _, checked ->
-            (applicationContext as App).switchTheme(checked)
+            (application as App).switchTheme(checked)
             viewModel.editTheme(checked.toString())
         }
-        selectorSwitch.isChecked = (applicationContext as App).darkTheme
+        selectorSwitch.isChecked = (application as App).darkTheme
     }
 
     fun onButtonShare() {
@@ -67,7 +69,7 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(intent)
         } catch (e: ActivityNotFoundException) {
             Toast.makeText(
-                this@SettingsActivity, getResources().getString(R.string.message_error_intent),
+                requireContext(), getResources().getString(R.string.message_error_intent),
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -91,7 +93,7 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(emailIntent)
         } catch (e: ActivityNotFoundException) {
             Toast.makeText(
-                this@SettingsActivity, getResources().getString((R.string.message_error_intent)),
+                requireContext(), getResources().getString((R.string.message_error_intent)),
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -105,10 +107,14 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(intent)
         } catch (e: ActivityNotFoundException) {
             Toast.makeText(
-                this@SettingsActivity,
+                requireContext(),
                 getResources().getString((R.string.message_error_intent)),
                 Toast.LENGTH_SHORT
             ).show()
         }
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
