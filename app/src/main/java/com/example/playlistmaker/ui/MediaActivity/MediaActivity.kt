@@ -122,14 +122,7 @@ class MediaActivity : AppCompatActivity() {
             val buttonPlayPause = binding.buttonMediaPlayPause
 
             buttonPlayPause.setOnClickListener {
-                //viewModel.playbackControl()
-
-                val navHostFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
-                val navController = navHostFragment.navController
-                navController.navigateUp()
-                // я сюда уже всякие фрагементы пыталась поставить))
-
-                // findNavController(R.id.rootFragmentContainerView).navigateUp()
+                viewModel.playbackControl()
             }
         }
     }
