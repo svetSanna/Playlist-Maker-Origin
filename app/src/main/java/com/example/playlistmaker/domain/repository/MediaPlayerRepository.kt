@@ -5,7 +5,7 @@ interface MediaPlayerRepository {
     fun preparePlayer(url: String?)
     fun startPlayer()
     fun pausePlayer()
-    fun playbackControl()
+   // fun playbackControl()
     fun onDestroy()
     fun isStateIsPlaying(): Boolean
 }

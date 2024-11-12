@@ -44,7 +44,7 @@ class MediaPlayerRepositoryImpl(private var mediaPlayer : MediaPlayer) :
         playerState = STATE_PAUSED
     }
 
-    override fun playbackControl() {
+  /*  override fun playbackControl() {
         // функция вызывается при нажатии на кнопку Play/Pause
         when (playerState) {
             STATE_PLAYING -> {
@@ -56,7 +56,7 @@ class MediaPlayerRepositoryImpl(private var mediaPlayer : MediaPlayer) :
             }
         }
     }
-
+*/
     override fun onDestroy() {
         //mediaPlayer.release() - убрала потому что валилась программа при повороте
         mediaPlayer.reset()

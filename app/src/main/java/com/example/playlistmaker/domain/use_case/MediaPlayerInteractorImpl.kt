@@ -9,14 +9,18 @@ class MediaPlayerInteractorImpl(
         return repositoryImpl.preparePlayer(url)
     }
 
+    override fun startPlayer() {
+        return repositoryImpl.startPlayer()
+    }
+
     override fun pausePlayer() {
         return repositoryImpl.pausePlayer()
     }
 
-    override fun playbackControl() {
+  /*  override fun playbackControl() {
         return repositoryImpl.playbackControl()
     }
-
+*/
     override fun onDestroy() {
         return repositoryImpl.onDestroy()
     }

@@ -25,7 +25,7 @@ import org.koin.core.parameter.parametersOf
 class MediaActivity : AppCompatActivity() {
     //Log.i("MyTest", "MediaActivity.onCreate-4")
     companion object {
-        private const val TIME_DEBOUNCE = 400L // время, через которое будет обновляться поле, показывающее, сколько времени от начала отрывка проиграно в формате
+     //   private const val TIME_DEBOUNCE = 400L // время, через которое будет обновляться поле, показывающее, сколько времени от начала отрывка проиграно в формате
         const val ARGS_TRACK = "track"
         fun createArgs(track: Track): Bundle {
             return bundleOf(ARGS_TRACK to track)
@@ -40,7 +40,7 @@ class MediaActivity : AppCompatActivity() {
 
     private val viewModel by viewModel<MediaViewModel>{parametersOf(url)}
 
-    private val handlerMain = Handler(Looper.getMainLooper())
+    /*private val handlerMain = Handler(Looper.getMainLooper())
 
     private val timeTrackRunnable = object : Runnable {
         override fun run() {
@@ -49,7 +49,7 @@ class MediaActivity : AppCompatActivity() {
 
             handlerMain?.postDelayed(this, TIME_DEBOUNCE)
         }
-    }
+    }*/
     @SuppressLint("MissingInflatedId", "WrongViewCast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +57,7 @@ class MediaActivity : AppCompatActivity() {
         binding = ActivityMediaBinding.inflate(layoutInflater)
 
         timeTrack = binding.time
-        timeTrack.text = getString(R.string.time_00_00)
+    //    timeTrack.text = getString(R.string.time_00_00)
 
         val view = binding.root
         setContentView(view)
@@ -102,7 +102,7 @@ class MediaActivity : AppCompatActivity() {
             url = item?.previewUrl
 
             // подписываемся на состояние MediaViewModel
-            viewModel.getMediaPlayerState().observe(this) { state ->
+/*            viewModel.getMediaPlayerState().observe(this) { state ->
                 when(state) {
                     is MediaPlayerState.Playing -> {
                         showPlaying()
@@ -117,6 +117,20 @@ class MediaActivity : AppCompatActivity() {
             }
             // обновляем время
             timeTrack.text = SimpleDateFormatMapper.map(viewModel.getCurrentPosition())
+*/
+            viewModel.getMediaPlayerState().observe(this) { state ->
+                when(state) {
+                    is MediaPlayerState.Playing -> {
+                        showPlaying()
+                    }
+                    is MediaPlayerState.Paused -> {
+                        showPaused()
+                    }
+                    is MediaPlayerState.Prepared -> {
+                        showPrepared()
+                    }
+                }
+            }
 
             // кнопка "Play"/"Pause"
             val buttonPlayPause = binding.buttonMediaPlayPause
@@ -130,6 +144,7 @@ class MediaActivity : AppCompatActivity() {
     // Активити на паузу
     override fun onPause() {
         super.onPause()
+       // viewModel.onPause()//
     }
 
     // Активити закрывается
@@ -142,24 +157,28 @@ class MediaActivity : AppCompatActivity() {
         // запустить плейер        // кнопка "Play"/"Pause"
         val buttonPlayPause = binding.buttonMediaPlayPause
         buttonPlayPause.setImageResource(R.drawable.button_media_pause)
+        // обновляем время
+        timeTrack.text = SimpleDateFormatMapper.map(viewModel.getCurrentPosition())
 
-        handlerMain?.postDelayed(
+       /* handlerMain?.postDelayed(
             timeTrackRunnable,
             TIME_DEBOUNCE
-        )  // ставим в очередь обновление таймера
+        )*/  // ставим в очередь обновление таймера
     }
 
     fun showPaused(){
         // кнопка "Play"/"Pause"
         val buttonPlayPause = binding.buttonMediaPlayPause
         buttonPlayPause.setImageResource(R.drawable.button_media_play)
+        // обновляем время
+        timeTrack.text = SimpleDateFormatMapper.map(viewModel.getCurrentPosition())
 
-        handlerMain?.removeCallbacks(timeTrackRunnable) // удаляем из очереди все сообщения Runnable, чтобы таймер не обновлялся
+       // handlerMain?.removeCallbacks(timeTrackRunnable) // удаляем из очереди все сообщения Runnable, чтобы таймер не обновлялся
     }
     fun showPrepared() {
         var timeTrack = binding.time
         timeTrack.text = getString(R.string.time_00_00)
 
-        handlerMain?.removeCallbacks(timeTrackRunnable) // удаляем из очереди все сообщения Runnable, чтобы таймер не обновлялся
+       // handlerMain?.removeCallbacks(timeTrackRunnable) // удаляем из очереди все сообщения Runnable, чтобы таймер не обновлялся
     }
 }
