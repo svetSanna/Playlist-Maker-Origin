@@ -39,7 +39,7 @@ val dataModule = module {
     }
 
     single<NetworkClient> {
-        RetrofitNetworkClient(trackApiService = get())
+        RetrofitNetworkClient(trackApiService = get(), androidContext())
     }
 
     single<MediaPlayerRepository>{

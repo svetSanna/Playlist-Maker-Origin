@@ -25,19 +25,11 @@ import org.koin.core.parameter.parametersOf
 
 class MediaActivity : AppCompatActivity() {
     //Log.i("MyTest", "MediaActivity.onCreate-4")
-    companion object {
-        const val ARGS_TRACK = "track"
-        fun createArgs(track: Track): Bundle {
-            return bundleOf(ARGS_TRACK to track)
-        }
-    }
 
     private lateinit var binding: ActivityMediaBinding
-
     private lateinit var timeTrack :TextView
 
     private var url: String? = ""
-
     private val viewModel by viewModel<MediaViewModel>{parametersOf(url)}
 
     @SuppressLint("MissingInflatedId", "WrongViewCast")
@@ -135,6 +127,7 @@ class MediaActivity : AppCompatActivity() {
 
     fun showPlaying(){
         // запустить плейер        // кнопка "Play"/"Pause"
+       // Log.i("MyTest", "MediaActivity.showPlaying() ")
         val buttonPlayPause = binding.buttonMediaPlayPause
         buttonPlayPause.setImageResource(R.drawable.button_media_pause)
         // обновляем время
@@ -143,13 +136,18 @@ class MediaActivity : AppCompatActivity() {
 
     fun showPaused(){
         // кнопка "Play"/"Pause"
+     //   Log.i("MyTest", "MediaActivity.showPaused() ")
         val buttonPlayPause = binding.buttonMediaPlayPause
         buttonPlayPause.setImageResource(R.drawable.button_media_play)
         // обновляем время
         timeTrack.text = SimpleDateFormatMapper.map(viewModel.getCurrentPosition())
     }
     fun showPrepared() {
+       // Log.i("MyTest", "MediaActivity.onPrepared() ")
         var timeTrack = binding.time
         timeTrack.text = getString(R.string.time_00_00)
+        // кнопка "Play"/"Pause"
+        val buttonPlayPause = binding.buttonMediaPlayPause
+        buttonPlayPause.setImageResource(R.drawable.button_media_play)
    }
 }

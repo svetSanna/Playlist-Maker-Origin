@@ -47,21 +47,12 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
     private val viewModel by viewModel<SearchViewModel>()
 
     companion object {
-     //   private const val SEARCH_DEBOUNCE_DELAY =
-     //       2000L     // для поиска при задержке ввода на 2 секунды
         private const val CLICK_DEBOUNCE_DELAY =
             1000L      // для предотвращения нажатия два раза подряд на элемент списка
         private const val EDIT_STRING = "editString"
         private const val TRACK_LIST = "track_list"
         private const val TRACK_LIST_SEARCH_HISTORY = "track_list_search_history"
     }
-
-    // Создаём Handler, привязанный к ГЛАВНОМУ потоку
-    //private val searchRunnable = Runnable { searchRequest() }
-
-    //lateinit var private searchRunnable: Runnable
-
-  //  private var mainHandler: Handler? = null
 
     private var isClickAllowed = true
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?)
@@ -150,8 +141,6 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
             trackAdapter.notifyDataSetChanged()
         }
 
-        //mainHandler = Handler(Looper.getMainLooper())
-
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 //    TODO("Not yet implemented")
@@ -226,26 +215,17 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
         if (inputEditText.text.isNotEmpty()) {
             progressBarVisibility(true)// Показываем ProgressBar перед выполнением запроса
 
-            //viewModel.loadData(inputEditText.text.toString())
-            Log.i("MyTest", "SearchFragment.searchRequest(): вызывается viewModel.SearchDebounce(inputEditText.text.toString()) вместо viewModel.loadData(inputEditText.text.toString())")
             viewModel.searchDebounce(inputEditText.text.toString())
 
             progressBarVisibility(false) // Прячем ProgressBar после выполнения запроса
         }
     }
 
-    private fun showError(code: Int) {
+    private fun showError(code: String) {
         // кнопка "Обновить"
         val buttonRefresh = binding.buttonRefresh
         buttonRefresh.visibility = View.VISIBLE
-        var message = ""
-        if(code == -1) {
-            message = getString(R.string.search_err)
-        }
-        showMessage(
-            getString(R.string.something_went_wrong),
-            message
-        )
+        showMessage(getString(R.string.something_went_wrong))
         binding.rvItems.visibility = View.GONE
         binding.searchHistoryLinearLayout.visibility = View.GONE
         binding.placeholderLinearLayout.visibility = View.VISIBLE
@@ -269,12 +249,12 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
         trackAdapter.notifyDataSetChanged()
 
         if (trackList.isEmpty()) {
-            showMessage(getString(R.string.nothing_found), "")
+            showMessage(getString(R.string.nothing_found))//, "")
             binding.rvItems.visibility = View.GONE
             binding.searchHistoryLinearLayout.visibility = View.GONE
             binding.placeholderLinearLayout.visibility = View.VISIBLE
         } else {
-            showMessage("", "")
+            showMessage("")//, "")
             binding.rvItems.visibility = View.VISIBLE
             binding.searchHistoryLinearLayout.visibility = View.GONE
             binding.placeholderLinearLayout.visibility = View.GONE
@@ -288,11 +268,10 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
         else progressBar.visibility = View.GONE
     }
 
-    private fun showMessage(text: String, additionalMessage: String) {
+    private fun showMessage(text: String) {//, additionalMessage: String) {
 
         val placeholderMessage: TextView = binding.placeholderMessage
         val placeholderImage: ImageView = binding.placeholderImage
-        val rvItems: RecyclerView = binding.rvItems
 
         if (text.isNotEmpty()) {
             when (text) {
@@ -305,9 +284,6 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
             trackList.clear()
             trackAdapter.notifyDataSetChanged()
             placeholderMessage.text = text
-            if (additionalMessage.isNotEmpty()) {
-                Toast.makeText(requireContext(), additionalMessage, Toast.LENGTH_LONG).show()
-            }
         }
     }
 
@@ -382,12 +358,6 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
         }
     }
 
-    /* // для поиска при задержке ввода на 2 секунды
-    private fun SearchDebounce() {
-        mainHandler?.removeCallbacks(searchRunnable)
-        mainHandler?.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
-    }*/
-
     // Предотвращение двойного нажатия на элемент списка
     private fun clickDebounce(): Boolean {
         val current = isClickAllowed
@@ -400,18 +370,9 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
         }
         return current
     }
-    /*private fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            mainHandler?.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-        }
-        return current
-    }*/
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        //mainHandler?.removeCallbacks(searchRunnable)
     }
 }

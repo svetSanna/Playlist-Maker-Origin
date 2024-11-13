@@ -1,12 +1,12 @@
 package com.example.playlistmaker.presentation.view_model
 
-import android.os.SystemClock
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.domain.consumer.Consumer
-import com.example.playlistmaker.domain.consumer.ConsumerData
+import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.domain.use_case.GetTrackListUseCase
 import com.example.playlistmaker.domain.use_case.SearchHistoryInteractor
@@ -17,12 +17,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SearchViewModel( private var getTrackListUseCase : GetTrackListUseCase,
-                       private var historyInteractor : SearchHistoryInteractor
+                       private var historyInteractor : SearchHistoryInteractor,
+                       private val context: Context
 ) : ViewModel() {
-    private var latestSearchText: String? = null //
-    companion object { //
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L//
-    }//
+    private var latestSearchText: String? = null
+    companion object {
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+    }
 
     private val state = MutableLiveData<SearchScreenState>()
     init {
@@ -63,24 +64,31 @@ class SearchViewModel( private var getTrackListUseCase : GetTrackListUseCase,
             // и кладем ее в состояние contentHistory
             state.postValue(contentHistory)
         } else { // если поле ввода не пустое, то с помощью UseCase делаем запрос в сеть и либо находим треки, либо получаем ошибку
-            getTrackListUseCase(
-                str = inputSearchEditText,
-                consumer = object : Consumer<List<Track>> {
-                    override fun consume(data: ConsumerData<List<Track>>) {
-                        when (data) {
-                            is ConsumerData.Error -> {
-                                val error = SearchScreenState.Error(data.code)
-                                state.postValue(error)
-                            }
-
-                            is ConsumerData.Data -> {
-                                val content = SearchScreenState.Content(data.value)//productDetailsInfo)
-                                state.postValue(content)
-                            }
-                        }
+            viewModelScope.launch {
+                getTrackListUseCase(str = inputSearchEditText)
+                    .collect() { pair ->
+                        processResult(pair.first, pair.second)
                     }
-                }
-            )
+            }
+        }
+    }
+    private fun processResult(foundTracks: List<Track>?, errorMessage: String?) {
+        val tracks = mutableListOf<Track>()
+        if (foundTracks != null) {
+            tracks.addAll(foundTracks)
+        }
+
+        when {
+            errorMessage != null -> {
+                val error = SearchScreenState.Error(message = context.getString(
+                    R.string.something_went_wrong))
+                state.postValue(error)
+            }
+
+            else -> {
+                val content = SearchScreenState.Content(data = tracks)
+                state.postValue(content)
+            }
         }
     }
 

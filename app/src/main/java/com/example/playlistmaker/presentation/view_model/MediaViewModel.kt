@@ -53,6 +53,7 @@ class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor, p
                 delay(300L)
                 state.postValue(MediaPlayerState.Playing)
             }
+            state.postValue(MediaPlayerState.Prepared)
         }
     }
 
