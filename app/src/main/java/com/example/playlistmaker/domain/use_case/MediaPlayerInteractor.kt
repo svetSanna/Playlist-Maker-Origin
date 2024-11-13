@@ -4,7 +4,6 @@ interface MediaPlayerInteractor {
         fun preparePlayer(url: String?)
         fun startPlayer()
         fun pausePlayer()
-       // fun playbackControl()
         fun onDestroy()
         fun isStateIsPlaying(): Boolean
         fun getCurrentPosition() : Int

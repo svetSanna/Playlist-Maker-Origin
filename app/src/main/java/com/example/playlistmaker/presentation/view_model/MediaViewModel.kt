@@ -2,6 +2,7 @@ package com.example.playlistmaker.presentation.view_model
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,28 +15,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor, private val url: String?) : ViewModel() {
-    /*companion object {
-        private const val TIME_DEBOUNCE =
-            300L // время, через которое будет обновляться поле, показывающее, сколько времени от начала отрывка проиграно в формате
-    }*/
     private var timerJob: Job? = null //
 
     private val state = MutableLiveData<MediaPlayerState>()
     init{
         preparePlayer(url)
     }
-
-    //var flag = true
-    /*private val handlerMain = Handler(Looper.getMainLooper())
-
-    private val timeTrackRunnable = object : Runnable {
-        override fun run() {
-            // обновляем время
-            timeTrack.text = SimpleDateFormatMapper.map(viewModel.getCurrentPosition())
-
-            handlerMain?.postDelayed(this, TIME_DEBOUNCE)
-        }
-    }*/
 
     fun getMediaPlayerState(): LiveData<MediaPlayerState> = state
     fun preparePlayer(url: String?) {
@@ -44,24 +29,21 @@ class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor, p
     }
 
     fun playbackControl() {
-
-       // mediaPlayerInteractor.playbackControl()
         if (mediaPlayerInteractor.isStateIsPlaying())
-            pausePlayer()//state.postValue(MediaPlayerState.Playing)
+            pausePlayer()
         else
-            startPlayer()//state.postValue(MediaPlayerState.Paused)
-       // flag = !flag
+            startPlayer()
     }
 
     fun startPlayer(){
         mediaPlayerInteractor.startPlayer()
         state.postValue(MediaPlayerState.Playing)
-        startTimer() //
+        startTimer()
     }
 
     fun pausePlayer() {
         mediaPlayerInteractor.pausePlayer()
-        timerJob?.cancel() //
+        timerJob?.cancel()
         state.postValue(MediaPlayerState.Paused)
     }
 
@@ -75,6 +57,7 @@ class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor, p
     }
 
     fun onDestroyMediaPlayer() {
+        //Log.i("MyTest", "MediaViewModel.onDestroyMediaPlayer() ")
         mediaPlayerInteractor.onDestroy()
     }
 
@@ -84,10 +67,12 @@ class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor, p
 
     override fun onCleared() {
         super.onCleared()
+        //Log.i("MyTest", "MediaViewModel.onCleared() ")
         onDestroyMediaPlayer()
     }
 
-   /* fun onPause(){
+    fun onPause(){
+        //Log.i("MyTest", "MediaViewModel.onPause() ")
         pausePlayer()
-    }*/
+    }
 }

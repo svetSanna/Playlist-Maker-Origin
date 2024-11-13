@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -25,7 +26,6 @@ import org.koin.core.parameter.parametersOf
 class MediaActivity : AppCompatActivity() {
     //Log.i("MyTest", "MediaActivity.onCreate-4")
     companion object {
-     //   private const val TIME_DEBOUNCE = 400L // время, через которое будет обновляться поле, показывающее, сколько времени от начала отрывка проиграно в формате
         const val ARGS_TRACK = "track"
         fun createArgs(track: Track): Bundle {
             return bundleOf(ARGS_TRACK to track)
@@ -40,16 +40,6 @@ class MediaActivity : AppCompatActivity() {
 
     private val viewModel by viewModel<MediaViewModel>{parametersOf(url)}
 
-    /*private val handlerMain = Handler(Looper.getMainLooper())
-
-    private val timeTrackRunnable = object : Runnable {
-        override fun run() {
-            // обновляем время
-            timeTrack.text = SimpleDateFormatMapper.map(viewModel.getCurrentPosition())
-
-            handlerMain?.postDelayed(this, TIME_DEBOUNCE)
-        }
-    }*/
     @SuppressLint("MissingInflatedId", "WrongViewCast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +47,6 @@ class MediaActivity : AppCompatActivity() {
         binding = ActivityMediaBinding.inflate(layoutInflater)
 
         timeTrack = binding.time
-    //    timeTrack.text = getString(R.string.time_00_00)
 
         val view = binding.root
         setContentView(view)
@@ -101,23 +90,6 @@ class MediaActivity : AppCompatActivity() {
             // ссылка на отрывок
             url = item?.previewUrl
 
-            // подписываемся на состояние MediaViewModel
-/*            viewModel.getMediaPlayerState().observe(this) { state ->
-                when(state) {
-                    is MediaPlayerState.Playing -> {
-                        showPlaying()
-                    }
-                    is MediaPlayerState.Paused -> {
-                        showPaused()
-                    }
-                    is MediaPlayerState.Prepared -> {
-                        showPrepared()
-                    }
-                }
-            }
-            // обновляем время
-            timeTrack.text = SimpleDateFormatMapper.map(viewModel.getCurrentPosition())
-*/
             viewModel.getMediaPlayerState().observe(this) { state ->
                 when(state) {
                     is MediaPlayerState.Playing -> {
@@ -144,13 +116,21 @@ class MediaActivity : AppCompatActivity() {
     // Активити на паузу
     override fun onPause() {
         super.onPause()
-       // viewModel.onPause()//
     }
 
     // Активити закрывается
     override fun onDestroy() {
         super.onDestroy()
+        //Log.i("MyTest", "MediaActivity.onDestroy() ")
        // viewModel.onDestroyMediaPlayer() - убрала, чтобы медиаплейер не перезапускался снова при повороте
+    }
+
+    override fun onStop() {
+        super.onStop()
+        //Log.i("MyTest", "MediaActivity.onStop() ")
+        if (!isChangingConfigurations){
+            viewModel.onPause()
+        }
     }
 
     fun showPlaying(){
@@ -159,11 +139,6 @@ class MediaActivity : AppCompatActivity() {
         buttonPlayPause.setImageResource(R.drawable.button_media_pause)
         // обновляем время
         timeTrack.text = SimpleDateFormatMapper.map(viewModel.getCurrentPosition())
-
-       /* handlerMain?.postDelayed(
-            timeTrackRunnable,
-            TIME_DEBOUNCE
-        )*/  // ставим в очередь обновление таймера
     }
 
     fun showPaused(){
@@ -172,13 +147,9 @@ class MediaActivity : AppCompatActivity() {
         buttonPlayPause.setImageResource(R.drawable.button_media_play)
         // обновляем время
         timeTrack.text = SimpleDateFormatMapper.map(viewModel.getCurrentPosition())
-
-       // handlerMain?.removeCallbacks(timeTrackRunnable) // удаляем из очереди все сообщения Runnable, чтобы таймер не обновлялся
     }
     fun showPrepared() {
         var timeTrack = binding.time
         timeTrack.text = getString(R.string.time_00_00)
-
-       // handlerMain?.removeCallbacks(timeTrackRunnable) // удаляем из очереди все сообщения Runnable, чтобы таймер не обновлялся
-    }
+   }
 }

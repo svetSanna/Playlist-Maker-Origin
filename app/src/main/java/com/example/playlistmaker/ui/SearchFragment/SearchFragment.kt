@@ -6,6 +6,7 @@ import android.os.Looper
 import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,8 +44,8 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
     private val viewModel by viewModel<SearchViewModel>()
 
     companion object {
-        private const val SEARCH_DEBOUNCE_DELAY =
-            2000L     // для поиска при задержке ввода на 2 секунды
+     //   private const val SEARCH_DEBOUNCE_DELAY =
+     //       2000L     // для поиска при задержке ввода на 2 секунды
         private const val CLICK_DEBOUNCE_DELAY =
             1000L      // для предотвращения нажатия два раза подряд на элемент списка
         private const val EDIT_STRING = "editString"
@@ -53,7 +54,7 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
     }
 
     // Создаём Handler, привязанный к ГЛАВНОМУ потоку
-    private val searchRunnable = Runnable { searchRequest() }
+    //private val searchRunnable = Runnable { searchRequest() }
 
     //lateinit var private searchRunnable: Runnable
 
@@ -69,14 +70,12 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //searchRunnable = Runnable { searchRequest() }
-
         trackAdapterSearchHistory.onItemClickListener = this
         trackAdapter.onItemClickListener = this
 
         val inputEditText = binding.editSearchWindow
 
-        viewModel.loadData(inputEditText.text.toString())//
+        viewModel.loadData(inputEditText.text.toString())
 
         // для поиска
         val rvItems1: RecyclerView = binding.rvItems
@@ -129,6 +128,7 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
                 binding.placeholderLinearLayout.visibility = View.GONE
                 binding.rvItems.visibility = View.GONE
                 binding.searchHistoryLinearLayout.visibility = View.GONE
+                Log.i("MyTest", "SearchFragment.inputEditText.setOnEditorActionListener: вызывается searchRequest() ")
                 searchRequest()
                 true
             }
@@ -171,7 +171,8 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
                 binding.placeholderLinearLayout.visibility = View.GONE
                 binding.rvItems.visibility = View.GONE
 
-                SearchDebounce()
+                Log.i("MyTest", "SearchFragment.simpleTextWatcher.onTextChanged: вызывается viewModel.SearchDebounce() ")
+                viewModel.searchDebounce(inputEditText.text.toString()) //searchDebounce()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -222,7 +223,9 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
         if (inputEditText.text.isNotEmpty()) {
             progressBarVisibility(true)// Показываем ProgressBar перед выполнением запроса
 
-            viewModel.loadData(inputEditText.text.toString())
+            //viewModel.loadData(inputEditText.text.toString())
+            Log.i("MyTest", "SearchFragment.searchRequest(): вызывается viewModel.SearchDebounce(inputEditText.text.toString()) вместо viewModel.loadData(inputEditText.text.toString())")
+            viewModel.searchDebounce(inputEditText.text.toString())
 
             progressBarVisibility(false) // Прячем ProgressBar после выполнения запроса
         }
@@ -240,9 +243,9 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
             getString(R.string.something_went_wrong),
             message
         )
-        binding.rvItems.visibility = View.GONE //
-        binding.searchHistoryLinearLayout.visibility = View.GONE //
-        binding.placeholderLinearLayout.visibility = View.VISIBLE //
+        binding.rvItems.visibility = View.GONE
+        binding.searchHistoryLinearLayout.visibility = View.GONE
+        binding.placeholderLinearLayout.visibility = View.VISIBLE
     }
 
     private fun showContent(data: List<Track>) { // отображение контента, полученного после запроса, т.е. состояние SearchScreenState = content
@@ -264,14 +267,14 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
 
         if (trackList.isEmpty()) {
             showMessage(getString(R.string.nothing_found), "")
-            binding.rvItems.visibility = View.GONE//
-            binding.searchHistoryLinearLayout.visibility = View.GONE //
-            binding.placeholderLinearLayout.visibility = View.VISIBLE //
+            binding.rvItems.visibility = View.GONE
+            binding.searchHistoryLinearLayout.visibility = View.GONE
+            binding.placeholderLinearLayout.visibility = View.VISIBLE
         } else {
             showMessage("", "")
-            binding.rvItems.visibility = View.VISIBLE //
-            binding.searchHistoryLinearLayout.visibility = View.GONE //
-            binding.placeholderLinearLayout.visibility = View.GONE //
+            binding.rvItems.visibility = View.VISIBLE
+            binding.searchHistoryLinearLayout.visibility = View.GONE
+            binding.placeholderLinearLayout.visibility = View.GONE
         }
     }
 
@@ -376,11 +379,11 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
         }
     }
 
-    // для поиска при задержке ввода на 2 секунды
+    /* // для поиска при задержке ввода на 2 секунды
     private fun SearchDebounce() {
         mainHandler?.removeCallbacks(searchRunnable)
         mainHandler?.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
-    }
+    }*/
 
     // Предотвращение двойного нажатия на элемент списка
     private fun clickDebounce(): Boolean {
@@ -395,6 +398,6 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-        mainHandler?.removeCallbacks(searchRunnable)
+        //mainHandler?.removeCallbacks(searchRunnable)
     }
 }

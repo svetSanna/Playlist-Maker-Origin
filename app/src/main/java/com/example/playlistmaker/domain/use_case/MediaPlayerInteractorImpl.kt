@@ -17,10 +17,6 @@ class MediaPlayerInteractorImpl(
         return repositoryImpl.pausePlayer()
     }
 
-  /*  override fun playbackControl() {
-        return repositoryImpl.playbackControl()
-    }
-*/
     override fun onDestroy() {
         return repositoryImpl.onDestroy()
     }
