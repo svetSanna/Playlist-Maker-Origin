@@ -6,5 +6,5 @@ sealed interface SearchScreenState {
     object Loading : SearchScreenState
     data class Content(val data: List<Track>) : SearchScreenState
     data class ContentHistory(val data: List<Track>): SearchScreenState
-    data class Error(val message : Int): SearchScreenState
+    data class Error(val message : String): SearchScreenState
 }
