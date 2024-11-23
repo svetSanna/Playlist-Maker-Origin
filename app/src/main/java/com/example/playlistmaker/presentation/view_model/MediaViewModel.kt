@@ -1,20 +1,20 @@
 package com.example.playlistmaker.presentation.view_model
+// работа с медиаплейером, экран плейера
 
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.domain.use_case.LikeTrackListInteractorImpl
 import com.example.playlistmaker.domain.use_case.MediaPlayerInteractor
-import com.example.playlistmaker.presentation.mapper.SimpleDateFormatMapper
 import com.example.playlistmaker.presentation.state.MediaPlayerState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor, private val url: String?) : ViewModel() {
+class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor,
+                     private val url: String?,
+                     private val likeTrackListUseCase: LikeTrackListInteractorImpl) : ViewModel() {
     private var timerJob: Job? = null //
 
     private val state = MutableLiveData<MediaPlayerState>()
