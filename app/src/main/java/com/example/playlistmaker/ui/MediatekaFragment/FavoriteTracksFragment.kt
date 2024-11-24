@@ -9,20 +9,22 @@ import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentFavoriteTracksBinding
+import com.example.playlistmaker.databinding.FragmentSearchBinding
 
 class FavoriteTracksFragment : Fragment() {
     companion object {
         fun newInstance() = FavoriteTracksFragment()
     }
-
-    private lateinit var binding: FragmentFavoriteTracksBinding
-
+    private var _binding: FragmentFavoriteTracksBinding? = null
+    //private lateinit var binding: FragmentFavoriteTracksBinding
+    private val binding
+        get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        binding = FragmentFavoriteTracksBinding.inflate(inflater, container, false)
+        _binding = FragmentFavoriteTracksBinding.inflate(inflater, container, false)
         return binding.root
    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -34,5 +36,6 @@ class FavoriteTracksFragment : Fragment() {
         placeholderLayout.visibility = View.VISIBLE
 
         placeholderImage.setImageResource(R.drawable.nothing_found)
+
     }
 }

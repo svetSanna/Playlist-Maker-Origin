@@ -20,15 +20,16 @@ class LikeTrackListInteractorImpl(private val repository: LikeTrackListRepositor
             }
         }
     }
-   /* override suspend fun onFavoriteClicked(trackId: Int) // нажатие на кнопку лайк
-    {
-        if(isFavorite(trackId)){
-            repository.deleteTrackFromLikeTrackList(trackId)
-        }
-        else
-            repository.add
-    }*/
-    override suspend fun onFavoriteClicked(track: Track) // нажатие на кнопку лайк
+
+    override suspend fun deleteTrackFromLikeTrackList(track: Track){
+        repository.deleteTrackFromLikeTrackList(track)
+    }
+
+    override suspend fun addTrackToLikeTrackList(track: Track){
+        repository.addTrackToLikeTrackList(track)
+    }
+
+    /*override suspend fun onFavoriteClicked(track: Track) // нажатие на кнопку лайк
     {
         if(isFavorite(track.trackId)){
             repository.deleteTrackFromLikeTrackList(track)
@@ -36,9 +37,9 @@ class LikeTrackListInteractorImpl(private val repository: LikeTrackListRepositor
         else
             repository.addTrackToLikeTrackList(track)
     }
-
-    private suspend fun isFavorite(trackId: Int) : Boolean{
-        // если трек найден в бд по треку, то он избранный
+*/
+    override suspend fun isFavorite(trackId: Int) : Boolean{
+        // если трек найден в бд по Id трека, то он избранный
        return (repository.getLikeTrack(trackId) != null)
     }
 }

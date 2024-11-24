@@ -5,8 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.domain.use_case.LikeTrackListInteractorImpl
 import com.example.playlistmaker.domain.use_case.MediaPlayerInteractor
+import com.example.playlistmaker.presentation.state.LikeButtonState
 import com.example.playlistmaker.presentation.state.MediaPlayerState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -14,18 +16,25 @@ import kotlinx.coroutines.launch
 
 class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor,
                      private val url: String?,
-                     private val likeTrackListUseCase: LikeTrackListInteractorImpl) : ViewModel() {
+                     private val likeTrackListInteractor: LikeTrackListInteractorImpl) : ViewModel() {
     private var timerJob: Job? = null //
 
-    private val state = MutableLiveData<MediaPlayerState>()
+    private val mediaPlayerState = MutableLiveData<MediaPlayerState>() // состояние медиаплейера
+    private val likeButtonState = MutableLiveData<LikeButtonState>() // состояние кнопки лайк
     init{
         preparePlayer(url)
     }
 
-    fun getMediaPlayerState(): LiveData<MediaPlayerState> = state
+    fun getMediaPlayerState(): LiveData<MediaPlayerState> {
+        return mediaPlayerState
+    }
+    fun getLikeButtonState(): LiveData<LikeButtonState> {
+        return likeButtonState
+    }
+
     fun preparePlayer(url: String?) {
         mediaPlayerInteractor.preparePlayer(url)
-        state.postValue(MediaPlayerState.Prepared)
+        mediaPlayerState.postValue(MediaPlayerState.Prepared)
     }
 
     fun playbackControl() {
@@ -37,23 +46,23 @@ class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor,
 
     fun startPlayer(){
         mediaPlayerInteractor.startPlayer()
-        state.postValue(MediaPlayerState.Playing)
+        mediaPlayerState.postValue(MediaPlayerState.Playing)
         startTimer()
     }
 
     fun pausePlayer() {
         mediaPlayerInteractor.pausePlayer()
         timerJob?.cancel()
-        state.postValue(MediaPlayerState.Paused)
+        mediaPlayerState.postValue(MediaPlayerState.Paused)
     }
 
     private fun startTimer() {
         timerJob = viewModelScope.launch {
             while (mediaPlayerInteractor.isStateIsPlaying()) {
                 delay(300L)
-                state.postValue(MediaPlayerState.Playing)
+                mediaPlayerState.postValue(MediaPlayerState.Playing)
             }
-            state.postValue(MediaPlayerState.Prepared)
+            mediaPlayerState.postValue(MediaPlayerState.Prepared)
         }
     }
 
@@ -75,5 +84,19 @@ class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor,
     fun onPause(){
         //Log.i("MyTest", "MediaViewModel.onPause() ")
         pausePlayer()
+    }
+    fun onFavoriteClicked(track: Track){
+    // нажатие на кнопку лайк
+        viewModelScope.launch{
+            if(likeTrackListInteractor.isFavorite(track.trackId)){
+                likeTrackListInteractor.deleteTrackFromLikeTrackList(track)
+                likeButtonState.postValue(LikeButtonState.Liked)
+            }
+            else{
+                likeTrackListInteractor.addTrackToLikeTrackList(track)
+                likeButtonState.postValue(LikeButtonState.Unliked)
+            }
+            //likeTrackListInteractor.onFavoriteClicked(track)
+        }
     }
 }

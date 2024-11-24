@@ -17,6 +17,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityMediaBinding
 import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.presentation.mapper.SimpleDateFormatMapper
+import com.example.playlistmaker.presentation.state.LikeButtonState
 import com.example.playlistmaker.presentation.state.MediaPlayerState
 import com.example.playlistmaker.presentation.view_model.MediaViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -98,9 +99,27 @@ class MediaActivity : AppCompatActivity() {
 
             // кнопка "Play"/"Pause"
             val buttonPlayPause = binding.buttonMediaPlayPause
-
             buttonPlayPause.setOnClickListener {
                 viewModel.playbackControl()
+            }
+
+            viewModel.getLikeButtonState().observe(this) { state ->
+                when(state) {
+                    is LikeButtonState.Liked -> {
+                        val buttonLike = binding.buttonMediaLike
+                        buttonLike.setImageResource(R.drawable.button_media_like_chosen)
+                    }
+                    is LikeButtonState.Unliked -> {
+                        val buttonLike = binding.buttonMediaLike
+                        buttonLike.setImageResource(R.drawable.button_media_like)
+                    }
+                }
+            }
+
+            // кнопка добавить в избранное/ удалить из избранного"
+            val likeButton = binding.buttonMediaLike
+            likeButton.setOnClickListener {
+                viewModel.onFavoriteClicked(item)
             }
         }
     }
