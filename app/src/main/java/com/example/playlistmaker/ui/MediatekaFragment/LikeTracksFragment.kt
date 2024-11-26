@@ -48,8 +48,6 @@ class LikeTracksFragment : Fragment(), TrackViewHolder.OnItemClickListener {
 
         trackAdapter.onItemClickListener = this
 
-        //viewModel.loadData()
-
         // для поиска
         val rvItems: RecyclerView = binding.rvLikeItems
         rvItems.apply {
@@ -70,16 +68,6 @@ class LikeTracksFragment : Fragment(), TrackViewHolder.OnItemClickListener {
                 }
             }
         }
-
-        //////////////////////////
-
-       /* val placeholderImage: ImageView = binding.errorImageFavouriteTracks
-        val placeholderLayout: LinearLayout = binding.error_layout_like_tracks
-
-        placeholderLayout.visibility = View.VISIBLE
-
-        placeholderImage.setImageResource(R.drawable.nothing_found)*/
-
     }
     private fun showError(code: String) {
         trackList.clear()

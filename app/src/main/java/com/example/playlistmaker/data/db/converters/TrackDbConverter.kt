@@ -6,12 +6,6 @@ import com.example.playlistmaker.domain.entity.Track
 import java.time.Instant
 
 class TrackDbConverter {
-    /*fun map(track: TrackDto): LikeTrackEntity{
-        return LikeTrackEntity(track.trackId, track.trackName, track.artistName,
-            track.trackTimeMillis, track.artworkUrl100,
-            track.collectionName, track.releaseDate, track.primaryGenreName,
-            track.country, track.previewUrl)
-    }*/
     fun map(track: Track): LikeTrackEntity{
         return LikeTrackEntity(track.trackId, track.trackName, track.artistName,
             track.trackTimeMillis, track.artworkUrl100,

@@ -16,7 +16,8 @@ val viewModelModule = module {
     viewModel<SearchViewModel>{
         SearchViewModel(getTrackListUseCase = get(), historyInteractor = get(), androidContext())
     }
-   /*viewModel<MediaViewModel>{(url : String?) ->
+   /* Оставила для примера
+   viewModel<MediaViewModel>{(url : String?) ->
         MediaViewModel(mediaPlayerInteractor = get(), url, likeTrackListInteractor = get())
     }
     */

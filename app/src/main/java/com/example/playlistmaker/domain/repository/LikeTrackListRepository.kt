@@ -13,5 +13,4 @@ interface LikeTrackListRepository {
     suspend fun deleteTrackFromLikeTrackList(track: Track)
     suspend fun getLikeTrackList() : Flow<Resource<List<Track>>> // метод получения списка со всеми треками, добавленными в избранное.
     suspend fun getLikeTrack(trackId: Int) : Track? // метод получения списка треков по Id. Вообще-то должен получить один трек или пусто
-    //suspend fun getLikeTrack(trackId: Int) : Flow<List<Track>> // метод получения списка треков по Id. Вообще-то должен получить один трек или пусто
 }
