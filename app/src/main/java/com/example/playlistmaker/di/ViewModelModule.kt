@@ -1,6 +1,6 @@
 package com.example.playlistmaker.di
 
-import com.example.playlistmaker.presentation.view_model.FavoriteTracksViewModel
+import com.example.playlistmaker.presentation.view_model.LikeTracksViewModel
 import com.example.playlistmaker.presentation.view_model.MediaViewModel
 import com.example.playlistmaker.presentation.view_model.PlaylistsViewModel
 import com.example.playlistmaker.presentation.view_model.SearchViewModel
@@ -16,11 +16,15 @@ val viewModelModule = module {
     viewModel<SearchViewModel>{
         SearchViewModel(getTrackListUseCase = get(), historyInteractor = get(), androidContext())
     }
-    viewModel<MediaViewModel>{(url : String?) ->
-        MediaViewModel(mediaPlayerInteractor = get(), url, likeTrackListUseCase = get())
+   /*viewModel<MediaViewModel>{(url : String?) ->
+        MediaViewModel(mediaPlayerInteractor = get(), url, likeTrackListInteractor = get())
     }
-    viewModel<FavoriteTracksViewModel>{
-        FavoriteTracksViewModel()
+    */
+    viewModel<MediaViewModel>{
+        MediaViewModel(mediaPlayerInteractor = get(), likeTrackListInteractor = get(), track = get())
+    }
+    viewModel<LikeTracksViewModel>{
+        LikeTracksViewModel(likeTrackListInteractor = get(), androidContext())
     }
     viewModel<PlaylistsViewModel>{
         PlaylistsViewModel()

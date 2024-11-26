@@ -10,19 +10,34 @@ import com.example.playlistmaker.domain.use_case.LikeTrackListInteractorImpl
 import com.example.playlistmaker.domain.use_case.MediaPlayerInteractor
 import com.example.playlistmaker.presentation.state.LikeButtonState
 import com.example.playlistmaker.presentation.state.MediaPlayerState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor,
-                     private val url: String?,
-                     private val likeTrackListInteractor: LikeTrackListInteractorImpl) : ViewModel() {
+                     //private val url: String?,
+                     private val likeTrackListInteractor: LikeTrackListInteractorImpl,
+                     private val track: Track) : ViewModel() {
     private var timerJob: Job? = null //
 
     private val mediaPlayerState = MutableLiveData<MediaPlayerState>() // состояние медиаплейера
     private val likeButtonState = MutableLiveData<LikeButtonState>() // состояние кнопки лайк
     init{
-        preparePlayer(url)
+        preparePlayer(track.previewUrl)
+
+        var isFavorite : Boolean
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                isFavorite = likeTrackListInteractor.isFavorite(track.trackId)
+                if (isFavorite)
+                    likeButtonState.postValue(LikeButtonState.Liked)
+                else
+                    likeButtonState.postValue(LikeButtonState.Unliked)
+            }
+        }
     }
 
     fun getMediaPlayerState(): LiveData<MediaPlayerState> {
@@ -85,18 +100,20 @@ class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor,
         //Log.i("MyTest", "MediaViewModel.onPause() ")
         pausePlayer()
     }
-    fun onFavoriteClicked(track: Track){
+    fun onFavoriteClicked(){//track: Track){
     // нажатие на кнопку лайк
-        viewModelScope.launch{
-            if(likeTrackListInteractor.isFavorite(track.trackId)){
-                likeTrackListInteractor.deleteTrackFromLikeTrackList(track)
-                likeButtonState.postValue(LikeButtonState.Liked)
+        var isFavorite : Boolean
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                isFavorite = likeTrackListInteractor.isFavorite(track.trackId)
+                if (isFavorite) {
+                    likeTrackListInteractor.deleteTrackFromLikeTrackList(track)
+                    likeButtonState.postValue(LikeButtonState.Unliked)
+                } else {
+                    likeTrackListInteractor.addTrackToLikeTrackList(track)
+                    likeButtonState.postValue(LikeButtonState.Liked)
+                }
             }
-            else{
-                likeTrackListInteractor.addTrackToLikeTrackList(track)
-                likeButtonState.postValue(LikeButtonState.Unliked)
-            }
-            //likeTrackListInteractor.onFavoriteClicked(track)
         }
     }
 }

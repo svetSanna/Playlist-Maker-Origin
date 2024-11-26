@@ -1,8 +1,6 @@
 package com.example.playlistmaker.ui.SearchFragment
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,7 +12,6 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -25,6 +22,8 @@ import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.presentation.state.SearchScreenState
 import com.example.playlistmaker.presentation.view_model.SearchViewModel
+import com.example.playlistmaker.ui.AdapterAndViewHolder.TrackAdapter
+import com.example.playlistmaker.ui.AdapterAndViewHolder.TrackViewHolder
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
