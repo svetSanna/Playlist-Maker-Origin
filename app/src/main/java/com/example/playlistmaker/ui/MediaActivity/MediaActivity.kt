@@ -17,6 +17,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityMediaBinding
 import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.presentation.mapper.SimpleDateFormatMapper
+import com.example.playlistmaker.presentation.state.LikeButtonState
 import com.example.playlistmaker.presentation.state.MediaPlayerState
 import com.example.playlistmaker.presentation.view_model.MediaViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -30,7 +31,9 @@ class MediaActivity : AppCompatActivity() {
     private lateinit var timeTrack :TextView
 
     private var url: String? = ""
-    private val viewModel by viewModel<MediaViewModel>{parametersOf(url)}
+    var item: Track? = null
+
+    private val viewModel by viewModel<MediaViewModel>{parametersOf(item)}//() //{parametersOf(url)}
 
     @SuppressLint("MissingInflatedId", "WrongViewCast")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +54,8 @@ class MediaActivity : AppCompatActivity() {
 
         // получаем данные трека из Intent
         val args: MediaActivityArgs by navArgs()
-        var item: Track? = args.item
+        //var item: Track? = args.item
+        item = args.item
 
         // раскладываем эти данные по соответствующим вьюшкам
         var ivTrackImage: ImageView = binding.trackImage
@@ -65,19 +69,19 @@ class MediaActivity : AppCompatActivity() {
 
         if (item != null) {
             Glide.with(this)
-                .load(item.getCoverArtwork())
+                .load(item!!.getCoverArtwork())
                 .placeholder(R.drawable.place_holder)
                 .fitCenter()
                 .transform(RoundedCorners(8))
                 .into(ivTrackImage)
 
-            tvTrackName.text = item.trackName
-            tvArtistName.text = item.artistName
-            tvTrackTime.text = SimpleDateFormatMapper.map(item.trackTimeMillis)
-            tvCollectionName.text = item.collectionName
-            tvReleaseDate.text = item.releaseDate.substring(0, 4)
-            tvPrimaryGenreName.text = item.primaryGenreName
-            tvCountry.text = item.country
+            tvTrackName.text = item!!.trackName
+            tvArtistName.text = item!!.artistName
+            tvTrackTime.text = SimpleDateFormatMapper.map(item!!.trackTimeMillis)
+            tvCollectionName.text = item!!.collectionName
+            tvReleaseDate.text = item!!.releaseDate.substring(0, 4)
+            tvPrimaryGenreName.text = item!!.primaryGenreName
+            tvCountry.text = item!!.country
 
             // ссылка на отрывок
             url = item?.previewUrl
@@ -98,9 +102,27 @@ class MediaActivity : AppCompatActivity() {
 
             // кнопка "Play"/"Pause"
             val buttonPlayPause = binding.buttonMediaPlayPause
-
             buttonPlayPause.setOnClickListener {
                 viewModel.playbackControl()
+            }
+
+            viewModel.getLikeButtonState().observe(this) { state ->
+                when(state) {
+                    is LikeButtonState.Liked -> {
+                        val buttonLike = binding.buttonMediaLike
+                        buttonLike.setImageResource(R.drawable.button_media_like_chosen)
+                    }
+                    is LikeButtonState.Unliked -> {
+                        val buttonLike = binding.buttonMediaLike
+                        buttonLike.setImageResource(R.drawable.button_media_like)
+                    }
+                }
+            }
+
+            // кнопка добавить в избранное/ удалить из избранного"
+            val likeButton = binding.buttonMediaLike
+            likeButton.setOnClickListener {
+                viewModel.onFavoriteClicked()//(item)
             }
         }
     }

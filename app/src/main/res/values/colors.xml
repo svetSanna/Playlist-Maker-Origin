@@ -33,7 +33,7 @@
     <color name="track_attribute_text">#AEAFB4</color>
     <color name="track_attribute_data">#1A1B22</color>
 
-    <color name="progressbar">#6200EE</color>
+    <color name="progressbar">#3772E7</color>
 
     <color name="fragment_background">#FFFFFF</color>
 
@@ -41,8 +41,3 @@
     <color name="bottom_button">#1A1B22</color>
 </resources>
 
-<!--     <color name="selector_checked">#3772E7</color>
-    <color name="selector_nonchecked">#AEAFB4</color> -->
-
-<!--<color name="thumbTint">#AEAFB4</color>
-<color name="trackTint">#E6E8EB</color>-->

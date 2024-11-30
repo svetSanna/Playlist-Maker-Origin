@@ -15,7 +15,7 @@ class MediatekaViewPagerAdapter(
 
     override fun createFragment(position: Int): Fragment {
         return when(position) {
-            0 -> FavoriteTracksFragment.newInstance()
+            0 -> com.example.playlistmaker.ui.MediatekaFragment.LikeTracksFragment.newInstance()
             else -> PlaylistsFragment.newInstance()
         }
     }

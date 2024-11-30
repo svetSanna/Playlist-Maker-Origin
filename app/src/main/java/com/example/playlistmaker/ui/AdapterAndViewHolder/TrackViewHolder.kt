@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui.SearchFragment
+package com.example.playlistmaker.ui.AdapterAndViewHolder
 
 import android.icu.text.SimpleDateFormat
 import android.view.View

@@ -1,31 +1,55 @@
 package com.example.playlistmaker.presentation.view_model
+// работа с медиаплейером, экран плейера
 
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.domain.entity.Track
+import com.example.playlistmaker.domain.use_case.LikeTrackListInteractorImpl
 import com.example.playlistmaker.domain.use_case.MediaPlayerInteractor
-import com.example.playlistmaker.presentation.mapper.SimpleDateFormatMapper
+import com.example.playlistmaker.presentation.state.LikeButtonState
 import com.example.playlistmaker.presentation.state.MediaPlayerState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor, private val url: String?) : ViewModel() {
+class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor,
+                     //private val url: String?,
+                     private val likeTrackListInteractor: LikeTrackListInteractorImpl,
+                     private val track: Track) : ViewModel() {
     private var timerJob: Job? = null //
 
-    private val state = MutableLiveData<MediaPlayerState>()
+    private val mediaPlayerState = MutableLiveData<MediaPlayerState>() // состояние медиаплейера
+    private val likeButtonState = MutableLiveData<LikeButtonState>() // состояние кнопки лайк
     init{
-        preparePlayer(url)
+        preparePlayer(track.previewUrl)
+
+        var isFavorite : Boolean
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                isFavorite = likeTrackListInteractor.isFavorite(track.trackId)
+                if (isFavorite)
+                    likeButtonState.postValue(LikeButtonState.Liked)
+                else
+                    likeButtonState.postValue(LikeButtonState.Unliked)
+            }
+        }
     }
 
-    fun getMediaPlayerState(): LiveData<MediaPlayerState> = state
+    fun getMediaPlayerState(): LiveData<MediaPlayerState> {
+        return mediaPlayerState
+    }
+    fun getLikeButtonState(): LiveData<LikeButtonState> {
+        return likeButtonState
+    }
+
     fun preparePlayer(url: String?) {
         mediaPlayerInteractor.preparePlayer(url)
-        state.postValue(MediaPlayerState.Prepared)
+        mediaPlayerState.postValue(MediaPlayerState.Prepared)
     }
 
     fun playbackControl() {
@@ -37,23 +61,23 @@ class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor, p
 
     fun startPlayer(){
         mediaPlayerInteractor.startPlayer()
-        state.postValue(MediaPlayerState.Playing)
+        mediaPlayerState.postValue(MediaPlayerState.Playing)
         startTimer()
     }
 
     fun pausePlayer() {
         mediaPlayerInteractor.pausePlayer()
         timerJob?.cancel()
-        state.postValue(MediaPlayerState.Paused)
+        mediaPlayerState.postValue(MediaPlayerState.Paused)
     }
 
     private fun startTimer() {
         timerJob = viewModelScope.launch {
             while (mediaPlayerInteractor.isStateIsPlaying()) {
                 delay(300L)
-                state.postValue(MediaPlayerState.Playing)
+                mediaPlayerState.postValue(MediaPlayerState.Playing)
             }
-            state.postValue(MediaPlayerState.Prepared)
+            mediaPlayerState.postValue(MediaPlayerState.Prepared)
         }
     }
 
@@ -75,5 +99,21 @@ class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor, p
     fun onPause(){
         //Log.i("MyTest", "MediaViewModel.onPause() ")
         pausePlayer()
+    }
+    fun onFavoriteClicked(){//track: Track){
+    // нажатие на кнопку лайк
+        var isFavorite : Boolean
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                isFavorite = likeTrackListInteractor.isFavorite(track.trackId)
+                if (isFavorite) {
+                    likeTrackListInteractor.deleteTrackFromLikeTrackList(track)
+                    likeButtonState.postValue(LikeButtonState.Unliked)
+                } else {
+                    likeTrackListInteractor.addTrackToLikeTrackList(track)
+                    likeButtonState.postValue(LikeButtonState.Liked)
+                }
+            }
+        }
     }
 }

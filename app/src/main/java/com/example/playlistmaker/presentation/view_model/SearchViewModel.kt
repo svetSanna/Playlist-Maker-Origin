@@ -51,7 +51,9 @@ class SearchViewModel( private var getTrackListUseCase : GetTrackListUseCase,
         }
     }
 
-    fun getScreenState(): LiveData<SearchScreenState> = state
+    fun getScreenState(): LiveData<SearchScreenState> {
+        return state
+    }
 
     fun loadData(inputSearchEditText: String) {
         state.postValue(SearchScreenState.Loading)
