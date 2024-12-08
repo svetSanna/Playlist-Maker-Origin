@@ -15,7 +15,7 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/buttonRefresh"
+            android:id="@+id/buttonGoToNewPlaylist"
             style="@style/ButtonRefresh"
             android:layout_marginTop="@dimen/margin_24"
             android:text="@string/new_playlist" />

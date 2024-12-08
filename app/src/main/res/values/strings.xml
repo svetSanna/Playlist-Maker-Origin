@@ -33,4 +33,5 @@
     <string name="no_playlists">Вы не создали \n ни одного плейлиста</string>
     <string name="title">Название*</string>
     <string name="definition">Описание</string>
+    <string name="create">Создать</string>
 </resources>

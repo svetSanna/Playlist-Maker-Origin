@@ -12,6 +12,9 @@
         <action
             android:id="@+id/action_mediatekaFragment_to_mediaActivity"
             app:destination="@id/mediaActivity" />
+        <action
+            android:id="@+id/action_mediatekaFragment_to_newPlayListFragment"
+            app:destination="@id/newPlayListFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -39,4 +42,9 @@
     <argument
         android:name="item"
         app:argType="com.example.playlistmaker.domain.entity.Track" />
+    <fragment
+        android:id="@+id/newPlayListFragment"
+        android:name="com.example.playlistmaker.ui.NewPlayListFragment.NewPlayListFragment"
+        android:label="NewPlayListFragment"
+        android:layout="@layout/fragment_new_play_list"/>
 </navigation>

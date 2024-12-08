@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
+import com.example.playlistmaker.ui.SearchFragment.SearchFragmentDirections
 
 class PlaylistsFragment :Fragment() {
     companion object {
@@ -36,6 +38,12 @@ class PlaylistsFragment :Fragment() {
         placeholderLayout.visibility = View.VISIBLE
 
         placeholderImage.setImageResource(R.drawable.nothing_found)
+
+        binding.buttonGoToNewPlaylist.setOnClickListener{
+            // переход на экран аудиоплейера, передаем выбранный трек
+
+            findNavController().navigate(R.id.action_mediatekaFragment_to_newPlayListFragment)
+        }
     }
     override fun onDestroyView() {
         super.onDestroyView()
