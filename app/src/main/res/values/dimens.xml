@@ -36,11 +36,14 @@
     <dimen name="margin_48">48dp</dimen>
     <dimen name="margin_54">54dp</dimen>
     <dimen name="margin_56">56dp</dimen>
+    <dimen name="margin_100">100dp</dimen>
     <dimen name="margin_102">102dp</dimen>
     <dimen name="margin_106">106dp</dimen>
     <dimen name="margin_140">140dp</dimen>
     <dimen name="margin_300">300dp</dimen>
+    <dimen name="margin_312">312dp</dimen>
     <dimen name="button_size">24dp</dimen>
     <dimen name="edittext_size">16dp</dimen>
     <dimen name="edittext_height">36dp</dimen>
+    <dimen name="edittext_new_playlist_height">54dp</dimen>
 </resources>
