@@ -34,4 +34,10 @@
     <string name="title">Название*</string>
     <string name="definition">Описание</string>
     <string name="create">Создать</string>
+    <string name="filename">list_image.jpg</string>
+    <string name="directory">playlistmaker</string>
+    <string name="title_dialog">Завершить создание плейлиста?</string>
+    <string name="message_dialog">Все несохраненные данные будут потеряны</string>
+    <string name="cancel_dialog">Отмена</string>
+    <string name="ok_dialog">Завершить</string>
 </resources>

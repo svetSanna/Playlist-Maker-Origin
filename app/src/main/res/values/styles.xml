@@ -202,6 +202,9 @@
         <item name="android:textFontWeight">500</item>
         <item name="lineHeight">16.41sp</item>
     </style>
+    <style name="CustomTextInputStyle" parent="">
+        <item name="colorControlActivated">@color/cursor_edittext</item>
+    </style>
    <!-- <style name="MyHintStyle" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/edit_text_new_playlist</item>
     </style>-->

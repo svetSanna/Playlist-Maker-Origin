@@ -30,4 +30,10 @@
   <string name="title">Title*</string>
   <string name="definition">Definition</string>
   <string name="create">Create</string>
+  <string name="filename">list_image.jpg</string>
+  <string name="directory">playlistmaker</string>
+  <string name="title_dialog">Finish creating the playlist?</string>
+  <string name="message_dialog">All unsaved data will be lost</string>
+  <string name="cancel_dialog">Cancel</string>
+  <string name="ok_dialog">OK</string>
 </resources>

@@ -28,5 +28,4 @@
             android:name=".ui.MediaActivity.MediaActivity"
             android:exported="false" />
     </application>
-
 </manifest>
