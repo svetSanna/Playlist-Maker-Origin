@@ -18,18 +18,13 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.graphics.toColorInt
-import androidx.core.net.toUri
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentNewPlayListBinding
-import com.example.playlistmaker.databinding.FragmentSearchBinding
-import com.example.playlistmaker.presentation.view_model.NewPlayListViewModel
+import com.example.playlistmaker.presentation.view_model.NewPlaylistViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.File
 import java.io.FileOutputStream
-import java.nio.file.Path
 
 class NewPlayListFragment : Fragment() {
     private var _binding: FragmentNewPlayListBinding? = null
@@ -56,7 +51,7 @@ class NewPlayListFragment : Fragment() {
           fun newInstance() = NewPlayListFragment()
       }*/
 
-    private val viewModel: NewPlayListViewModel by viewModels()
+  //  private val viewModel: NewPlaylistViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -193,7 +188,9 @@ class NewPlayListFragment : Fragment() {
         //Log.d("PhotoPicker", "Выбранный URI: $uri")
         val title = binding.titleEdittext.text.toString()
         val definition = binding.definitionEdittext.text.toString()
-        viewModel.createPlayList(path, title, definition)
+
+    //    viewModel.CreatePlaylist(path, title, definition)
+
         Toast.makeText(requireContext(), "Плейлист "+ title + " создан", Toast.LENGTH_LONG).show()
     }
 }

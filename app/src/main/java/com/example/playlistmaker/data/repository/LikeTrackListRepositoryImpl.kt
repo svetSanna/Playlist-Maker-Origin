@@ -42,19 +42,14 @@ class LikeTrackListRepositoryImpl(
             emit(Resource.Success(convertListToList(tracks)))
     }
 
-   /* override suspend fun getLikeTrack(trackId: Int) : Flow<List<Track>> {
-        return flow{
-            val tracks = appDatabase.likeTrackDao().getLikeTrack(trackId)
-            emit(convertListToList(tracks))
-        }
-    }*/
-   override suspend fun getLikeTrack(trackId: Int) : Track? {
+    override suspend fun getLikeTrack(trackId: Int) : Track? {
        // возвращается трек по Id. Если такого нет, возвращается null
        var track = appDatabase.likeTrackDao().getLikeTrack(trackId)
 
        return if (track == null) null
        else trackDbConverter.map(track)
-   }
+    }
+
     private fun convertListToList(tracks: List<LikeTrackEntity>)
     : List<Track> {
         return tracks.map { track -> trackDbConverter.map(track)}

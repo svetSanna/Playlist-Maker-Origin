@@ -1,27 +1,29 @@
 package com.example.playlistmaker.data.db.dao
 
+import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.playlistmaker.data.db.entity.PlayListEntity
+import com.example.playlistmaker.data.db.entity.PlaylistEntity
 
+@Dao
 interface PlayListDao {
     // метод @Insert для добавления плейлиста в таблицу;
-    @Insert(entity = PlayListEntity::class, onConflict = OnConflictStrategy.REPLACE)
-    fun insertPlayList(likeTrack: PlayListEntity)
+    @Insert(entity = PlaylistEntity::class, onConflict = OnConflictStrategy.REPLACE)
+    fun insertPlaylist(playlist: PlaylistEntity)
 
     // метод @Delete для удаления плейлиста из таблицы
-    @Delete(entity = PlayListEntity::class)
-    fun deletePlayList(likeTrack: PlayListEntity)
+    @Delete(entity = PlaylistEntity::class)
+    fun deletePlaylist(playlist: PlaylistEntity)
 
     // метод @Query для получения списка со всеми плейлистами
     @Query("SELECT * FROM play_list_entity")
-    fun getPlayLists(): List<PlayListEntity>
+    fun getPlaylists(): List<PlaylistEntity>
 
     // метод @Query для изменения значения в столбце trackIdList для плейлиста с заданным Id
     @Query("UPDATE play_list_entity SET trackIdList = :newTrackIdList WHERE playlistId = :identificator")
-    fun updateTrackIdListByPlayListId(newTrackIdList: String, identificator: Int)
+    fun updateTrackIdListByPlaylistId(newTrackIdList: String, identificator: Int)
 
 
     // метод @Query для получения трека по Id (должен один быть получен или null)
