@@ -10,7 +10,7 @@ import com.example.playlistmaker.data.db.entity.LikeTrackEntity
 import com.example.playlistmaker.data.db.entity.PlaylistEntity
 
 
-@Database(version = 1, entities = [LikeTrackEntity::class, PlaylistEntity::class])
+@Database(version = 2, entities = [LikeTrackEntity::class, PlaylistEntity::class])
 abstract class AppDatabase : RoomDatabase() {
     abstract fun likeTrackDao(): LikeTrackDao
     abstract fun playListDao(): PlayListDao

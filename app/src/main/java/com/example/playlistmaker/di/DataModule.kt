@@ -77,6 +77,7 @@ val dataModule = module {
 
     single {
         Room.databaseBuilder(androidContext(), AppDatabase::class.java, "AppDatabase.db")
+            .fallbackToDestructiveMigration()
             .build()
     }
 
