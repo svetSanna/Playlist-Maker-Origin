@@ -51,7 +51,7 @@ class NewPlayListFragment : Fragment() {
           fun newInstance() = NewPlayListFragment()
       }*/
 
-  //  private val viewModel: NewPlaylistViewModel by viewModels()
+    private val viewModel: NewPlaylistViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -189,7 +189,7 @@ class NewPlayListFragment : Fragment() {
         val title = binding.titleEdittext.text.toString()
         val definition = binding.definitionEdittext.text.toString()
 
-    //    viewModel.CreatePlaylist(path, title, definition)
+        viewModel.CreatePlaylist(path, title, definition)
 
         Toast.makeText(requireContext(), "Плейлист "+ title + " создан", Toast.LENGTH_LONG).show()
     }

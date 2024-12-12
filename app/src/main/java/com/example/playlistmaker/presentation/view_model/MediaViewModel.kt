@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.entity.Track
+import com.example.playlistmaker.domain.use_case.LikeTrackListInteractor
 import com.example.playlistmaker.domain.use_case.LikeTrackListInteractorImpl
 import com.example.playlistmaker.domain.use_case.MediaPlayerInteractor
 import com.example.playlistmaker.presentation.state.LikeButtonState
@@ -19,7 +20,7 @@ import kotlinx.coroutines.withContext
 
 class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor,
                      //private val url: String?,
-                     private val likeTrackListInteractor: LikeTrackListInteractorImpl,
+                     private val likeTrackListInteractor: LikeTrackListInteractor,
                      private val track: Track) : ViewModel() {
     private var timerJob: Job? = null //
 
