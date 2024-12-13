@@ -4,27 +4,31 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import androidx.fragment.app.viewModels
 import android.os.Bundle
 import android.os.Environment
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentNewPlayListBinding
 import com.example.playlistmaker.presentation.view_model.NewPlaylistViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
+
 
 class NewPlayListFragment : Fragment() {
     private var _binding: FragmentNewPlayListBinding? = null
@@ -51,7 +55,7 @@ class NewPlayListFragment : Fragment() {
           fun newInstance() = NewPlayListFragment()
       }*/
 
-    private val viewModel: NewPlaylistViewModel by viewModels()
+    private val viewModel by viewModel<NewPlaylistViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -107,7 +111,8 @@ class NewPlayListFragment : Fragment() {
         titleEditText.addTextChangedListener(simpleTextWatcher)
 
         // создаём событие с результатом и передаём в него PickVisualMedia()
-        val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        val pickMedia =
+            registerForActivityResult(ActivityResultContracts.OpenDocument()){ uri->//.PickVisualMedia()) { uri ->
             // Callback вызовется, когда пользователь выберет картинку
             if (uri != null) {
                 binding.imagePlaylist.setImageURI(uri)
@@ -122,7 +127,7 @@ class NewPlayListFragment : Fragment() {
         //по нажатию на кнопку imagePlaylist запускаем photo picker
         binding.imagePlaylist.setOnClickListener{
             // Вызываем метод launch и передаём параметр, чтобы предлагались только картинки
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            pickMedia.launch(arrayOf("image/*"))//(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
 
         // добавление слушателя для обработки нажатия на кнопку Back
@@ -146,8 +151,10 @@ class NewPlayListFragment : Fragment() {
         if (!filePath.exists()){
             filePath.mkdirs()
         }
+
+        val currentDate: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
         //создаём экземпляр класса File, который указывает на файл внутри каталога
-        val file = File(filePath, getString(R.string.filename))
+        val file = File(filePath, getString(R.string.filename) + "_" + currentDate + getString(R.string.extention)) //Calendar.getInstance().time    .toString())
 
         // передаём необходимый флаг на запись
         val takeFlags: Int = Intent.FLAG_GRANT_WRITE_URI_PERMISSION
@@ -189,9 +196,11 @@ class NewPlayListFragment : Fragment() {
         val title = binding.titleEdittext.text.toString()
         val definition = binding.definitionEdittext.text.toString()
 
-        viewModel.CreatePlaylist(path, title, definition)
+        viewModel.createPlaylist(path, title, definition)
 
         Toast.makeText(requireContext(), "Плейлист "+ title + " создан", Toast.LENGTH_LONG).show()
+
+        findNavController().navigateUp()
     }
 }
 

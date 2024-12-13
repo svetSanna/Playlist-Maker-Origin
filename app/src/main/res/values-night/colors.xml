@@ -42,6 +42,8 @@
     <color name="edittext_outline">#FFFFFF</color>
 
     <color name="hint">#FFFFFF</color>
+
+    <color name="text_playlist_layout">#FFFFFF</color>
 </resources>
 
 <!-- цвета switch будут такие же, как в дневной теме и регулироваться с помощью селектора -->

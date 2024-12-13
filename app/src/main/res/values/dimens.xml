@@ -40,6 +40,7 @@
     <dimen name="margin_102">102dp</dimen>
     <dimen name="margin_106">106dp</dimen>
     <dimen name="margin_140">140dp</dimen>
+    <dimen name="margin_160">140dp</dimen>
     <dimen name="margin_300">300dp</dimen>
     <dimen name="margin_312">312dp</dimen>
     <dimen name="button_size">24dp</dimen>

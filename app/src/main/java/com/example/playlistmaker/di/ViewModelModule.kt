@@ -29,7 +29,7 @@ val viewModelModule = module {
         LikeTracksViewModel(likeTrackListInteractor = get(), androidContext())
     }
     viewModel<PlaylistsViewModel>{
-        PlaylistsViewModel()
+        PlaylistsViewModel(playlistInteractor = get(), androidContext())
     }
     viewModel<NewPlaylistViewModel>{
         NewPlaylistViewModel(playlistInteractor = get())
