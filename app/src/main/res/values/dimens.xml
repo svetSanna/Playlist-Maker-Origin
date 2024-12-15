@@ -9,6 +9,7 @@
     <dimen name="corner_radius_2">2dp</dimen>
     <dimen name="corner_radius_8">8dp</dimen>
     <dimen name="corner_radius_16">16dp</dimen>
+    <dimen name="corner_radius_44">44dp</dimen>
     <dimen name="corner_radius_54">54dp</dimen>
     <dimen name="margin_1">1dp</dimen>
     <dimen name="margin_4">4dp</dimen>
@@ -34,6 +35,7 @@
     <dimen name="margin_45">45dp</dimen>
     <dimen name="margin_46">46dp</dimen>
     <dimen name="margin_48">48dp</dimen>
+    <dimen name="margin_50">50dp</dimen>
     <dimen name="margin_54">54dp</dimen>
     <dimen name="margin_56">56dp</dimen>
     <dimen name="margin_100">100dp</dimen>
