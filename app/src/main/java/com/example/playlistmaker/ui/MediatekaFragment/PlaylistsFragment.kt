@@ -1,5 +1,6 @@
 package com.example.playlistmaker.ui.MediatekaFragment
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -117,9 +118,11 @@ class PlaylistsFragment :Fragment(), PlaylistViewHolder.OnPlaylistClickListener 
         val rvItems: RecyclerView = binding.recyclerViewPlaylist
         rvItems.apply {
             adapter = playlistAdapter
-            layoutManager = GridLayoutManager(requireContext(), /*Количество столбцов*/ 2) //ориентация по умолчанию — вертикальная
-
-            //LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            // сделала разное количество столбцов в зависимости от ориентации экрана, но ориентация recyclerView dвсе равно вертикальная
+            if (requireContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+                layoutManager = GridLayoutManager(requireContext(), 2) //ориентация по умолчанию — вертикальная
+            else
+                layoutManager = GridLayoutManager(requireContext(), 4) //ориентация по умолчанию — вертикальная
         }
         playlistsList.clear()
 
