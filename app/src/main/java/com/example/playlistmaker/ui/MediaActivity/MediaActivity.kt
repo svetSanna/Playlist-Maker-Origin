@@ -179,29 +179,12 @@ class MediaActivity : AppCompatActivity(), ChosePlaylistViewHolder.OnChosePlayli
             newPlaylistButton.setOnClickListener {
                 // переход на экран создания нового плейлиста
 
-               // findNavController(R.id.rootFragmentContainerView).navigate(R.id.action_mediaActivity_to_newPlayListFragment)
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("playlistmaker://newPlaylist"))
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("playlistmaker://createplaylist"))
                 startActivity(intent)
-
-               // val navHostFragment = supportFragmentManager.findFragmentById(R.id.newPlayListFragment) as NavHostFragment
-               // navController = navHostFragment.navController
-                //findNavController(R.id.rootFragmentContainerView).navigate(R.id.action_mediatekaFragment_to_newPlayListFragment)
-               // Navigation.findNavController(this, R.id.my_nav_host_fragment).navigate(R.id.action_navigationFragment_to_blankFragment)
-
-                //Navigation.findNavController(this, R.id.newPlayListFragment)
-
-               // findNavController(RootActivity, R.id.rootFragmentContainerView).navigate(R.id.newPlayListFragment)
-               // findNavController(R.id.newPlayListFragment).navigate(R.id.action_mediatekaFragment_to_newPlayListFragment)
-
-            //val navHostFragment = supportFragmentManager.findFragmentById(R.id.container_view) as NavHostFragment
-            //val navController = navHostFragment.navController
-
-
-                /*val navHostFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
-                val navController = navHostFragment.navController
-                navController.navigate(R.id.newPlayListFragment)*/
-
-
+                /*
+                Логика такая, что startActivity запускает RootActivity,
+                которая при помощи NavController открывает нужный фрагмент
+                */
             }
         }
     }

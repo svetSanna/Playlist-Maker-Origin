@@ -48,7 +48,7 @@
         android:label="NewPlaylistFragment"
         android:layout="@layout/fragment_new_play_list">
     <deepLink
-        app:uri="playlistmaker://newPlaylist" />
+        app:uri="playlistmaker://createplaylist" />
     </fragment>
 </navigation>
 

@@ -18,12 +18,20 @@
         <activity
             android:name=".ui.RootActivity.RootActivity"
             android:exported="true"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustNothing" >
             <nav-graph android:value="@navigation/main_navigation_graph" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-                <data android:scheme="playlistmaker" />
+
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+
+                <data
+                    android:scheme="playlistmaker"
+                    android:host="createplaylist"/>
             </intent-filter>
         </activity>
         <activity
