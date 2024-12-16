@@ -1,30 +1,32 @@
 package com.example.playlistmaker.ui.MediaActivity
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityMediaBinding
+import com.example.playlistmaker.domain.entity.Playlist
 import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.presentation.mapper.SimpleDateFormatMapper
 import com.example.playlistmaker.presentation.state.LikeButtonState
 import com.example.playlistmaker.presentation.state.MediaPlayerState
 import com.example.playlistmaker.presentation.view_model.MediaViewModel
+import com.example.playlistmaker.ui.AdapterAndViewHolder.ChosePlaylistViewHolder
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
 
-class MediaActivity : AppCompatActivity() {
+class MediaActivity : AppCompatActivity(), ChosePlaylistViewHolder.OnChosePlaylistClickListener {
     //Log.i("MyTest", "MediaActivity.onCreate-4")
 
     private lateinit var binding: ActivityMediaBinding
@@ -51,6 +53,46 @@ class MediaActivity : AppCompatActivity() {
         buttonBackMedia.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
+
+        // bottomSheet
+        val bottomSheetContainer = binding.standardBottomSheet
+        val overlay = binding.overlay
+
+        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer).apply {
+            state = BottomSheetBehavior.STATE_HIDDEN
+        }
+        /*
+        BottomSheetBehavior имеет несколько состояний-констант, как было показано на видео выше:
+        STATE_COLLAPSED — дефолтное положение BottomSheet, при котором BottomSheet находится в нераскрытом виде.
+        STATE_EXPANDED — раскрытое положение BottomSheet, соответствующее его максимально возможной высоте (match_parent).
+        STATE_HIDDEN — полностью свёрнутое положение BottomSheet, в которое его можно привести перетаскиванием/взмахом вниз из состояния STATE_COLLAPSED.
+        STATE_DRAGGING — состояние BottomSheet, при котором пользователь перетаскивает его вверх или вниз.
+        STATE_SETTLING — BottomSheet устанавливается на определённую высоту после жеста перетаскивания (dragging)/взмахивания.
+        */
+
+        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        overlay.visibility = View.GONE
+                    }
+                    else -> {
+                        overlay.visibility = View.VISIBLE
+                    }
+                }
+            }
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                // Чтобы интенсивность затеменения менялась плавно в зависимости от положения Bottom Sheet,
+                // можете добавить в метод onSlide() у этого же слушателя изменение значения alpha,
+                // используя переменную slideOffset:
+
+              //  overlay.alpha = slideOffset
+
+                // Однако вам потребуется доработать этот код самостоятельно, ведь необходимо учесть,
+                // что значение альфы варьируется от 0f до 1f, тогда как slideOffset имеет диапазон от -1f до 1f.
+            }
+        })
 
         // получаем данные трека из Intent
         val args: MediaActivityArgs by navArgs()
@@ -119,10 +161,47 @@ class MediaActivity : AppCompatActivity() {
                 }
             }
 
-            // кнопка добавить в избранное/ удалить из избранного"
+            // кнопка "добавить в избранное/ удалить из избранного"
             val likeButton = binding.buttonMediaLike
             likeButton.setOnClickListener {
                 viewModel.onFavoriteClicked()//(item)
+            }
+
+            // кнопка добавить в плейлист
+            val addToPlaylistButton = binding.buttonMediaAdd
+            addToPlaylistButton.setOnClickListener {
+               // viewModel.onAddToPlaylistClicked()//(item)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            }
+
+            // кнопка "новый плейлист"
+            val newPlaylistButton = binding.buttonAddToPlaylist
+            newPlaylistButton.setOnClickListener {
+                // переход на экран создания нового плейлиста
+
+               // findNavController(R.id.rootFragmentContainerView).navigate(R.id.action_mediaActivity_to_newPlayListFragment)
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("playlistmaker://newPlaylist"))
+                startActivity(intent)
+
+               // val navHostFragment = supportFragmentManager.findFragmentById(R.id.newPlayListFragment) as NavHostFragment
+               // navController = navHostFragment.navController
+                //findNavController(R.id.rootFragmentContainerView).navigate(R.id.action_mediatekaFragment_to_newPlayListFragment)
+               // Navigation.findNavController(this, R.id.my_nav_host_fragment).navigate(R.id.action_navigationFragment_to_blankFragment)
+
+                //Navigation.findNavController(this, R.id.newPlayListFragment)
+
+               // findNavController(RootActivity, R.id.rootFragmentContainerView).navigate(R.id.newPlayListFragment)
+               // findNavController(R.id.newPlayListFragment).navigate(R.id.action_mediatekaFragment_to_newPlayListFragment)
+
+            //val navHostFragment = supportFragmentManager.findFragmentById(R.id.container_view) as NavHostFragment
+            //val navController = navHostFragment.navController
+
+
+                /*val navHostFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
+                val navController = navHostFragment.navController
+                navController.navigate(R.id.newPlayListFragment)*/
+
+
             }
         }
     }
@@ -172,4 +251,8 @@ class MediaActivity : AppCompatActivity() {
         val buttonPlayPause = binding.buttonMediaPlayPause
         buttonPlayPause.setImageResource(R.drawable.button_media_play)
    }
+
+    override fun onChosePlaylistClick(item: Playlist) {
+            Toast.makeText(this, "Кликнули", Toast.LENGTH_LONG).show()
+    }
 }

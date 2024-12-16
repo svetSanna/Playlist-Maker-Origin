@@ -31,6 +31,8 @@
 
         <item name="cornerRadius">@dimen/corner_radius_54</item>
         <item name="android:backgroundTint">@color/button_refresh_background</item>
+        <item name="android:paddingHorizontal">@dimen/margin_14</item>
+        <item name="android:paddingVertical">@dimen/margin_10</item>
     </style>
     <style name="ButtonNewPlaylist" parent="Widget.AppCompat.Button">
         <item name="android:layout_width">match_parent</item>

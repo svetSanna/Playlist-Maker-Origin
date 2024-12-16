@@ -89,8 +89,7 @@ class PlaylistsFragment :Fragment(), PlaylistViewHolder.OnPlaylistClickListener 
 
 
         binding.buttonGoToNewPlaylist.setOnClickListener{
-            // переход на экран аудиоплейера, передаем выбранный трек
-
+            // переход на экран создания нового плейлиста
             findNavController().navigate(R.id.action_mediatekaFragment_to_newPlayListFragment)
         }
     }

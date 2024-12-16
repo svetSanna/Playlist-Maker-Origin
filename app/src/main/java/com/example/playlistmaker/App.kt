@@ -29,6 +29,18 @@ class App : Application() {
             field = value
         }
 
+    companion object {
+        // функция отпределяет окончание к слову "трек" в зависимости от числительного n
+        fun getEnding(n: Int) : String{
+            var s = n.toString()
+
+            if (s.endsWith("5") || s.endsWith("6") || s.endsWith("7") || s.endsWith("8") || s.endsWith("9")
+                || s.endsWith("0") || s.endsWith("11") || s.endsWith("12") || s.endsWith("13") || s.endsWith("14")
+                || s.endsWith("15") || s.endsWith("16") || s.endsWith("17") || s.endsWith("18") || s.endsWith("19")) return "ов"
+            if (s.endsWith("2") || s.endsWith("3") || s.endsWith("4")) return "а"
+            return ""
+        }
+    }
     override fun onCreate() {
         // Получаем тему приложения, выбранную пользователем, из SharedPreferences, а если
         // ничего туда не успели сохранить, то применим текущую тему приложения

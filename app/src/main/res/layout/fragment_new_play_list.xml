@@ -14,7 +14,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/fragment_background"
-    tools:context=".ui.NewPlayListFragment.NewPlayListFragment">
+    tools:context=".ui.NewPlaylistFragment.NewPlaylistFragment">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_playlist"
         app:navigationIcon="@drawable/arrow_back"

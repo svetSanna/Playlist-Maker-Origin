@@ -44,7 +44,17 @@
         app:argType="com.example.playlistmaker.domain.entity.Track" />
     <fragment
         android:id="@+id/newPlayListFragment"
-        android:name="com.example.playlistmaker.ui.NewPlayListFragment.NewPlayListFragment"
-        android:label="NewPlayListFragment"
-        android:layout="@layout/fragment_new_play_list"/>
+        android:name="com.example.playlistmaker.ui.NewPlaylistFragment.NewPlaylistFragment"
+        android:label="NewPlaylistFragment"
+        android:layout="@layout/fragment_new_play_list">
+    <deepLink
+        app:uri="playlistmaker://newPlaylist" />
+    </fragment>
 </navigation>
+
+<!--<fragment
+android:id="@+id/createPlaylist"
+android:name="com.example.createPlaylist">
+<deepLink
+    app:uri="playlisyMaker://createPlaylist" />
+</fragment> -->

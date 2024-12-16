@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui.NewPlayListFragment
+package com.example.playlistmaker.ui.NewPlaylistFragment
 
 import android.content.Intent
 import android.graphics.Bitmap
@@ -25,12 +25,11 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
 
-class NewPlayListFragment : Fragment() {
+class NewPlaylistFragment : Fragment() {
     private var _binding: FragmentNewPlayListBinding? = null
     // This property is only valid between onCreateView and onDestroyView.
     private val binding
