@@ -97,10 +97,9 @@ class MediaActivity : AppCompatActivity(), ChosePlaylistViewHolder.OnChosePlayli
 
         // получаем данные трека из Intent
         val args: MediaActivityArgs by navArgs()
-        //var item: Track? = args.item
         item = args.item
 
-        App.track = item as Track ///
+       // App.track = item as Track ///
 
         // раскладываем эти данные по соответствующим вьюшкам
         var ivTrackImage: ImageView = binding.trackImage
@@ -181,9 +180,10 @@ class MediaActivity : AppCompatActivity(), ChosePlaylistViewHolder.OnChosePlayli
             val newPlaylistButton = binding.buttonAddToPlaylist
             newPlaylistButton.setOnClickListener {
                 // переход на экран создания нового плейлиста
-                App.screen_for_mediaActivity = 2
+                /*App.screen_for_mediaActivity = 2   ///
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse("playlistmaker://createplaylist"))
                 startActivity(intent)
+                */
 
                 /*
                 Логика такая, что startActivity запускает RootActivity,

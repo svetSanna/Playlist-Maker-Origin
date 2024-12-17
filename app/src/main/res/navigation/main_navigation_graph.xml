@@ -46,18 +46,64 @@
         android:id="@+id/newPlayListFragment"
         android:name="com.example.playlistmaker.ui.NewPlaylistFragment.NewPlaylistFragment"
         android:label="NewPlaylistFragment"
-        android:layout="@layout/fragment_new_play_list">
-    <deepLink
-        app:uri="playlistmaker://createplaylist" />
-        <action
-            android:id="@+id/action_newPlayListFragment_to_mediaActivity"
-            app:destination="@id/mediaActivity" />
-    </fragment>
+        android:layout="@layout/fragment_new_play_list"/>
 </navigation>
 
-<!--<fragment
-android:id="@+id/createPlaylist"
-android:name="com.example.createPlaylist">
-<deepLink
-    app:uri="playlisyMaker://createPlaylist" />
-</fragment> -->
+<!--
+    <?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/main_navigation_graph"
+app:startDestination="@id/mediatekaFragment">
+<fragment
+    android:id="@+id/mediatekaFragment"
+    android:name="com.example.playlistmaker.ui.MediatekaFragment.MediatekaFragment"
+    android:label="fragment_mediateka"
+    tools:layout="@layout/fragment_mediateka" >
+    <action
+        android:id="@+id/action_mediatekaFragment_to_mediaActivity"
+        app:destination="@id/mediaActivity" />
+    <action
+        android:id="@+id/action_mediatekaFragment_to_newPlayListFragment"
+        app:destination="@id/newPlayListFragment" />
+</fragment>
+<fragment
+    android:id="@+id/searchFragment"
+    android:name="com.example.playlistmaker.ui.SearchFragment.SearchFragment"
+    android:label="fragment_search"
+    tools:layout="@layout/fragment_search" >
+    <action
+        android:id="@+id/action_searchFragment_to_mediaActivity"
+        app:destination="@id/mediaActivity" />
+</fragment>
+<fragment
+    android:id="@+id/settingsFragment"
+    android:name="com.example.playlistmaker.ui.SettingsFragment.SettingsFragment"
+    android:label="fragment_settings"
+    tools:layout="@layout/fragment_settings" />
+<activity
+    android:id="@+id/mediaActivity"
+    android:name="com.example.playlistmaker.ui.MediaActivity.MediaActivity"
+    android:label="activity_media"
+    tools:layout="@layout/activity_media" >
+    <argument
+        android:name="item"
+        app:argType="com.example.playlistmaker.domain.entity.Track" />
+</activity>
+<argument
+    android:name="item"
+    app:argType="com.example.playlistmaker.domain.entity.Track" />
+<fragment
+    android:id="@+id/newPlayListFragment"
+    android:name="com.example.playlistmaker.ui.NewPlaylistFragment.NewPlaylistFragment"
+    android:label="NewPlaylistFragment"
+    android:layout="@layout/fragment_new_play_list">
+    <deepLink
+        app:uri="playlistmaker://createplaylist" />
+    <action
+        android:id="@+id/action_newPlayListFragment_to_mediaActivity"
+        app:destination="@id/mediaActivity" />
+</fragment>
+</navigation>
+-->

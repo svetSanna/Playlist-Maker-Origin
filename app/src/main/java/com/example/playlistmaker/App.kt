@@ -41,10 +41,10 @@ class App : Application() {
             if (s.endsWith("2") || s.endsWith("3") || s.endsWith("4")) return "а"
             return ""
         }
-        var screen_for_mediaActivity = 1 ///
+       // var screen_for_mediaActivity = 1 ///
         // 1 - переход на экран создания нового плейлиста со списка плейлистов PlaylistsFragment
         // 2 - с плейера MediaActivity
-        var track: Track? = null ///
+       // var track: Track? = null ///
     }
     override fun onCreate() {
         // Получаем тему приложения, выбранную пользователем, из SharedPreferences, а если

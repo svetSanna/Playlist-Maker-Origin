@@ -42,12 +42,12 @@ class RootActivity : AppCompatActivity() {
         }
     }
 
-    override fun onNewIntent(intent: Intent){
+   /* override fun onNewIntent(intent: Intent){
         super.onNewIntent(intent)
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
         val navController = navHostFragment.navController
 
         intent.data?.let {_ -> navController.handleDeepLink(intent)}
-    }
+    }*/
 }

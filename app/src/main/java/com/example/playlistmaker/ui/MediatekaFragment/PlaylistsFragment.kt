@@ -91,7 +91,7 @@ class PlaylistsFragment :Fragment(), PlaylistViewHolder.OnPlaylistClickListener 
 
         binding.buttonGoToNewPlaylist.setOnClickListener{
             // переход на экран создания нового плейлиста
-            App.screen_for_mediaActivity = 1
+            //App.screen_for_mediaActivity = 1 ///
             findNavController().navigate(R.id.action_mediatekaFragment_to_newPlayListFragment)
         }
     }

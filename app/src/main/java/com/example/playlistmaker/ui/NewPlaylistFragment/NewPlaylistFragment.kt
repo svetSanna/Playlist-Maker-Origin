@@ -185,20 +185,16 @@ class NewPlaylistFragment : Fragment() {
         val currentDrawable = binding.imagePlaylist.drawable
         if (!binding.titleEdittext.text.isNullOrBlank() ||
             !binding.definitionEdittext.text.isNullOrBlank() ||
-            (currentDrawable != null)
-        )
+            (currentDrawable != null))
             confirmDialog.show()
         else{
-            if(App.screen_for_mediaActivity == 1) ///
+            //if(App.screen_for_mediaActivity == 1) ///
                 findNavController().navigateUp()
-            else{ ///
-                /*val intent = Intent(requireContext(), MediaActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
-                startActivity(intent)*/
+            //else{ ///
                 // переход на экран аудиоплейера, передаем выбранный трек
-                val direction = NewPlaylistFragmentDirections.actionNewPlayListFragmentToMediaActivity(App.track!!)
-                findNavController().navigate(direction)
-            }
+           //     val direction = NewPlaylistFragmentDirections.actionNewPlayListFragmentToMediaActivity(App.track!!)
+           //     findNavController().navigate(direction)
+           // }
         }
     }
     private fun createPlayList(){
