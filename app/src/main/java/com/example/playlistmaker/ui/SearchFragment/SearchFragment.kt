@@ -364,6 +364,7 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
+          //  viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycleScope.launch {
                 delay(CLICK_DEBOUNCE_DELAY)
                 isClickAllowed = true
@@ -375,5 +376,10 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+            isClickAllowed = true
     }
 }

@@ -131,7 +131,7 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
             // ссылка на отрывок
             url = item?.previewUrl
 
-            viewModel.getMediaPlayerState().observe(viewLifecycleOwner) { state ->
+            viewModel.getMediaPlayerState().observe(viewLifecycleOwner){ state ->
                 when(state) {
                     is MediaPlayerState.Playing -> {
                         showPlaying()
@@ -193,7 +193,7 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
             }
         }
     }
-    // Активити на паузу
+  /*  // Активити на паузу
     override fun onPause() {
         super.onPause()
     }
@@ -212,7 +212,7 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
       //      viewModel.onPause()
        // }
     }
-
+*/
     fun showPlaying(){
         // запустить плейер        // кнопка "Play"/"Pause"
         // Log.i("MyTest", "MediaActivity.showPlaying() ")
@@ -241,5 +241,14 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
 
     override fun onChosePlaylistClick(item: Playlist) {
         Toast.makeText(requireContext(), "Кликнули", Toast.LENGTH_LONG).show()
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+
     }
 }
