@@ -105,7 +105,7 @@ class LikeTracksFragment : Fragment(), TrackViewHolder.OnItemClickListener {
     override fun onItemClick(item: Track) {
        // if (clickDebounce()) { // если между нажатиями на элемент прошло не меньше 1 секунды
             // переход на экран аудиоплейера, передаем выбранный трек
-            val direction: NavDirections = MediatekaFragmentDirections.actionMediatekaFragmentToMediaActivity(item)
+            val direction: NavDirections = MediatekaFragmentDirections.actionMediatekaFragmentToMediaFragment(item)
             findNavController().navigate(direction)
         //}
     }
