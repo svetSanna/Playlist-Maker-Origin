@@ -49,6 +49,9 @@
         android:layout="@layout/fragment_new_play_list">
     <deepLink
         app:uri="playlistmaker://createplaylist" />
+        <action
+            android:id="@+id/action_newPlayListFragment_to_mediaActivity"
+            app:destination="@id/mediaActivity" />
     </fragment>
 </navigation>
 

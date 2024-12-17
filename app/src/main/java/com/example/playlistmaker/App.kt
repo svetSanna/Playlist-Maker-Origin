@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.di.dataModule
 import com.example.playlistmaker.di.domainModule
 import com.example.playlistmaker.di.viewModelModule
+import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.domain.use_case.SharedPreferencesInteractor
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.koin.androidContext
@@ -40,6 +41,10 @@ class App : Application() {
             if (s.endsWith("2") || s.endsWith("3") || s.endsWith("4")) return "а"
             return ""
         }
+        var screen_for_mediaActivity = 1 ///
+        // 1 - переход на экран создания нового плейлиста со списка плейлистов PlaylistsFragment
+        // 2 - с плейера MediaActivity
+        var track: Track? = null ///
     }
     override fun onCreate() {
         // Получаем тему приложения, выбранную пользователем, из SharedPreferences, а если

@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.App
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityMediaBinding
 import com.example.playlistmaker.domain.entity.Playlist
@@ -99,6 +100,8 @@ class MediaActivity : AppCompatActivity(), ChosePlaylistViewHolder.OnChosePlayli
         //var item: Track? = args.item
         item = args.item
 
+        App.track = item as Track ///
+
         // раскладываем эти данные по соответствующим вьюшкам
         var ivTrackImage: ImageView = binding.trackImage
         var tvTrackName: TextView = binding.trackNameData
@@ -178,9 +181,10 @@ class MediaActivity : AppCompatActivity(), ChosePlaylistViewHolder.OnChosePlayli
             val newPlaylistButton = binding.buttonAddToPlaylist
             newPlaylistButton.setOnClickListener {
                 // переход на экран создания нового плейлиста
-
+                App.screen_for_mediaActivity = 2
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse("playlistmaker://createplaylist"))
                 startActivity(intent)
+
                 /*
                 Логика такая, что startActivity запускает RootActivity,
                 которая при помощи NavController открывает нужный фрагмент

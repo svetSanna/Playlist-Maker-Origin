@@ -17,9 +17,12 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.playlistmaker.App
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentNewPlayListBinding
 import com.example.playlistmaker.presentation.view_model.NewPlaylistViewModel
+import com.example.playlistmaker.ui.MediaActivity.MediaActivity
+import com.example.playlistmaker.ui.SearchFragment.SearchFragmentDirections
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
@@ -177,15 +180,26 @@ class NewPlaylistFragment : Fragment() {
         var f = file.toString()*/
         return file.path
     }
-    private fun onBack(){
+    private fun onBack() {
         // Получаем идентификатор ресурса drawable, который сейчас установлен для ImageView
         val currentDrawable = binding.imagePlaylist.drawable
-        if(!binding.titleEdittext.text.isNullOrBlank() ||
+        if (!binding.titleEdittext.text.isNullOrBlank() ||
             !binding.definitionEdittext.text.isNullOrBlank() ||
-            (currentDrawable != null))
+            (currentDrawable != null)
+        )
             confirmDialog.show()
-        else
-            findNavController().navigateUp()
+        else{
+            if(App.screen_for_mediaActivity == 1) ///
+                findNavController().navigateUp()
+            else{ ///
+                /*val intent = Intent(requireContext(), MediaActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+                startActivity(intent)*/
+                // переход на экран аудиоплейера, передаем выбранный трек
+                val direction = NewPlaylistFragmentDirections.actionNewPlayListFragmentToMediaActivity(App.track!!)
+                findNavController().navigate(direction)
+            }
+        }
     }
     private fun createPlayList(){
         var path:String? = null

@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.App
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.example.playlistmaker.domain.entity.Playlist
@@ -90,6 +91,7 @@ class PlaylistsFragment :Fragment(), PlaylistViewHolder.OnPlaylistClickListener 
 
         binding.buttonGoToNewPlaylist.setOnClickListener{
             // переход на экран создания нового плейлиста
+            App.screen_for_mediaActivity = 1
             findNavController().navigate(R.id.action_mediatekaFragment_to_newPlayListFragment)
         }
     }
