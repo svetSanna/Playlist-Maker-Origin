@@ -23,7 +23,7 @@ val viewModelModule = module {
     }
     */
     viewModel<MediaViewModel>{
-        MediaViewModel(mediaPlayerInteractor = get(), likeTrackListInteractor = get(), track = get())
+        MediaViewModel(mediaPlayerInteractor = get(), likeTrackListInteractor = get(), playlistInteractor = get(), track = get())
     }
     viewModel<LikeTracksViewModel>{
         LikeTracksViewModel(likeTrackListInteractor = get(), androidContext())

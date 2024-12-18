@@ -2,7 +2,7 @@ package com.example.playlistmaker.data.repository
 
 import com.example.playlistmaker.R
 import com.example.playlistmaker.data.db.AppDatabase
-import com.example.playlistmaker.data.db.converters.TrackDbConverter
+import com.example.playlistmaker.data.db.converters.LikeTrackDbConverter
 import com.example.playlistmaker.data.db.entity.LikeTrackEntity
 import com.example.playlistmaker.domain.entity.Resource
 import com.example.playlistmaker.domain.entity.Track
@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.flow
 
 class LikeTrackListRepositoryImpl(
     private val appDatabase: AppDatabase,
-    private val trackDbConverter: TrackDbConverter
+    private val trackDbConverter: LikeTrackDbConverter
 )  : LikeTrackListRepository {
     override suspend fun addTrackToLikeTrackList(track: LikeTrackEntity) {
         appDatabase.likeTrackDao().insertLikeTrack(track)

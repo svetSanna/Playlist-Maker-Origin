@@ -12,7 +12,7 @@ class NewPlaylistViewModel(private val playlistInteractor: PlaylistInteractor) :
     fun createPlaylist(path: String?, title: String, definition: String?){
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                playlistInteractor.addPlaylist(Playlist(title, definition, path, null, 0))
+                playlistInteractor.addPlaylist(Playlist(0, title, definition, path, null, 0)) /// (Playlist( title, definition, path, null, 0))
             }
         }
     }

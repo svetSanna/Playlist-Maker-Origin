@@ -61,7 +61,8 @@
 
     <color name="text_playlist_layout">#1A1B22</color>
 
-    <color name="background_coordinator">#801A1B22</color>
+    <color name="background_coordinator">#FF1A1B22</color>
+    <!--<color name="background_coordinator">#801A1B22</color> -->
 
     <color name="background_bottom_sheet">#FFFFFF</color>
 

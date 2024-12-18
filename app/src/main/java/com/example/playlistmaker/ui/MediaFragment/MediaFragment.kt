@@ -1,6 +1,7 @@
 package com.example.playlistmaker.ui.MediaFragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,18 +11,19 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentMediaBinding
-import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.domain.entity.Playlist
 import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.presentation.mapper.SimpleDateFormatMapper
 import com.example.playlistmaker.presentation.state.LikeButtonState
 import com.example.playlistmaker.presentation.state.MediaPlayerState
 import com.example.playlistmaker.presentation.view_model.MediaViewModel
+import com.example.playlistmaker.ui.AdapterAndViewHolder.ChosePlaylistAdapter
 import com.example.playlistmaker.ui.AdapterAndViewHolder.ChosePlaylistViewHolder
 //import com.example.playlistmaker.ui.MediaActivity.MediaActivityArgs
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -39,6 +41,10 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
     private var url: String? = ""
     var item: Track? = null
 
+    private var playlistsList: MutableList<Playlist> = arrayListOf()
+    // создаем адаптер для playlist
+    private val playlistAdapter = ChosePlaylistAdapter()
+
     private val viewModel by viewModel<MediaViewModel>{ parametersOf(item) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?)
@@ -49,6 +55,7 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        Log.i("MyTest", "MediaFragment.onViewCreated 1 ")
         timeTrack = binding.time
         // кнопка "Назад"
         val buttonBackMedia = binding.toolbar
@@ -89,7 +96,7 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
                 // можете добавить в метод onSlide() у этого же слушателя изменение значения alpha,
                 // используя переменную slideOffset:
 
-                //  overlay.alpha = slideOffset
+                overlay.alpha = (slideOffset + 1)/2
 
                 // Однако вам потребуется доработать этот код самостоятельно, ведь необходимо учесть,
                 // что значение альфы варьируется от 0f до 1f, тогда как slideOffset имеет диапазон от -1f до 1f.
@@ -99,8 +106,6 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
         // получаем данные трека из Intent
         val args: MediaFragmentArgs by navArgs()
         item = args.item
-
-        // App.track = item as Track ///
 
         // раскладываем эти данные по соответствующим вьюшкам
         var ivTrackImage: ImageView = binding.trackImage
@@ -181,38 +186,36 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
             val newPlaylistButton = binding.buttonAddToPlaylist
             newPlaylistButton.setOnClickListener {
                 // переход на экран создания нового плейлиста
-                /*App.screen_for_mediaActivity = 2   ///
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("playlistmaker://createplaylist"))
-                startActivity(intent)
-                */
+                Log.i("MyTest", "MediaFragment.newPlaylistButton.setOnClickListener - нажатие на /'новый плейлист/'")
                 findNavController().navigate(R.id.action_mediaFragment_to_newPlayListFragment)
-                /*
-                Логика такая, что startActivity запускает RootActivity,
-                которая при помощи NavController открывает нужный фрагмент
-                */
+            }
+
+            playlistAdapter.onChosePlaylistClickListener = this
+
+            Log.i("MyTest", "MediaFragment 2. перед viewModel.loadPlaylists(): playlistsList.count=" + playlistsList.count())
+            viewModel.loadPlaylists()
+            Log.i("MyTest", "MediaFragment 3. перед viewModel.getPlaylistsMutableData().observe: playlistsList.count=" + playlistsList.count())
+            viewModel.getPlaylistsMutableData().observe(viewLifecycleOwner) { list ->
+                Log.i("MyTest", "MediaFragment 4. viewModel.getPlaylistsMutableData().observe: playlistsList.count=" + playlistsList.count())
+                if(list != null) {
+                    //viewModel.loadPlaylists()
+                    val rvItems: RecyclerView = binding.recyclerviewChosePlaylist
+                    rvItems.apply {
+                        adapter = playlistAdapter
+                        layoutManager =
+                            LinearLayoutManager(requireContext()) //ориентация по умолчанию — вертикальная
+                    }
+                    //playlistsList.clear()
+                    Log.i("MyTest", "MediaFragment-5. viewModel.getPlaylistsMutableData().observe: playlistsList.count=" + playlistsList.count())
+                    playlistsList = list as MutableList<Playlist>
+                    Log.i("MyTest", "MediaFragment-6. viewModel.getPlaylistsMutableData().observe: playlistsList.count=" + playlistsList.count())
+
+                    playlistAdapter.items = playlistsList
+                    playlistAdapter.notifyDataSetChanged()
+                }
             }
         }
     }
-  /*  // Активити на паузу
-    override fun onPause() {
-        super.onPause()
-    }
-
-    // Активити закрывается
-    override fun onDestroy() {
-        super.onDestroy()
-        //Log.i("MyTest", "MediaActivity.onDestroy() ")
-        // viewModel.onDestroyMediaPlayer() - убрала, чтобы медиаплейер не перезапускался снова при повороте
-    }
-
-    override fun onStop() {
-        super.onStop()
-        //Log.i("MyTest", "MediaActivity.onStop() ")
-      //  if (!isChangingConfigurations){
-      //      viewModel.onPause()
-       // }
-    }
-*/
     fun showPlaying(){
         // запустить плейер        // кнопка "Play"/"Pause"
         // Log.i("MyTest", "MediaActivity.showPlaying() ")
@@ -230,6 +233,7 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
         // обновляем время
         timeTrack.text = SimpleDateFormatMapper.map(viewModel.getCurrentPosition())
     }
+
     fun showPrepared() {
         // Log.i("MyTest", "MediaActivity.onPrepared() ")
         var timeTrack = binding.time
@@ -239,8 +243,18 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
         buttonPlayPause.setImageResource(R.drawable.button_media_play)
     }
 
-    override fun onChosePlaylistClick(item: Playlist) {
-        Toast.makeText(requireContext(), "Кликнули", Toast.LENGTH_LONG).show()
+    override fun onChosePlaylistClick(playlist: Playlist) {
+        playlistsList.forEach{p ->
+            if (p.trackIdList != null){
+                val idList= p.trackIdList!!.split(',')
+                if (idList.contains(playlist.trackIdList.toString())){
+                    Toast.makeText(requireContext(), "Трек уже добавлен в плейлист " + playlist.name, Toast.LENGTH_LONG).show()
+                    return
+                }
+            }
+        }
+        // если трек с идентификатором, как у item, не нашелся ни в одном плейлисте
+        viewModel.addTrackToPlaylist(item!!, playlist.playlistId)
     }
     override fun onDestroyView() {
         super.onDestroyView()
@@ -249,6 +263,5 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
 
     override fun onResume() {
         super.onResume()
-
     }
 }

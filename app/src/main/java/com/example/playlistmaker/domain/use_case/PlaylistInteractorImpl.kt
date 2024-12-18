@@ -23,4 +23,7 @@ class PlaylistInteractorImpl(private val repository: PlaylistRepository) : Playl
             }
         }
     }
+    override suspend fun addTrackToPlaylist(track: Track, playlistId: Int) {
+        repository.addTrackIdToPlaylist(track, playlistId)
+    }
 }

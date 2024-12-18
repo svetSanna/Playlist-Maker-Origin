@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.entity.Playlist
 
-class ChosePlayListAdapter: RecyclerView.Adapter<ChosePlaylistViewHolder>() {
+class ChosePlaylistAdapter: RecyclerView.Adapter<ChosePlaylistViewHolder>() {
     var items: MutableList<Playlist> = mutableListOf()
         set(value) {
             field = value.toMutableList()

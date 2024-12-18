@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Playlist(
-   // val playlistId: Int, // идентификатор плейлиста
+    val playlistId: Int, // идентификатор плейлиста
     var name: String,    // Название плейлиста, добавила уникальность, хотя по заданию не требуется
     var definition: String?,  // Описание плейлиста
     var path: String?,        // Путь к файлу изображения для обложки, который был скопирован в хранилище приложения при создании плейлиста

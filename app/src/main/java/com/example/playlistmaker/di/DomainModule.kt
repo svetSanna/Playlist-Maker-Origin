@@ -1,7 +1,8 @@
 package com.example.playlistmaker.di
 
 import com.example.playlistmaker.data.db.converters.PlaylistDbConverter
-import com.example.playlistmaker.data.db.converters.TrackDbConverter
+import com.example.playlistmaker.data.db.converters.LikeTrackDbConverter
+import com.example.playlistmaker.data.db.converters.TrackInPlaylistDbConverter
 import com.example.playlistmaker.domain.use_case.LikeTrackListInteractorImpl
 import com.example.playlistmaker.domain.use_case.GetTrackListUseCase
 import com.example.playlistmaker.domain.use_case.LikeTrackListInteractor
@@ -29,7 +30,7 @@ val domainModule = module {
         MediaPlayerInteractorImpl(repositoryImpl = get())
     }
     factory {
-        TrackDbConverter()
+        LikeTrackDbConverter()
     }
     factory<LikeTrackListInteractor>{
         LikeTrackListInteractorImpl(repository = get())
@@ -39,5 +40,8 @@ val domainModule = module {
     }
     factory<PlaylistInteractor>{
         PlaylistInteractorImpl(repository = get())
+    }
+    factory {
+        TrackInPlaylistDbConverter()
     }
 }

@@ -33,7 +33,7 @@ class PlaylistsFragment :Fragment(), PlaylistViewHolder.OnPlaylistClickListener 
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
 
-    // lдля получения списка плейлистов
+    // для получения списка плейлистов
     private var playlistsList: ArrayList<Playlist> = arrayListOf()
     // создаем адаптер для Playlist
     private val playlistAdapter = PlaylistAdapter()
@@ -60,16 +60,20 @@ class PlaylistsFragment :Fragment(), PlaylistViewHolder.OnPlaylistClickListener 
 
         playlistAdapter.onPlaylistClickListener = this
 
-        viewModel.loadData()
+        viewModel.loadData() ///???
 
-        val rvItems: RecyclerView = binding.recyclerViewPlaylist
-        rvItems.apply {
-            adapter = playlistAdapter
-            layoutManager =
-                GridLayoutManager(requireContext(), /*Количество столбцов*/ 2) //ориентация по умолчанию — вертикальная
-                // LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        }
-        playlistAdapter.items = playlistsList
+/*
+         ///???
+         val rvItems: RecyclerView = binding.recyclerViewPlaylist
+         rvItems.apply {
+             adapter = playlistAdapter
+             layoutManager =
+                 GridLayoutManager(requireContext(), 2) //ориентация по умолчанию — вертикальная
+                 // LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+         }
+         playlistAdapter.items = playlistsList
+         ///???
+ */
 
         // подписываемся на состояние SearchViewModel
         viewModel.getScreenState().observe(viewLifecycleOwner) { state ->
@@ -115,6 +119,7 @@ class PlaylistsFragment :Fragment(), PlaylistViewHolder.OnPlaylistClickListener 
     private fun showContent(data: List<Playlist>) { // отображение контента, полученного после запроса, т.е. состояние SearchScreenState = content
         binding.placeholderPlaylist.visibility = View.GONE
         binding.recyclerViewPlaylist.visibility = View.VISIBLE
+
 
         val rvItems: RecyclerView = binding.recyclerViewPlaylist
         rvItems.apply {

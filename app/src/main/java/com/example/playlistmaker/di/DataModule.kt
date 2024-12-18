@@ -3,8 +3,6 @@ package com.example.playlistmaker.di
 import android.content.Context
 import android.media.MediaPlayer
 import androidx.room.Room
-import androidx.room.Room.databaseBuilder
-import androidx.room.migration.Migration
 import com.example.playlistmaker.PLAYLISTMAKER_PREFERENCES
 import com.example.playlistmaker.data.db.AppDatabase
 import com.example.playlistmaker.data.history.SearchHistory
@@ -92,7 +90,7 @@ val dataModule = module {
     }
 
     single<PlaylistRepository> {
-        PlaylistRepositoryImpl(appDatabase = get(), playlistDbConverter = get())
+        PlaylistRepositoryImpl(appDatabase = get(), playlistDbConverter = get(), trackInPlaylistDbConverter = get())
     }
 
 }
