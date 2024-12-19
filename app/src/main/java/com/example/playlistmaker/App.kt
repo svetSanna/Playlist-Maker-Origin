@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.di.dataModule
 import com.example.playlistmaker.di.domainModule
 import com.example.playlistmaker.di.viewModelModule
+import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.domain.use_case.SharedPreferencesInteractor
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.koin.androidContext
@@ -29,6 +30,22 @@ class App : Application() {
             field = value
         }
 
+    companion object {
+        // функция отпределяет окончание к слову "трек" в зависимости от числительного n
+        fun getEnding(n: Int) : String{
+            var s = n.toString()
+
+            if (s.endsWith("5") || s.endsWith("6") || s.endsWith("7") || s.endsWith("8") || s.endsWith("9")
+                || s.endsWith("0") || s.endsWith("11") || s.endsWith("12") || s.endsWith("13") || s.endsWith("14")
+                || s.endsWith("15") || s.endsWith("16") || s.endsWith("17") || s.endsWith("18") || s.endsWith("19")) return "ов"
+            if (s.endsWith("2") || s.endsWith("3") || s.endsWith("4")) return "а"
+            return ""
+        }
+       // var screen_for_mediaActivity = 1 ///
+        // 1 - переход на экран создания нового плейлиста со списка плейлистов PlaylistsFragment
+        // 2 - с плейера MediaActivity
+       // var track: Track? = null ///
+    }
     override fun onCreate() {
         // Получаем тему приложения, выбранную пользователем, из SharedPreferences, а если
         // ничего туда не успели сохранить, то применим текущую тему приложения
