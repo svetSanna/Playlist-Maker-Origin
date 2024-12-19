@@ -237,9 +237,9 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
             val idList= playlist.trackIdList!!.split(',')
             if (idList.contains(item!!.trackId.toString())){
                 Toast.makeText(requireContext(), "Трек уже добавлен в плейлист " + playlist.name, Toast.LENGTH_LONG).show()
-                val bottomSheetContainer = binding.standardBottomSheet
-                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                //val bottomSheetContainer = binding.standardBottomSheet
+                //val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
+                //bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                 return
             }
         }
