@@ -35,6 +35,18 @@
 
     <color name="bottom_button_check">#3772E7</color>
     <color name="bottom_button">#FFFFFF</color>
+
+    <color name="edittext_stroke">#FFFFFF</color>
+    <color name="edit_text_new_playlist">#FFFFFF</color>
+
+    <color name="edittext_outline">#FFFFFF</color>
+
+    <color name="hint">#FFFFFF</color>
+
+    <color name="text_playlist_layout">#FFFFFF</color>
+
+    <color name="background_bottom_sheet">#1A1B22</color>
+    <color name="slider">#FFFFFF</color>
 </resources>
 
 <!-- цвета switch будут такие же, как в дневной теме и регулироваться с помощью селектора -->

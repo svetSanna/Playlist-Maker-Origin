@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.entity.Track
+import com.example.playlistmaker.domain.use_case.LikeTrackListInteractor
 import com.example.playlistmaker.domain.use_case.LikeTrackListInteractorImpl
 import com.example.playlistmaker.presentation.state.LikeTracksScreenState
 import com.example.playlistmaker.presentation.state.SearchScreenState
@@ -14,7 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class LikeTracksViewModel(private val likeTrackListInteractor: LikeTrackListInteractorImpl,
+class LikeTracksViewModel(private val likeTrackListInteractor: LikeTrackListInteractor,
                           private val context: Context
 ) : ViewModel() {
 

@@ -105,7 +105,7 @@ class LikeTracksFragment : Fragment(), TrackViewHolder.OnItemClickListener {
     override fun onItemClick(item: Track) {
        // if (clickDebounce()) { // если между нажатиями на элемент прошло не меньше 1 секунды
             // переход на экран аудиоплейера, передаем выбранный трек
-            val direction: NavDirections = MediatekaFragmentDirections.actionMediatekaFragmentToMediaActivity(item)
+            val direction: NavDirections = MediatekaFragmentDirections.actionMediatekaFragmentToMediaFragment(item)
             findNavController().navigate(direction)
         //}
     }
@@ -114,49 +114,4 @@ class LikeTracksFragment : Fragment(), TrackViewHolder.OnItemClickListener {
         super.onResume()
         viewModel.loadData()
     }
-
-
-    //скрыть PlaceHolder
-   /* private fun hidePlaceholder() {
-        binding.rvItems.visibility = View.VISIBLE
-        binding.placeholderLinearLayout.visibility = View.GONE
-    }
-
-    override fun onItemClick(item: Track) {
-        if (clickDebounce()) { // если между нажатиями на элемент прошло не меньше 1 секунды
-
-            viewModel.itemClick(item)
-
-            trackAdapterSearchHistory.items = viewModel.getTrackListSearchHistory()
-            trackAdapterSearchHistory.notifyDataSetChanged()
-
-            viewModel.addItemToTrackListSearchHistory(item)
-            trackAdapterSearchHistory.items = viewModel.getTrackListSearchHistory()
-            trackAdapterSearchHistory.notifyDataSetChanged()
-
-            viewModel.writeToSharedPreferences()
-
-            // переход на экран аудиоплейера, передаем выбранный трек
-            val direction = SearchFragmentDirections.actionSearchFragmentToMediaActivity(item)
-            findNavController().navigate(direction)
-        }
-    }
-
-    // Предотвращение двойного нажатия на элемент списка
-    private fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            viewLifecycleOwner.lifecycleScope.launch {
-                delay(SearchFragment.CLICK_DEBOUNCE_DELAY)
-                isClickAllowed = true
-            }
-        }
-        return current
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }*/
 }
