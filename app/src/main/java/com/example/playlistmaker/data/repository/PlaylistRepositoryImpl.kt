@@ -1,5 +1,6 @@
 package com.example.playlistmaker.data.repository
 
+import android.util.Log
 import com.example.playlistmaker.R
 import com.example.playlistmaker.data.db.AppDatabase
 import com.example.playlistmaker.data.db.converters.PlaylistDbConverter
@@ -17,9 +18,6 @@ class PlaylistRepositoryImpl(
     private val playlistDbConverter: PlaylistDbConverter,
     private val trackInPlaylistDbConverter: TrackInPlaylistDbConverter
 ) : PlaylistRepository {
-   /* override suspend fun addPlaylist(playlist: PlaylistEntity) {
-        appDatabase.playListDao().insertPlaylist(playlist)
-    }*/
    override suspend fun addPlaylist(playlist: Playlist) {
        appDatabase.playListDao().insertPlaylist(playlistDbConverter.map(playlist))
    }
@@ -34,9 +32,7 @@ class PlaylistRepositoryImpl(
         else
             emit(Resource.Success(convertListToList(playlists)))
     }
-  /*  override suspend fun updateTrackIdListByPlaylistId(newTrackIdList: String, identificator: Int){
-        appDatabase.playListDao().updateTrackIdListByPlaylistId(newTrackIdList, identificator)
-    }*/
+
     private fun convertListToList(playlists: List<PlaylistEntity>)
             : List<Playlist> {
         return playlists.map { playlist -> playlistDbConverter.map(playlist)}
@@ -44,7 +40,9 @@ class PlaylistRepositoryImpl(
     override suspend fun addTrackIdToPlaylist(track: Track, playlistId: Int){
         var str = appDatabase.playListDao().getTrackIdList(playlistId)
         str += "," + track.trackId.toString()
-        appDatabase.playListDao().updateTrackIdListByPlaylistId(str!!, playlistId)
+
+        appDatabase.playListDao().setTrackIdListByPlaylistId(str!!, playlistId)
+        appDatabase.playListDao().countPlusOne(playlistId)
 
         appDatabase.trackInPlaylistDao().insertTrack(trackInPlaylistDbConverter.map(track))
     }

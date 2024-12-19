@@ -17,12 +17,9 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.playlistmaker.App
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentNewPlayListBinding
 import com.example.playlistmaker.presentation.view_model.NewPlaylistViewModel
-import com.example.playlistmaker.ui.MediaActivity.MediaActivity
-import com.example.playlistmaker.ui.SearchFragment.SearchFragmentDirections
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File

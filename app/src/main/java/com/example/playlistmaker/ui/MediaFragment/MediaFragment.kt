@@ -55,7 +55,6 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.i("MyTest", "MediaFragment.onViewCreated 1 ")
         timeTrack = binding.time
         // кнопка "Назад"
         val buttonBackMedia = binding.toolbar
@@ -178,7 +177,6 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
             // кнопка добавить в плейлист
             val addToPlaylistButton = binding.buttonMediaAdd
             addToPlaylistButton.setOnClickListener {
-                // viewModel.onAddToPlaylistClicked()//(item)
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             }
 
@@ -186,29 +184,21 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
             val newPlaylistButton = binding.buttonAddToPlaylist
             newPlaylistButton.setOnClickListener {
                 // переход на экран создания нового плейлиста
-                Log.i("MyTest", "MediaFragment.newPlaylistButton.setOnClickListener - нажатие на /'новый плейлист/'")
                 findNavController().navigate(R.id.action_mediaFragment_to_newPlayListFragment)
             }
 
             playlistAdapter.onChosePlaylistClickListener = this
-
-            Log.i("MyTest", "MediaFragment 2. перед viewModel.loadPlaylists(): playlistsList.count=" + playlistsList.count())
             viewModel.loadPlaylists()
-            Log.i("MyTest", "MediaFragment 3. перед viewModel.getPlaylistsMutableData().observe: playlistsList.count=" + playlistsList.count())
+
             viewModel.getPlaylistsMutableData().observe(viewLifecycleOwner) { list ->
-                Log.i("MyTest", "MediaFragment 4. viewModel.getPlaylistsMutableData().observe: playlistsList.count=" + playlistsList.count())
                 if(list != null) {
-                    //viewModel.loadPlaylists()
                     val rvItems: RecyclerView = binding.recyclerviewChosePlaylist
                     rvItems.apply {
                         adapter = playlistAdapter
                         layoutManager =
                             LinearLayoutManager(requireContext()) //ориентация по умолчанию — вертикальная
                     }
-                    //playlistsList.clear()
-                    Log.i("MyTest", "MediaFragment-5. viewModel.getPlaylistsMutableData().observe: playlistsList.count=" + playlistsList.count())
                     playlistsList = list as MutableList<Playlist>
-                    Log.i("MyTest", "MediaFragment-6. viewModel.getPlaylistsMutableData().observe: playlistsList.count=" + playlistsList.count())
 
                     playlistAdapter.items = playlistsList
                     playlistAdapter.notifyDataSetChanged()
@@ -235,8 +225,7 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
     }
 
     fun showPrepared() {
-        // Log.i("MyTest", "MediaActivity.onPrepared() ")
-        var timeTrack = binding.time
+    var timeTrack = binding.time
         timeTrack.text = getString(R.string.time_00_00)
         // кнопка "Play"/"Pause"
         val buttonPlayPause = binding.buttonMediaPlayPause
@@ -244,17 +233,24 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
     }
 
     override fun onChosePlaylistClick(playlist: Playlist) {
-        playlistsList.forEach{p ->
-            if (p.trackIdList != null){
-                val idList= p.trackIdList!!.split(',')
-                if (idList.contains(playlist.trackIdList.toString())){
-                    Toast.makeText(requireContext(), "Трек уже добавлен в плейлист " + playlist.name, Toast.LENGTH_LONG).show()
-                    return
-                }
+        if (playlist.trackIdList != null){
+            val idList= playlist.trackIdList!!.split(',')
+            if (idList.contains(item!!.trackId.toString())){
+                Toast.makeText(requireContext(), "Трек уже добавлен в плейлист " + playlist.name, Toast.LENGTH_LONG).show()
+                val bottomSheetContainer = binding.standardBottomSheet
+                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                return
             }
         }
         // если трек с идентификатором, как у item, не нашелся ни в одном плейлисте
         viewModel.addTrackToPlaylist(item!!, playlist.playlistId)
+
+        val bottomSheetContainer = binding.standardBottomSheet
+        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
+        Toast.makeText(requireContext(), "Добавлено в плейлист " + playlist.name, Toast.LENGTH_LONG).show()
     }
     override fun onDestroyView() {
         super.onDestroyView()

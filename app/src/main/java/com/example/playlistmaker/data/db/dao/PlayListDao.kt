@@ -5,7 +5,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.playlistmaker.data.db.entity.LikeTrackEntity
 import com.example.playlistmaker.data.db.entity.PlaylistEntity
 
 @Dao
@@ -24,7 +23,11 @@ interface PlayListDao {
 
     // метод @Query для изменения значения в столбце trackIdList для плейлиста с заданным Id
     @Query("UPDATE play_list_entity SET trackIdList = :newTrackIdList WHERE playlistId = :identificator")
-    fun updateTrackIdListByPlaylistId(newTrackIdList: String, identificator: Int)
+    fun setTrackIdListByPlaylistId(newTrackIdList: String, identificator: Int)
+
+    // метод @Query для изменения значения в столбце count для плейлиста с заданным Id
+    @Query("UPDATE play_list_entity SET count = count+1 WHERE playlistId = :identificator")
+    fun countPlusOne(identificator: Int)
 
     // метод @Query для получения списка треков в плейлисте по идентификатору Id плейлиста
     @Query("SELECT trackIdList FROM play_list_entity WHERE playlistId = (:id)")

@@ -14,17 +14,4 @@ data class PlaylistEntity(
     var trackIdList: String?, // Список идентификаторов треков, которые будут добавляться в этот плейлист. Можете использовать Gson для преобразования списка в строку, которую можно сохранить в базу.
                              // В момент создания плейлиста этот список будет пустым.
     var count: Int           // Количество треков, добавленных в плейлист
-)/*{
-    constructor(
-        name: String,
-        definition: String?,
-        path: String?,
-        trackIdList: String?,
-        count: Int
-    ): this(0,
-        name,
-        definition,
-        path,
-        trackIdList,
-        count)
-}*/
+)

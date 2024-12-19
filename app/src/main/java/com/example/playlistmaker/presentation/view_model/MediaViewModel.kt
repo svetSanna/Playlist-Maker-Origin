@@ -19,24 +19,25 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor,
-                     //private val url: String?,
-                     private val likeTrackListInteractor: LikeTrackListInteractor,
-                     private val playlistInteractor: PlaylistInteractor,
-                     private val track: Track) : ViewModel() {
+class MediaViewModel(
+    private val mediaPlayerInteractor: MediaPlayerInteractor,
+    private val likeTrackListInteractor: LikeTrackListInteractor,
+    private val playlistInteractor: PlaylistInteractor,
+    private val track: Track
+) : ViewModel() {
     private var timerJob: Job? = null //
 
     private val mediaPlayerState = MutableLiveData<MediaPlayerState>() // состояние медиаплейера
     private val likeButtonState = MutableLiveData<LikeButtonState>() // состояние кнопки лайк
 
-    private var playlists = MutableLiveData<List<Playlist>?>()//arrayListOf<Playlist>()//mutableListOf<Playlist>() // список плейлистов
+    private var playlists = MutableLiveData<List<Playlist>?>() // список плейлистов
 
-    init{
+    init {
         preparePlayer(track.previewUrl)
 
         loadPlaylists()
 
-        var isFavorite : Boolean
+        var isFavorite: Boolean
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 isFavorite = likeTrackListInteractor.isFavorite(track.trackId)
@@ -48,43 +49,14 @@ class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor,
         }
     }
 
-    /*fun loadPlaylists() {
-        Log.i("MyTest", "MediaViewModel.loadPlaylists() - 1| Playlists.count = " + playlists.count())
-        viewModelScope.launch {
-            Log.i("MyTest", "MediaViewModel.loadPlaylists() - 2| Playlists.count = " + playlists.count())
-            withContext(Dispatchers.IO) {
-                Log.i("MyTest", "MediaViewModel.loadPlaylists() - 3| Playlists.count = " + playlists.count())
-                playlistInteractor.getPlaylistsList()
-                    .collect() { pair ->
-                        Log.i("MyTest", "MediaViewModel.loadPlaylists() - 4| Playlists.count = " + playlists.count())
-                        val foundPlaylists = pair.first
-                        if (foundPlaylists != null) {
-                            Log.i("MyTest", "MediaViewModel.loadPlaylists() - 5| Playlists.count = " + playlists.count())
-                            playlists.clear()
-                            playlists.addAll(foundPlaylists)
-                            Log.i("MyTest", "MediaViewModel.loadPlaylists() - 6| Playlists.count = " + playlists.count())
-                        }
-                    }
-            }
-
-        }
-    } */
     fun loadPlaylists() {
-        Log.i("MyTest", "MediaViewModel.loadPlaylists() - 1| Playlists.count = " + playlists.value?.count())
-        viewModelScope.launch{
-            Log.i("MyTest", "MediaViewModel.loadPlaylists() - 2| Playlists.count = " + playlists.value?.count())
+        viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                Log.i("MyTest", "MediaViewModel.loadPlaylists() - 3| Playlists.count = " + playlists.value?.count())
                 playlistInteractor.getPlaylistsList()
                     .collect() { pair ->
-                        Log.i("MyTest", "MediaViewModel.loadPlaylists() - 4| Playlists.count = " + playlists.value?.count())
                         val foundPlaylists = pair.first
                         if (foundPlaylists != null) {
-                            Log.i("MyTest", "MediaViewModel.loadPlaylists() - 5| Playlists.count = " + playlists.value?.count())
-                            //playlists.clear()
-                            //playlists.addAll(foundPlaylists)
                             playlists.postValue(foundPlaylists)
-                            Log.i("MyTest", "MediaViewModel.loadPlaylists() - 6| Playlists.count = " + playlists.value?.count())
                         }
                     }
             }
@@ -95,6 +67,7 @@ class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor,
     fun getMediaPlayerState(): LiveData<MediaPlayerState> {
         return mediaPlayerState
     }
+
     fun getLikeButtonState(): LiveData<LikeButtonState> {
         return likeButtonState
     }
@@ -111,7 +84,7 @@ class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor,
             startPlayer()
     }
 
-    fun startPlayer(){
+    fun startPlayer() {
         mediaPlayerInteractor.startPlayer()
         mediaPlayerState.postValue(MediaPlayerState.Playing)
         startTimer()
@@ -148,13 +121,13 @@ class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor,
         onDestroyMediaPlayer()
     }
 
-    fun onPause(){
-        //Log.i("MyTest", "MediaViewModel.onPause() ")
+    fun onPause() {
         pausePlayer()
     }
-    fun onFavoriteClicked(){//track: Track){
-    // нажатие на кнопку лайк
-        var isFavorite : Boolean
+
+    fun onFavoriteClicked() {
+        // нажатие на кнопку лайк
+        var isFavorite: Boolean
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 isFavorite = likeTrackListInteractor.isFavorite(track.trackId)
@@ -169,12 +142,7 @@ class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor,
         }
     }
 
-    /*fun getPlaylistsList(): List<Playlist>? {
-        Log.i("MyTest", "MediaViewModel.getPlaylistsList()| Playlists.count = " + playlists.value?.count())
-        return playlists.value
-    }*/
-
-    fun getPlaylistsMutableData(): MutableLiveData<List<Playlist>?>{
+    fun getPlaylistsMutableData(): MutableLiveData<List<Playlist>?> {
         return playlists
     }
 
@@ -182,6 +150,7 @@ class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor,
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 playlistInteractor.addTrackToPlaylist(track, playlistId)
+                loadPlaylists()
             }
         }
     }

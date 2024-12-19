@@ -53,33 +53,17 @@ class PlaylistsFragment :Fragment(), PlaylistViewHolder.OnPlaylistClickListener 
         super.onViewCreated(view, savedInstanceState)
 
         val placeholderImage: ImageView = binding.errorImagePlaylist
-       // val placeholderLayout: LinearLayout = binding.errorLayoutPlaylists
-
-       // placeholderLayout.visibility = View.VISIBLE
         placeholderImage.setImageResource(R.drawable.nothing_found)
 
         playlistAdapter.onPlaylistClickListener = this
 
-        viewModel.loadData() ///???
-
-/*
-         ///???
-         val rvItems: RecyclerView = binding.recyclerViewPlaylist
-         rvItems.apply {
-             adapter = playlistAdapter
-             layoutManager =
-                 GridLayoutManager(requireContext(), 2) //ориентация по умолчанию — вертикальная
-                 // LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-         }
-         playlistAdapter.items = playlistsList
-         ///???
- */
+        viewModel.loadData()
 
         // подписываемся на состояние SearchViewModel
         viewModel.getScreenState().observe(viewLifecycleOwner) { state ->
             when(state) {
                 is PlaylistsScreenState.Error -> {
-                    showError()//state.message)
+                    showError()
                 }
                 is PlaylistsScreenState.Content -> {
                     showContent(state.data)
@@ -87,15 +71,9 @@ class PlaylistsFragment :Fragment(), PlaylistViewHolder.OnPlaylistClickListener 
             }
         }
 
-        /*val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
-
-        recyclerView.layoutManager = GridLayoutManager(this, /*Количество столбцов*/ 2) //ориентация по умолчанию — вертикальная
-        recyclerView.adapter = NewsAdapter() */
-
-
         binding.buttonGoToNewPlaylist.setOnClickListener{
             // переход на экран создания нового плейлиста
-            //App.screen_for_mediaActivity = 1 ///
+
             findNavController().navigate(R.id.action_mediatekaFragment_to_newPlayListFragment)
         }
     }

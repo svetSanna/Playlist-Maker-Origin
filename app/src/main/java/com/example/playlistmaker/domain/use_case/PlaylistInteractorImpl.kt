@@ -1,5 +1,6 @@
 package com.example.playlistmaker.domain.use_case
 
+import android.util.Log
 import com.example.playlistmaker.domain.entity.Playlist
 import com.example.playlistmaker.domain.entity.Resource
 import com.example.playlistmaker.domain.entity.Track
@@ -24,6 +25,6 @@ class PlaylistInteractorImpl(private val repository: PlaylistRepository) : Playl
         }
     }
     override suspend fun addTrackToPlaylist(track: Track, playlistId: Int) {
-        repository.addTrackIdToPlaylist(track, playlistId)
+       repository.addTrackIdToPlaylist(track, playlistId)
     }
 }
