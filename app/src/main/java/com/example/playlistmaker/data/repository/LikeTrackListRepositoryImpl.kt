@@ -2,7 +2,7 @@ package com.example.playlistmaker.data.repository
 
 import com.example.playlistmaker.R
 import com.example.playlistmaker.data.db.AppDatabase
-import com.example.playlistmaker.data.db.converters.TrackDbConverter
+import com.example.playlistmaker.data.db.converters.LikeTrackDbConverter
 import com.example.playlistmaker.data.db.entity.LikeTrackEntity
 import com.example.playlistmaker.domain.entity.Resource
 import com.example.playlistmaker.domain.entity.Track
@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.flow
 
 class LikeTrackListRepositoryImpl(
     private val appDatabase: AppDatabase,
-    private val trackDbConverter: TrackDbConverter
+    private val trackDbConverter: LikeTrackDbConverter
 )  : LikeTrackListRepository {
     override suspend fun addTrackToLikeTrackList(track: LikeTrackEntity) {
         appDatabase.likeTrackDao().insertLikeTrack(track)
@@ -42,19 +42,14 @@ class LikeTrackListRepositoryImpl(
             emit(Resource.Success(convertListToList(tracks)))
     }
 
-   /* override suspend fun getLikeTrack(trackId: Int) : Flow<List<Track>> {
-        return flow{
-            val tracks = appDatabase.likeTrackDao().getLikeTrack(trackId)
-            emit(convertListToList(tracks))
-        }
-    }*/
-   override suspend fun getLikeTrack(trackId: Int) : Track? {
+    override suspend fun getLikeTrack(trackId: Int) : Track? {
        // возвращается трек по Id. Если такого нет, возвращается null
        var track = appDatabase.likeTrackDao().getLikeTrack(trackId)
 
        return if (track == null) null
        else trackDbConverter.map(track)
-   }
+    }
+
     private fun convertListToList(tracks: List<LikeTrackEntity>)
     : List<Track> {
         return tracks.map { track -> trackDbConverter.map(track)}

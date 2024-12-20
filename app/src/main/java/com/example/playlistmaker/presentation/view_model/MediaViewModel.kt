@@ -1,34 +1,43 @@
 package com.example.playlistmaker.presentation.view_model
 // работа с медиаплейером, экран плейера
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.domain.entity.Playlist
 import com.example.playlistmaker.domain.entity.Track
-import com.example.playlistmaker.domain.use_case.LikeTrackListInteractorImpl
+import com.example.playlistmaker.domain.use_case.LikeTrackListInteractor
 import com.example.playlistmaker.domain.use_case.MediaPlayerInteractor
+import com.example.playlistmaker.domain.use_case.PlaylistInteractor
 import com.example.playlistmaker.presentation.state.LikeButtonState
 import com.example.playlistmaker.presentation.state.MediaPlayerState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor,
-                     //private val url: String?,
-                     private val likeTrackListInteractor: LikeTrackListInteractorImpl,
-                     private val track: Track) : ViewModel() {
+class MediaViewModel(
+    private val mediaPlayerInteractor: MediaPlayerInteractor,
+    private val likeTrackListInteractor: LikeTrackListInteractor,
+    private val playlistInteractor: PlaylistInteractor,
+    private val track: Track
+) : ViewModel() {
     private var timerJob: Job? = null //
 
     private val mediaPlayerState = MutableLiveData<MediaPlayerState>() // состояние медиаплейера
     private val likeButtonState = MutableLiveData<LikeButtonState>() // состояние кнопки лайк
-    init{
+
+    private var playlists = MutableLiveData<List<Playlist>?>() // список плейлистов
+
+    init {
         preparePlayer(track.previewUrl)
 
-        var isFavorite : Boolean
+        loadPlaylists()
+
+        var isFavorite: Boolean
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 isFavorite = likeTrackListInteractor.isFavorite(track.trackId)
@@ -40,9 +49,25 @@ class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor,
         }
     }
 
+    fun loadPlaylists() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                playlistInteractor.getPlaylistsList()
+                    .collect() { pair ->
+                        val foundPlaylists = pair.first
+                        if (foundPlaylists != null) {
+                            playlists.postValue(foundPlaylists)
+                        }
+                    }
+            }
+
+        }
+    }
+
     fun getMediaPlayerState(): LiveData<MediaPlayerState> {
         return mediaPlayerState
     }
+
     fun getLikeButtonState(): LiveData<LikeButtonState> {
         return likeButtonState
     }
@@ -59,7 +84,7 @@ class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor,
             startPlayer()
     }
 
-    fun startPlayer(){
+    fun startPlayer() {
         mediaPlayerInteractor.startPlayer()
         mediaPlayerState.postValue(MediaPlayerState.Playing)
         startTimer()
@@ -96,13 +121,13 @@ class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor,
         onDestroyMediaPlayer()
     }
 
-    fun onPause(){
-        //Log.i("MyTest", "MediaViewModel.onPause() ")
+    fun onPause() {
         pausePlayer()
     }
-    fun onFavoriteClicked(){//track: Track){
-    // нажатие на кнопку лайк
-        var isFavorite : Boolean
+
+    fun onFavoriteClicked() {
+        // нажатие на кнопку лайк
+        var isFavorite: Boolean
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 isFavorite = likeTrackListInteractor.isFavorite(track.trackId)
@@ -113,6 +138,19 @@ class MediaViewModel(private val mediaPlayerInteractor: MediaPlayerInteractor,
                     likeTrackListInteractor.addTrackToLikeTrackList(track)
                     likeButtonState.postValue(LikeButtonState.Liked)
                 }
+            }
+        }
+    }
+
+    fun getPlaylistsMutableData(): MutableLiveData<List<Playlist>?> {
+        return playlists
+    }
+
+    fun addTrackToPlaylist(track: Track, playlistId: Int) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                playlistInteractor.addTrackToPlaylist(track, playlistId)
+                loadPlaylists()
             }
         }
     }

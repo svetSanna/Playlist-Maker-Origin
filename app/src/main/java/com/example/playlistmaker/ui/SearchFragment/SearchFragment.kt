@@ -14,6 +14,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +25,7 @@ import com.example.playlistmaker.presentation.state.SearchScreenState
 import com.example.playlistmaker.presentation.view_model.SearchViewModel
 import com.example.playlistmaker.ui.AdapterAndViewHolder.TrackAdapter
 import com.example.playlistmaker.ui.AdapterAndViewHolder.TrackViewHolder
+import com.example.playlistmaker.ui.MediatekaFragment.MediatekaFragmentDirections
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -352,7 +354,7 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
             viewModel.writeToSharedPreferences()
 
             // переход на экран аудиоплейера, передаем выбранный трек
-            val direction = SearchFragmentDirections.actionSearchFragmentToMediaActivity(item)
+            val direction = SearchFragmentDirections.actionSearchFragmentToMediaFragment(item) //.actionSearchFragmentToMediaActivity(item)
             findNavController().navigate(direction)
         }
     }
@@ -362,6 +364,7 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
+          //  viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycleScope.launch {
                 delay(CLICK_DEBOUNCE_DELAY)
                 isClickAllowed = true
@@ -373,5 +376,10 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+            isClickAllowed = true
     }
 }

@@ -121,9 +121,9 @@ class SearchViewModel( private var getTrackListUseCase : GetTrackListUseCase,
     // для поиска при задержке ввода на 2 секунды
     public fun searchDebounce(changedText: String) {
 
-        if (latestSearchText != changedText) {
-            latestSearchText = changedText
+      //  if (latestSearchText != changedText) {
+      //      latestSearchText = changedText
             mySearchDebounce(changedText)
-        }
+      //  }
     }
 }

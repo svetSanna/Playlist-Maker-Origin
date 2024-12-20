@@ -39,5 +39,33 @@
 
     <color name="bottom_button_check">#3772E7</color>
     <color name="bottom_button">#1A1B22</color>
+
+    <color name="edittext_stroke">#AEAFB4</color>
+    <color name="edit_text_new_playlist">#1A1B22</color>
+    <color name="edittext_stroke_enter">#3772E7</color>
+
+    <color name="button_new_playlist_un_enabled">#AEAFB4</color>
+    <color name="button_new_playlist_enabled">#3772E7</color>
+
+    <color name="image_newplaylist_background">#AEAFB4</color>
+    <color name="button_new_playlist_text">#FFFFFF</color>
+
+    <color name="red">#FF0000</color>
+    <color name="green">#00FF00</color>
+
+    <color name="edittext_outline_focused">#3772E7</color>
+    <color name="edittext_outline">#AEAFB4</color>
+
+    <color name="hint_outline">#3772E7</color>
+    <color name="hint">#1A1B22</color>
+
+    <color name="text_playlist_layout">#1A1B22</color>
+
+    <color name="background_coordinator">#FF1A1B22</color>
+    <!--<color name="background_coordinator">#801A1B22</color> -->
+
+    <color name="background_bottom_sheet">#FFFFFF</color>
+
+    <color name="slider">#E6E8EB</color>
 </resources>
 
