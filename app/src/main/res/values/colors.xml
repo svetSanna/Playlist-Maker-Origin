@@ -67,5 +67,9 @@
     <color name="background_bottom_sheet">#FFFFFF</color>
 
     <color name="slider">#E6E8EB</color>
+
+    <color name="arrow_back_playlist">#1A1B22</color>
+
+    <color name="playlist_background">#E6E8EB</color>
 </resources>
 
