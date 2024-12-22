@@ -38,7 +38,7 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
 
     private lateinit var timeTrack : TextView
 
-    private var url: String? = ""
+    //private var url: String? = ""
     var item: Track? = null
 
     private var playlistsList: MutableList<Playlist> = arrayListOf()
@@ -133,7 +133,7 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
             tvCountry.text = item!!.country
 
             // ссылка на отрывок
-            url = item?.previewUrl
+            //url = item?.previewUrl
 
             viewModel.getMediaPlayerState().observe(viewLifecycleOwner){ state ->
                 when(state) {

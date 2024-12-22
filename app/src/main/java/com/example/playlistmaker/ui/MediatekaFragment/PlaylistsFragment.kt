@@ -23,6 +23,7 @@ import com.example.playlistmaker.presentation.state.SearchScreenState
 import com.example.playlistmaker.presentation.view_model.PlaylistsViewModel
 import com.example.playlistmaker.ui.AdapterAndViewHolder.PlaylistAdapter
 import com.example.playlistmaker.ui.AdapterAndViewHolder.PlaylistViewHolder
+import com.example.playlistmaker.ui.SearchFragment.SearchFragmentDirections
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment :Fragment(), PlaylistViewHolder.OnPlaylistClickListener  {
@@ -83,7 +84,9 @@ class PlaylistsFragment :Fragment(), PlaylistViewHolder.OnPlaylistClickListener 
     }
 
     override fun onPlaylistClick(item: Playlist) {
-        Toast.makeText(requireContext(), "Кликнули", Toast.LENGTH_LONG).show()
+        // переход на экран плейлиста, передаем выбранный плейлист
+        val direction = MediatekaFragmentDirections.actionMediatekaFragmentToPlaylistFragment(item)
+        findNavController().navigate(direction)
     }
 
     private fun showError() {

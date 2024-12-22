@@ -26,8 +26,12 @@ interface PlayListDao {
     fun setTrackIdListByPlaylistId(newTrackIdList: String, identificator: Int)
 
     // метод @Query для изменения значения в столбце count для плейлиста с заданным Id
-    @Query("UPDATE play_list_entity SET count = count+1 WHERE playlistId = :identificator")
-    fun countPlusOne(identificator: Int)
+    @Query("UPDATE play_list_entity SET count = :newCount WHERE playlistId = :identificator")
+    fun setCount(newCount: Int, identificator: Int)
+
+    // метод @Query для получения значения count для плейлиста с заданным Id
+    @Query("SELECT count FROM play_list_entity WHERE playlistId = :identificator")
+    fun getCount(identificator: Int): Int
 
     // метод @Query для получения списка треков в плейлисте по идентификатору Id плейлиста
     @Query("SELECT trackIdList FROM play_list_entity WHERE playlistId = (:id)")

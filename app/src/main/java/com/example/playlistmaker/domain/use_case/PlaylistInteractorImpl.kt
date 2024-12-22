@@ -1,6 +1,5 @@
 package com.example.playlistmaker.domain.use_case
 
-import android.util.Log
 import com.example.playlistmaker.domain.entity.Playlist
 import com.example.playlistmaker.domain.entity.Resource
 import com.example.playlistmaker.domain.entity.Track
@@ -24,7 +23,22 @@ class PlaylistInteractorImpl(private val repository: PlaylistRepository) : Playl
             }
         }
     }
+
     override suspend fun addTrackToPlaylist(track: Track, playlistId: Int) {
-       repository.addTrackIdToPlaylist(track, playlistId)
+       repository.addTrackToPlaylist(track, playlistId)
+    }
+
+    override suspend fun getTracksInPlaylist(playlistId: Int): Flow<Pair<List<Track>?, String?>> {//Flow<Resource<List<Track>>> {
+        //return repository.getTracksInPlaylist(playlistId)
+        return repository.getTracksInPlaylist(playlistId).map {result ->
+            when (result) {
+                is Resource.Success -> {
+                    Pair(result.data, null)
+                }
+                is Resource.Error -> {
+                    Pair(null, result.message)
+                }
+            }
+        }
     }
 }

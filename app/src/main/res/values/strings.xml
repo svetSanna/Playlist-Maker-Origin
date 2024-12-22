@@ -42,4 +42,5 @@
     <string name="cancel_dialog">Отмена</string>
     <string name="ok_dialog">Завершить</string>
     <string name="add_to_playlist">Добавить в плейлист</string>
+    <string name="db_error">Ошибка при получении списка треков для плейлиста</string>
 </resources>

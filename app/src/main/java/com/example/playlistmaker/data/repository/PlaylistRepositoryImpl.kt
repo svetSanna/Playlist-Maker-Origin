@@ -1,6 +1,5 @@
 package com.example.playlistmaker.data.repository
 
-import android.util.Log
 import com.example.playlistmaker.R
 import com.example.playlistmaker.data.db.AppDatabase
 import com.example.playlistmaker.data.db.converters.PlaylistDbConverter
@@ -37,13 +36,72 @@ class PlaylistRepositoryImpl(
             : List<Playlist> {
         return playlists.map { playlist -> playlistDbConverter.map(playlist)}
     }
-    override suspend fun addTrackIdToPlaylist(track: Track, playlistId: Int){
+    override suspend fun addTrackToPlaylist(track: Track, playlistId: Int){
         var str = appDatabase.playListDao().getTrackIdList(playlistId)
-        str += "," + track.trackId.toString()
+        if(str.isNullOrBlank()) str =  track.trackId.toString()
+        else str += "," + track.trackId.toString()
 
         appDatabase.playListDao().setTrackIdListByPlaylistId(str!!, playlistId)
-        appDatabase.playListDao().countPlusOne(playlistId)
+        appDatabase.playListDao().setCount((appDatabase.playListDao().getCount(playlistId) + 1), playlistId)
 
         appDatabase.trackInPlaylistDao().insertTrack(trackInPlaylistDbConverter.map(track))
+    }
+
+    override suspend fun deleteTrackFromPlaylist(track: Track, playlistId: Int){
+        // получаем список идентификаторов треков данного плейлиста
+        var str = appDatabase.playListDao().getTrackIdList(playlistId)
+        if(!str.isNullOrBlank()){
+            // преобразуем его
+            val idTrackList: MutableList<String> = str.split(',').toMutableList()
+            // удаляем идентификатор трека
+            idTrackList.remove(track.trackId.toString()) // если нет такого, то ничего не изменится
+
+            // создаем список заново
+            var newStr = ""
+            for(s in idTrackList){
+                newStr = s + ","
+            }
+            // помещаем его в БД на место старого списка
+            appDatabase.playListDao().setTrackIdListByPlaylistId(newStr, playlistId)
+            // уменьшаем счетчик треков в плейлисте
+            val count = appDatabase.playListDao().getCount(playlistId)
+            if(count>0) appDatabase.playListDao().setCount((count-1), playlistId)
+
+            // проверяем, в скольких плейлистах содержится данный трек, чтобы удалить его из таблицы
+            // TrackInPlaylistEntity, если его больше нет ни в одном списке
+            var number :Int = 0
+            for(playlist in appDatabase.playListDao().getPlaylists()){
+                val s= appDatabase.playListDao().getTrackIdList(playlist.playlistId)
+                if(s.isNullOrBlank()){
+                    val idList: MutableList<String> = s!!.split(',').toMutableList()
+                    if(idList.contains(track.trackId.toString())) number++
+                }
+            }
+            // если трека нет ни в одном списке, удаляем его из таблицы TrackInPlaylistEntity
+            if(number == 0) appDatabase.trackInPlaylistDao().deleteTrackById(track.trackId)
+        }
+    }
+
+    override suspend fun getTracksInPlaylist(playlistId: Int): Flow<Resource<List<Track>>>
+    = flow {
+        var str = appDatabase.playListDao().getTrackIdList(playlistId)
+        // получаем для данного плейлиста список идентификаторов треков
+        if(str != null){
+            var trackList: MutableList<Track> = arrayListOf()
+            var trackIdList: MutableList<Int> = arrayListOf()
+            str.split(',').forEach{ str ->
+                trackIdList.add(str.toInt())
+            }
+            // получаем по идентивикаторам треки
+            trackIdList.forEach { id ->
+                var track = appDatabase.trackInPlaylistDao().getTrack(id)
+                if(track == null)
+                    emit(Resource.Error(R.string.db_error.toString()))
+                else trackList.add(trackInPlaylistDbConverter.map(track!!))
+            }
+            emit(Resource.Success(trackList))
+        }
+        else
+            emit(Resource.Error(R.string.no_playlists.toString()))
     }
 }
