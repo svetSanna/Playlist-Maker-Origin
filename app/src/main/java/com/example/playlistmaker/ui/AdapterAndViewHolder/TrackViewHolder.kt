@@ -2,6 +2,7 @@ package com.example.playlistmaker.ui.AdapterAndViewHolder
 
 import android.icu.text.SimpleDateFormat
 import android.view.View
+import android.view.View.OnLongClickListener
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -20,7 +21,8 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     // var artworkUrl100: TextView = itemView.findViewById(R.id.artworkUrl100)
     fun bind(
         item: Track,
-        onItemClickListener: OnItemClickListener?
+        onItemClickListener: OnItemClickListener?,
+        onLongClickListener: OnLongClickListener?
     ) {
         tvTrackName.text = item.trackName
         tvArtistName.text = item.artistName
@@ -38,9 +40,19 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         itemView.setOnClickListener {
             onItemClickListener?.onItemClick(item)
         }
+
+        // для истории поиска генерируем слушателя нажатия на элемент
+        itemView.setOnLongClickListener {
+           // onItemClickListener?.onLongItemClick(item)
+            onLongClickListener?.onLongClick(item)!!
+        }
     }
 
     interface OnItemClickListener {
         fun onItemClick(item: Track)
+       // fun onLongItemClick(item: Track)
+    }
+    interface OnLongClickListener{
+        fun onLongClick(item: Track): Boolean
     }
 }

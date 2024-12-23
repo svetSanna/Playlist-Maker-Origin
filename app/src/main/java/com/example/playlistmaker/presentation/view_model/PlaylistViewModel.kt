@@ -50,4 +50,13 @@ class PlaylistViewModel(
     fun getTracksMutableData(): MutableLiveData<List<Track>?> {
         return tracks
     }
+
+    fun deleteTrackFromPlaylist(item: Track, playlistId: Int) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                playlistInteractor.deleteTrackFromPlaylist(item, playlistId)
+            }
+        }
+        loadTracks(playlistId)
+    }
 }

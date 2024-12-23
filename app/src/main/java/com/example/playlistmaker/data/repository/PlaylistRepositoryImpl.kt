@@ -59,20 +59,21 @@ class PlaylistRepositoryImpl(
             // создаем список заново
             var newStr = ""
             for(s in idTrackList){
-                newStr = s + ","
+                newStr += s + ","
             }
             // помещаем его в БД на место старого списка
             appDatabase.playListDao().setTrackIdListByPlaylistId(newStr, playlistId)
             // уменьшаем счетчик треков в плейлисте
-            val count = appDatabase.playListDao().getCount(playlistId)
-            if(count>0) appDatabase.playListDao().setCount((count-1), playlistId)
+            //val count = appDatabase.playListDao().getCount(playlistId)
+            //if(count>0) appDatabase.playListDao().setCount((count-1), playlistId)
+            appDatabase.playListDao().setCount(idTrackList.count(), playlistId)
 
             // проверяем, в скольких плейлистах содержится данный трек, чтобы удалить его из таблицы
             // TrackInPlaylistEntity, если его больше нет ни в одном списке
             var number :Int = 0
             for(playlist in appDatabase.playListDao().getPlaylists()){
                 val s= appDatabase.playListDao().getTrackIdList(playlist.playlistId)
-                if(s.isNullOrBlank()){
+                if(!s.isNullOrBlank()){
                     val idList: MutableList<String> = s!!.split(',').toMutableList()
                     if(idList.contains(track.trackId.toString())) number++
                 }
@@ -89,8 +90,9 @@ class PlaylistRepositoryImpl(
         if(str != null){
             var trackList: MutableList<Track> = arrayListOf()
             var trackIdList: MutableList<Int> = arrayListOf()
-            str.split(',').forEach{ str ->
-                trackIdList.add(str.toInt())
+            str.split(',').forEach{ s ->
+                if(!s.isNullOrBlank())
+                    trackIdList.add(s.toInt())
             }
             // получаем по идентивикаторам треки
             trackIdList.forEach { id ->

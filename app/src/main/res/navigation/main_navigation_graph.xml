@@ -58,6 +58,9 @@
         <argument
             android:name="playlist"
             app:argType="com.example.playlistmaker.domain.entity.Playlist" />
+        <action
+            android:id="@+id/action_playlistFragment_to_mediaFragment"
+            app:destination="@id/mediaFragment" />
     </fragment>
     />
 </navigation>

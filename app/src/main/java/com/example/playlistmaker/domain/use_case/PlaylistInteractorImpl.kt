@@ -28,8 +28,7 @@ class PlaylistInteractorImpl(private val repository: PlaylistRepository) : Playl
        repository.addTrackToPlaylist(track, playlistId)
     }
 
-    override suspend fun getTracksInPlaylist(playlistId: Int): Flow<Pair<List<Track>?, String?>> {//Flow<Resource<List<Track>>> {
-        //return repository.getTracksInPlaylist(playlistId)
+    override suspend fun getTracksInPlaylist(playlistId: Int): Flow<Pair<List<Track>?, String?>> {
         return repository.getTracksInPlaylist(playlistId).map {result ->
             when (result) {
                 is Resource.Success -> {
@@ -41,4 +40,9 @@ class PlaylistInteractorImpl(private val repository: PlaylistRepository) : Playl
             }
         }
     }
+
+    override suspend fun deleteTrackFromPlaylist(track: Track, playlistId: Int) {
+        repository.deleteTrackFromPlaylist(track, playlistId)
+    }
+
 }

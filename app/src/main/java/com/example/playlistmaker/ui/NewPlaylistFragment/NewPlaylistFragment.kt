@@ -74,7 +74,7 @@ class NewPlaylistFragment : Fragment() {
             .setNeutralButton(getString(R.string.cancel_dialog)) { dialog, which -> // Добавляет кнопку «Отмена»
                 // Действия, выполняемые при нажатии на кнопку «Отмена»
             }
-            .setPositiveButton(getString(R.string.ok_dialog)) { dialog, which -> // Добавляет кнопку «Завершить»
+            .setPositiveButton(getString(R.string.complete_dialog)) { dialog, which -> // Добавляет кнопку «Завершить»
                 // Действия, выполняемые при нажатии на кнопку «Да»
                 findNavController().navigateUp()
             }
@@ -168,13 +168,6 @@ class NewPlaylistFragment : Fragment() {
             .decodeStream(inputStream)
             .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
 
-       /* var a = file.path
-        var p = File("file.path")
-        var b = file.name
-        var с = file.parent
-        var d = file.toPath()
-        var e = file.toUri()
-        var f = file.toString()*/
         return file.path
     }
     private fun onBack() {
@@ -184,15 +177,7 @@ class NewPlaylistFragment : Fragment() {
             !binding.definitionEdittext.text.isNullOrBlank() ||
             (currentDrawable != null))
             confirmDialog.show()
-        else{
-            //if(App.screen_for_mediaActivity == 1) ///
-                findNavController().navigateUp()
-            //else{ ///
-                // переход на экран аудиоплейера, передаем выбранный трек
-           //     val direction = NewPlaylistFragmentDirections.actionNewPlayListFragmentToMediaActivity(App.track!!)
-           //     findNavController().navigate(direction)
-           // }
-        }
+        else findNavController().navigateUp()
     }
     private fun createPlayList(){
         var path:String? = null

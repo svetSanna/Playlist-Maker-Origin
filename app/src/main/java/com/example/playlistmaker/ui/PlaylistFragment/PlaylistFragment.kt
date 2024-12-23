@@ -1,6 +1,5 @@
 package com.example.playlistmaker.ui.PlaylistFragment
 
-import androidx.fragment.app.viewModels
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,12 +22,14 @@ import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.ui.AdapterAndViewHolder.TrackAdapter
 import com.example.playlistmaker.ui.AdapterAndViewHolder.TrackViewHolder
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener {
+class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener,
+                        TrackViewHolder.OnLongClickListener{
     private var _binding: FragmentPlaylistBinding? = null
     private val binding
         get() = _binding!!
@@ -45,11 +45,6 @@ class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener {
     private val trackAdapter = TrackAdapter()
 
     private val viewModel by viewModel<PlaylistViewModel> { parametersOf(playlist) }
-
-    /*companion object {
-        fun newInstance() = PlaylistFragment()
-    }*/
-    // private val viewModel: PlaylistViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -142,6 +137,7 @@ class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener {
 
             //      if (playlist != null) {
             trackAdapter.onItemClickListener = this
+            trackAdapter.onLongClickListener = this
             viewModel.loadTracks(playlist!!.playlistId)
 
             viewModel.getTracksMutableData().observe(viewLifecycleOwner) { tracks ->
@@ -176,6 +172,26 @@ class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener {
     }
 
     override fun onItemClick(item: Track) {
-        Toast.makeText(requireContext(), "Кликнули", Toast.LENGTH_LONG).show()
+        // переход на экран аудиоплейера, передаем выбранный трек
+        val direction = PlaylistFragmentDirections.actionPlaylistFragmentToMediaFragment(item)
+        findNavController().navigate(direction)
+    }
+
+    override fun onLongClick(item: Track): Boolean {
+        // создаем диалог
+        var deleteTrackDialog: MaterialAlertDialogBuilder
+        deleteTrackDialog = MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.title_delete_track_dialog)) // Заголовок диалога
+            .setMessage(getString(R.string.message_delete_track_dialog)) // Описание диалога
+            .setNeutralButton(getString(R.string.cancel_dialog)) { dialog, which -> // Добавляет кнопку «Отмена»
+                // Действия, выполняемые при нажатии на кнопку «Отмена»
+            }
+            .setPositiveButton(getString(R.string.del_dialog)) { dialog, which -> // Добавляет кнопку «Завершить»
+                // Действия, выполняемые при нажатии на кнопку «Да»
+                viewModel.deleteTrackFromPlaylist(item, playlist!!.playlistId)
+            }
+
+        deleteTrackDialog.show()
+        return true
     }
 }

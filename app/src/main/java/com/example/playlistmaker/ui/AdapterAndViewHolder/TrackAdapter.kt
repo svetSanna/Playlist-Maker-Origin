@@ -18,6 +18,7 @@ class TrackAdapter : RecyclerView.Adapter<TrackViewHolder>() {
 
     // передаем сюда слушателя нажатия на элемент
     var onItemClickListener: TrackViewHolder.OnItemClickListener? = null
+    var onLongClickListener: TrackViewHolder.OnLongClickListener? = null ///
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val itemView =
@@ -29,7 +30,8 @@ class TrackAdapter : RecyclerView.Adapter<TrackViewHolder>() {
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(
             item = items[position],
-            onItemClickListener = onItemClickListener // присваиваем ссылку на тот объект, который создали в SearchActivity
+            onItemClickListener = onItemClickListener, // присваиваем ссылку на тот объект, который создали в SearchActivity
+            onLongClickListener = onLongClickListener ///
         )
     }
 
