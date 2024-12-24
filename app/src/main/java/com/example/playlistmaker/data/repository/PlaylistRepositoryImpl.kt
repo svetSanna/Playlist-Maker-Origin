@@ -53,20 +53,26 @@ class PlaylistRepositoryImpl(
         if(!str.isNullOrBlank()){
             // преобразуем его
             val idTrackList: MutableList<String> = str.split(',').toMutableList()
+
             // удаляем идентификатор трека
             idTrackList.remove(track.trackId.toString()) // если нет такого, то ничего не изменится
 
             // создаем список заново
             var newStr = ""
-            for(s in idTrackList){
-                newStr += s + ","
+            //var count = 0
+            for(i in 0..idTrackList.count()-1){
+                if(!idTrackList[i].isNullOrBlank()) {
+                    //count =
+                    newStr += (idTrackList[i] + ",")
+                }
             }
+            //newStr.remove(",")
             // помещаем его в БД на место старого списка
             appDatabase.playListDao().setTrackIdListByPlaylistId(newStr, playlistId)
             // уменьшаем счетчик треков в плейлисте
-            //val count = appDatabase.playListDao().getCount(playlistId)
+            val count = appDatabase.playListDao().getCount(playlistId)
             //if(count>0) appDatabase.playListDao().setCount((count-1), playlistId)
-            appDatabase.playListDao().setCount(idTrackList.count(), playlistId)
+            appDatabase.playListDao().setCount(count-1, playlistId)
 
             // проверяем, в скольких плейлистах содержится данный трек, чтобы удалить его из таблицы
             // TrackInPlaylistEntity, если его больше нет ни в одном списке
