@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -67,7 +68,7 @@ class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener,
         // bottomSheet
         val bottomSheetContainer = binding.bottomSheetTracksInPlaylist
         // val overlay = binding.overlay
-        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer).apply {
+        val bottomSheetTracksBehavior = BottomSheetBehavior.from(bottomSheetContainer).apply {
             state = BottomSheetBehavior.STATE_COLLAPSED
         }
         /*
@@ -78,7 +79,7 @@ class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener,
         STATE_DRAGGING — состояние BottomSheet, при котором пользователь перетаскивает его вверх или вниз.
         STATE_SETTLING — BottomSheet устанавливается на определённую высоту после жеста перетаскивания (dragging)/взмахивания.
         */
-        bottomSheetBehavior.addBottomSheetCallback(object :
+        bottomSheetTracksBehavior.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
 
@@ -101,6 +102,34 @@ class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener,
 
                 // Однако вам потребуется доработать этот код самостоятельно, ведь необходимо учесть,
                 // что значение альфы варьируется от 0f до 1f, тогда как slideOffset имеет диапазон от -1f до 1f.
+            }
+        })
+
+        // bottomSheet для меню
+        val bottomSheetMenuContainer = binding.bottomSheetMenuInPlaylist
+        val overlayMenu = binding.overlay
+        val bottomSheetMenuBehavior = BottomSheetBehavior.from(bottomSheetMenuContainer).apply {
+            state = BottomSheetBehavior.STATE_HIDDEN
+        }
+
+        bottomSheetMenuBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
+        bottomSheetMenuBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+
+                when (newState) {
+                      BottomSheetBehavior.STATE_HIDDEN -> {
+                          overlayMenu.visibility = View.GONE
+                      }
+                      else -> {
+                          overlayMenu.visibility = View.VISIBLE
+                      }
+                  }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                   overlayMenu.alpha = (slideOffset + 1)/2
             }
         })
 
@@ -162,6 +191,20 @@ class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener,
                 }
             }
         }
+
+        binding.buttonPlaylistShare.setOnClickListener{
+            // поделиться
+            // findNavController().navigate(R.id.action_mediatekaFragment_to_newPlayListFragment)
+            Toast.makeText( requireContext(),"Поделиться", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.buttonPlaylistMenu.setOnClickListener{
+            // показать меню
+            bottomSheetMenuBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+          //  Toast.makeText( requireContext(),"Показать меню", Toast.LENGTH_SHORT).show()
+
+        }
+
     }
 
     fun sumTime(trackList: List<Track>): Long {

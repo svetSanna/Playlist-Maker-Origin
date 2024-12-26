@@ -208,13 +208,22 @@
         <item name="colorControlActivated">@color/cursor_edittext</item>
     </style>
 
-    <style name="text_playlist_layout">
+    <style name="TextBigPlaylistLayout">
         <item name="android:maxLines">1</item>
         <item name="android:fontFamily">@font/ys_display_regular</item>
-        <item name="android:textSize">12sp</item>
-        <item name="android:textColor">@color/text_playlist_layout</item>
+        <item name="android:textSize">@dimen/margin_16</item>
+        <item name="android:textColor">@color/edit_text_track_big</item>
         <item name="android:textFontWeight">400</item>
-        <item name="lineHeight">16sp</item>
+        <item name="lineHeight">12.89sp</item>
+    </style>
+
+    <style name="TextSmallPlaylistLayout">
+        <item name="android:maxLines">1</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/margin_11</item>
+        <item name="android:textColor">@color/edit_text_track_small</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="lineHeight">12.89sp</item>
     </style>
     <style name="PlaylistName">
         <item name="android:maxLines">1</item>
@@ -231,6 +240,23 @@
         <item name="android:textColor">@color/arrow_back_playlist</item>
         <item name="android:textFontWeight">400</item>
         <item name="lineHeight">21.1sp</item>
+    </style>
+    <style name="TextBigPlaylistMenu">
+        <item name="android:maxLines">1</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/margin_16</item>
+        <item name="android:textColor">@color/text_playlist_layout</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="lineHeight">18.75sp</item>
+    </style>
+
+    <style name="TextSmallPlaylistMenu">
+        <item name="android:maxLines">1</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/margin_11</item>
+        <item name="android:textColor">@color/edit_text_track_small</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="lineHeight">12.89sp</item>
     </style>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">

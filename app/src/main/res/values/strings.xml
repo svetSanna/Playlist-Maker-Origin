@@ -46,4 +46,8 @@
     <string name="title_delete_track_dialog">Удалить трек</string>
     <string name="message_delete_track_dialog">Вы уверены, что хотите удалить трек из плейлиста?</string>
     <string name="del_dialog">Удалить</string>
+    <string name="share">Поделиться</string>
+    <string name="edit_information">Редактировать информацию</string>
+    <string name="delete_playlist">Удалить плейлист</string>
+
 </resources>

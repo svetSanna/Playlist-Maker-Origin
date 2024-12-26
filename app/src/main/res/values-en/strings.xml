@@ -42,4 +42,8 @@
   <string name="title_delete_track_dialog">Delete track</string>
   <string name="message_delete_track_dialog">Are you sure you want to remove the track from the playlist?</string>
   <string name="del_dialog">Delete</string>
+  <string name="share">Share</string>
+  <string name="edit_information">Edit information</string>
+  <string name="delete_playlist">Delete playlist</string>
+
 </resources>
