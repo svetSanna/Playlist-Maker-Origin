@@ -55,8 +55,9 @@ class PlaylistViewModel(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 playlistInteractor.deleteTrackFromPlaylist(item, playlistId)
+                loadTracks(playlistId)
             }
         }
-        loadTracks(playlistId)
+            //loadTracks(playlistId)
     }
 }

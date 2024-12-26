@@ -154,7 +154,8 @@ class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener,
                     trackAdapter.notifyDataSetChanged()
 
                     tvPlaylistNumberOfTracks.text =
-                        playlist!!.count.toString() + getEndingTrack(playlist!!.count)
+                        //playlist!!.count.toString() + getEndingTrack(playlist!!.count)
+                        trackList.count().toString() + getEndingTrack(trackList.count())
                     val sum = sumTime(trackList)
                     tvPlaylistTime.text =
                         SimpleDateFormat("mm", Locale.getDefault()).format(sum) + getEndingMinute(sum.toInt())
