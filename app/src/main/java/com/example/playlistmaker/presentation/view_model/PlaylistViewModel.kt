@@ -58,6 +58,13 @@ class PlaylistViewModel(
                 loadTracks(playlistId)
             }
         }
-            //loadTracks(playlistId)
+    }
+
+    fun deletePlaylist(playlistId: Int) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                playlistInteractor.deletePlaylist(playlistId)
+            }
+        }
     }
 }

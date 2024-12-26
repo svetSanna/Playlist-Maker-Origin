@@ -1,5 +1,8 @@
 package com.example.playlistmaker.ui.PlaylistFragment
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.content.res.Resources
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -20,6 +23,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistBinding
 import com.example.playlistmaker.domain.entity.Playlist
 import com.example.playlistmaker.domain.entity.Track
+import com.example.playlistmaker.presentation.mapper.SimpleDateFormatMapper
 import com.example.playlistmaker.ui.AdapterAndViewHolder.TrackAdapter
 import com.example.playlistmaker.ui.AdapterAndViewHolder.TrackViewHolder
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -39,6 +43,8 @@ class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener,
 
     //private var url: String? = ""
     var playlist: Playlist? = null
+
+    private lateinit var deletePlaylistDialog: MaterialAlertDialogBuilder // диалог удаления плейлиста
 
     private var trackList: MutableList<Track> = arrayListOf()
 
@@ -104,6 +110,7 @@ class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener,
                 // что значение альфы варьируется от 0f до 1f, тогда как slideOffset имеет диапазон от -1f до 1f.
             }
         })
+        bottomSheetTracksBehavior.peekHeight = Resources.getSystem().getDisplayMetrics().heightPixels * 250/800
 
         // bottomSheet для меню
         val bottomSheetMenuContainer = binding.bottomSheetMenuInPlaylist
@@ -132,6 +139,7 @@ class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener,
                    overlayMenu.alpha = (slideOffset + 1)/2
             }
         })
+        bottomSheetMenuBehavior.peekHeight = Resources.getSystem().getDisplayMetrics().heightPixels * 383/800 //47 / 100
 
         // получаем данные плейлиста
         val args: PlaylistFragmentArgs by navArgs()
@@ -148,7 +156,6 @@ class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener,
             Glide.with(this)
                 .load(playlist!!.path)
                 .placeholder(R.drawable.place_holder)
-//                .fitCenter()
                 .into(ivPlaylistImage)
 
             tvPlaylistName.text = playlist!!.name
@@ -159,12 +166,11 @@ class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener,
                 tvPlaylistDefinition.text = playlist!!.definition
             }
 
-            tvPlaylistNumberOfTracks.text =
-                "0 треков"//playlist!!.count.toString() + " трек" + getEnding(playlist!!.count)
-            tvPlaylistTime.text =
-                "0 минут"//SimpleDateFormat("mm", Locale.getDefault()).format(sumTime(trackList))
+            tvPlaylistNumberOfTracks.text = getString(R.string.null_tracks)
+            tvPlaylistTime.text = getString(R.string.null_minutes)
+            binding.namePlaylistLayout.text = playlist!!.name
+            binding.countPlaylistLayout.text = getString(R.string.null_tracks)
 
-            //      if (playlist != null) {
             trackAdapter.onItemClickListener = this
             trackAdapter.onLongClickListener = this
             viewModel.loadTracks(playlist!!.playlistId)
@@ -183,28 +189,100 @@ class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener,
                     trackAdapter.notifyDataSetChanged()
 
                     tvPlaylistNumberOfTracks.text =
-                        //playlist!!.count.toString() + getEndingTrack(playlist!!.count)
                         trackList.count().toString() + getEndingTrack(trackList.count())
                     val sum = sumTime(trackList)
                     tvPlaylistTime.text =
                         SimpleDateFormat("mm", Locale.getDefault()).format(sum) + getEndingMinute(sum.toInt())
+
+                    binding.countPlaylistLayout.text = trackList.count().toString() + getEndingTrack(trackList.count())
                 }
+                else binding.countPlaylistLayout.text = getString(R.string.null_tracks)
             }
+
+            // создаем диалог для удаления плейлиста
+            deletePlaylistDialog = MaterialAlertDialogBuilder(requireContext())
+                .setTitle(getString(R.string.title_delete_playlist_dialog)) // Заголовок диалога
+                .setMessage(getString(R.string.message_delete_playlist_dialog)) // Описание диалога
+                .setNeutralButton(getString(R.string.no)) { dialog, which -> // Добавляет кнопку «Нет»
+                    // Действия, выполняемые при нажатии на кнопку «Нет»
+                }
+                .setPositiveButton(getString(R.string.yes)) { dialog, which -> // Добавляет кнопку «Да»
+                    // Действия, выполняемые при нажатии на кнопку «Да»
+                    viewModel.deletePlaylist(playlist!!.playlistId)
+                    findNavController().navigateUp()
+                }
         }
 
         binding.buttonPlaylistShare.setOnClickListener{
-            // поделиться
-            // findNavController().navigate(R.id.action_mediatekaFragment_to_newPlayListFragment)
-            Toast.makeText( requireContext(),"Поделиться", Toast.LENGTH_SHORT).show()
+            // нажатие на кнопочку "Поделиться"
+            share()
         }
 
         binding.buttonPlaylistMenu.setOnClickListener{
-            // показать меню
+            // нажатие на кнопочку "открыть меню"
             bottomSheetMenuBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-          //  Toast.makeText( requireContext(),"Показать меню", Toast.LENGTH_SHORT).show()
-
         }
 
+        binding.playlistMenuShare.setOnClickListener{
+            // нажатие на надпись "Поделиться"
+            share()
+        }
+
+        binding.playlistMenuEdit.setOnClickListener{
+            // нажатие на надпись "редактировать информацию"
+            Toast.makeText( requireContext(),"редактируем информацию", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.playlistMenuDelete.setOnClickListener{
+            // нажатие на надпись "Удалить плейлист"
+            deletePlaylistDialog.show()
+        }
+
+    }
+
+    fun share(){
+        // поделиться
+        if (trackList.isEmpty())
+            Toast.makeText( requireContext(), getString(R.string.track_list_is_empty), Toast.LENGTH_SHORT).show()
+        else{
+            // составляем сообщение
+            /*
+            Сообщение для получателя должно содержать простой текст со списком треков плейлиста
+            с названием плейлиста, описанием на следующей строке, количеством треков в формате
+            «[xx] треков», где «[xx]» — количество треков на следующей строке,
+            пронумерованным списком треков плейлиста в формате:
+            «[номер]. [имя исполнителя] - [название трека] ([продолжительность трека])».
+
+            Каждый трек отображается в отдельной строке.
+            */
+            var message = playlist!!.name.toString() + "\n"
+            if(!playlist!!.definition.isNullOrBlank())
+                message += playlist!!.definition.toString() + "\n"
+            message += trackList.count().toString() + getEndingTrack(trackList.count()) + "\n"
+
+            var num = 1
+            for(track in trackList){
+                message += num.toString() + ". " + track.artistName + " - " + track.trackName + " (" + SimpleDateFormatMapper.map(track!!.trackTimeMillis) + ")\n"
+                num++
+            }
+
+            // делимся плейлистом
+            onShare(message)
+        }
+    }
+    fun onShare(message: String) {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.setType("text/plain")
+
+        intent.putExtra(Intent.EXTRA_TEXT, message)
+        try {
+            startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            Toast.makeText(
+                requireContext(), getResources().getString(R.string.message_error_intent),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     fun sumTime(trackList: List<Track>): Long {

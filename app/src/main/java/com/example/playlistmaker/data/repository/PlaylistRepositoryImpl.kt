@@ -20,9 +20,24 @@ class PlaylistRepositoryImpl(
    override suspend fun addPlaylist(playlist: Playlist) {
        appDatabase.playListDao().insertPlaylist(playlistDbConverter.map(playlist))
    }
-    override suspend fun deletePlaylist(playlist: PlaylistEntity) {
-        appDatabase.playListDao().deletePlaylist(playlist)
+    override suspend fun deletePlaylist(playlistId: Int) {
+        var str = appDatabase.playListDao().getTrackIdList(playlistId)
+        // удаляем плейлист
+        appDatabase.playListDao().deletePlaylist(playlistId)
+
+        if(!str.isNullOrBlank()) {
+            // преобразуем список Id треков из строки в List
+            val idTrackList: List<String> = str.split(',').toList()
+
+            for(trackId in  idTrackList){
+            // проверяем каждый трек, содержится ли он еще в каком=нибудь плейлисте.
+            // Если нет - удаляем его из таблицы TrackInPlaylistEntity
+                if(!trackId.isNullOrBlank())
+                    checkAndDeleteUnnecessaryTrack(trackId.toInt())
+            }
+        }
     }
+
     override suspend fun getPlaylists(): Flow<Resource<List<Playlist>>> = flow {
         var playlists=  appDatabase.playListDao().getPlaylists()
 
@@ -66,7 +81,7 @@ class PlaylistRepositoryImpl(
                     newStr += (idTrackList[i] + ",")
                 }
             }
-            //newStr.remove(",")
+
             // помещаем его в БД на место старого списка
             appDatabase.playListDao().setTrackIdListByPlaylistId(newStr, playlistId)
             // уменьшаем счетчик треков в плейлисте
@@ -74,19 +89,24 @@ class PlaylistRepositoryImpl(
             //if(count>0) appDatabase.playListDao().setCount((count-1), playlistId)
             appDatabase.playListDao().setCount(count-1, playlistId)
 
-            // проверяем, в скольких плейлистах содержится данный трек, чтобы удалить его из таблицы
-            // TrackInPlaylistEntity, если его больше нет ни в одном списке
-            var number :Int = 0
-            for(playlist in appDatabase.playListDao().getPlaylists()){
-                val s= appDatabase.playListDao().getTrackIdList(playlist.playlistId)
-                if(!s.isNullOrBlank()){
-                    val idList: MutableList<String> = s!!.split(',').toMutableList()
-                    if(idList.contains(track.trackId.toString())) number++
-                }
-            }
-            // если трека нет ни в одном списке, удаляем его из таблицы TrackInPlaylistEntity
-            if(number == 0) appDatabase.trackInPlaylistDao().deleteTrackById(track.trackId)
+            //удалить трек из таблицы TrackInPlaylistEntity, если его больше нет ни в одном списке
+            checkAndDeleteUnnecessaryTrack(track.trackId)
         }
+    }
+
+    private fun checkAndDeleteUnnecessaryTrack(trackId: Int){
+    // проверяем, в скольких плейлистах содержится данный трек, и удаляем его из таблицы
+    // TrackInPlaylistEntity, если его больше нет ни в одном плейлисте
+        var number :Int = 0
+        for(playlist in appDatabase.playListDao().getPlaylists()){
+            val s= appDatabase.playListDao().getTrackIdList(playlist.playlistId)
+            if(!s.isNullOrBlank()){
+                val idList: MutableList<String> = s!!.split(',').toMutableList()
+                if(idList.contains(trackId.toString())) number++
+            }
+        }
+        // если трека нет ни в одном списке, удаляем его из таблицы TrackInPlaylistEntity
+        if(number == 0) appDatabase.trackInPlaylistDao().deleteTrackById(trackId)
     }
 
     override suspend fun getTracksInPlaylist(playlistId: Int): Flow<Resource<List<Track>>>
