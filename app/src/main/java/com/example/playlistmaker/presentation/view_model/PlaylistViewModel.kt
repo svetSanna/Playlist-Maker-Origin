@@ -12,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class PlaylistViewModel(
+open class PlaylistViewModel(
     private val playlistInteractor: PlaylistInteractor,
     private val playlist: Playlist
 ) : ViewModel() {
@@ -22,7 +22,7 @@ class PlaylistViewModel(
         loadTracks(playlist.playlistId)
     }
 
-    public fun loadTracks(playlistId: Int) {
+    fun loadTracks(playlistId: Int) {
 
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -32,19 +32,8 @@ class PlaylistViewModel(
                         if (foundTracks != null) {
                             tracks.postValue(foundTracks)
                         }
-                        /*result ->
-                        when (result) {
-                            is Resource.Success -> {
-                                tracks.postValue(result.data)
-                            }
-                            is Resource.Error -> {
-                                // nothing
-                            }
-                        }*/
-
                     }
             }
-
         }
     }
     fun getTracksMutableData(): MutableLiveData<List<Track>?> {

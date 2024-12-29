@@ -26,7 +26,7 @@ import com.example.playlistmaker.ui.AdapterAndViewHolder.PlaylistViewHolder
 import com.example.playlistmaker.ui.SearchFragment.SearchFragmentDirections
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PlaylistsFragment :Fragment(), PlaylistViewHolder.OnPlaylistClickListener  {
+ class PlaylistsFragment :Fragment(), PlaylistViewHolder.OnPlaylistClickListener  {
     companion object {
           fun newInstance() = PlaylistsFragment()
     }

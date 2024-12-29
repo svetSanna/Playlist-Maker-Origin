@@ -55,5 +55,7 @@
     <string name="no">Нет</string>
     <string name="null_tracks">0 треков</string>
     <string name="null_minutes">0 минут</string>
+    <string name="edit_playlist">Редиктировать</string>
+    <string name="save">Сохранить</string>
 
 </resources>

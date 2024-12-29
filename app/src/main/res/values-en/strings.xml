@@ -52,5 +52,7 @@
   <string name="no">No</string>
   <string name="null_tracks">0 tracks</string>
   <string name="null_minutes">0 minutes</string>
+  <string name="edit_playlist">Edit</string>
+  <string name="save">Save</string>
 
 </resources>

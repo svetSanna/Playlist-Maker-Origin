@@ -259,6 +259,15 @@
         <item name="lineHeight">12.89sp</item>
     </style>
 
+    <style name="Title_screen">
+        <item name="android:maxLines">1</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">@dimen/margin_22</item>
+        <item name="android:textColor">@color/text_playlist_layout</item>
+        <item name="android:textFontWeight">500</item>
+        <item name="lineHeight">25.78sp</item>
+    </style>
+
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
     </style>
