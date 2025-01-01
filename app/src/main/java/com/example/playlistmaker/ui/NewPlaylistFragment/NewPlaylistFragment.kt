@@ -52,6 +52,10 @@ open class NewPlaylistFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+     //   if(_binding == null)
+     //       _binding = FragmentNewPlayListBinding.inflate(inflater, container, false)
+
+
         // создаем диалог
         confirmDialog = MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.title_dialog)) // Заголовок диалога
@@ -70,8 +74,8 @@ open class NewPlaylistFragment : Fragment() {
             onBack()
         }
 
-        val titleEditText = binding.titleEdittext
-        binding.titleEdittext.setText(R.string.new_playlist)
+        //val titleEditText = binding.titleEdittext
+        binding.toolbarPlaylistTextview.setText(R.string.new_playlist)
 
         //viewModel.loadData(inputEditText.text.toString())
 
@@ -93,7 +97,7 @@ open class NewPlaylistFragment : Fragment() {
                 //  TODO("Not yet implemented")
             }
         }
-        titleEditText.addTextChangedListener(simpleTextWatcher)
+        binding.titleEdittext.addTextChangedListener(simpleTextWatcher)
 
         // создаём событие с результатом и передаём в него PickVisualMedia()
         val pickMedia =

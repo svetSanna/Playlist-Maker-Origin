@@ -1,11 +1,9 @@
 package com.example.playlistmaker.ui.RootActivity
 
 //import androidx.navigation.findNavController
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.playlistmaker.R
@@ -32,7 +30,7 @@ class RootActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.newPlayListFragment -> {
+                R.id.newPlaylistFragment -> {
                     binding.bottomNavigationView.visibility = View.GONE
                 }
                 R.id.mediaFragment -> {

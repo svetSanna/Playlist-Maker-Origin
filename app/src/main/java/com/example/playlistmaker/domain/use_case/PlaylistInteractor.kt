@@ -12,5 +12,5 @@ interface PlaylistInteractor {
     suspend fun getTracksInPlaylist(playlistId: Int):  Flow<Pair<List<Track>?, String?>>//Flow<Resource<List<Track>>> // получить список треков для плейлиста с заданным Id
     suspend fun deleteTrackFromPlaylist(track: Track, playlistId: Int) // удалить трек track из плейлиста с идентификатором playlistId
     suspend fun deletePlaylist(playlistId: Int) // удалить плейлист
-
+    suspend fun editPlaylist(playlistId: Int, path: String?, title: String, definition: String?) // редактировать плейлист с идентификатором playlistId
 }

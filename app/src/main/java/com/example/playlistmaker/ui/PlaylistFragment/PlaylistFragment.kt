@@ -110,7 +110,7 @@ class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener,
                 // что значение альфы варьируется от 0f до 1f, тогда как slideOffset имеет диапазон от -1f до 1f.
             }
         })
-        bottomSheetTracksBehavior.peekHeight = Resources.getSystem().getDisplayMetrics().heightPixels * 250/800
+        bottomSheetTracksBehavior.peekHeight = Resources.getSystem().getDisplayMetrics().heightPixels * 240/800 //250/800
 
         // bottomSheet для меню
         val bottomSheetMenuContainer = binding.bottomSheetMenuInPlaylist
@@ -230,7 +230,10 @@ class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener,
 
         binding.playlistMenuEdit.setOnClickListener{
             // нажатие на надпись "редактировать информацию"
-            Toast.makeText( requireContext(),"редактируем информацию", Toast.LENGTH_SHORT).show()
+            // переход на экран создания/редактирования плейлиста, передаем выбранный плейлист
+            val direction = PlaylistFragmentDirections.actionPlaylistFragmentToEditPlaylistFragment(playlist!!)
+            findNavController().navigate(direction)
+            //Toast.makeText( requireContext(),"редактируем информацию", Toast.LENGTH_SHORT).show()
         }
 
         binding.playlistMenuDelete.setOnClickListener{

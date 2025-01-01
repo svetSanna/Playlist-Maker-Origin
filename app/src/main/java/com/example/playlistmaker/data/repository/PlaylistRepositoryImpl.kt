@@ -94,6 +94,15 @@ class PlaylistRepositoryImpl(
         }
     }
 
+    override suspend fun editPlaylist(
+        playlistId: Int,
+        path: String?,
+        title: String,
+        definition: String?
+    ) {
+        appDatabase.playListDao().editPlaylist(playlistId, path, title, definition)
+    }
+
     private fun checkAndDeleteUnnecessaryTrack(trackId: Int){
     // проверяем, в скольких плейлистах содержится данный трек, и удаляем его из таблицы
     // TrackInPlaylistEntity, если его больше нет ни в одном плейлисте

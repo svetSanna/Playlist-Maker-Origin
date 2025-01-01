@@ -41,6 +41,10 @@ interface PlayListDao {
     @Query("SELECT trackIdList FROM play_list_entity WHERE playlistId = (:playlistIdentificator)")
     fun getTrackIdList(playlistIdentificator: Int): String?
 
+    // метод @Query для изменения значения в столбце count для плейлиста с заданным Id
+    @Query("UPDATE play_list_entity SET path = :newPath, name = :newTitle, definition = :newDefinition WHERE playlistId = :playlistIdentificator")
+    fun editPlaylist(playlistIdentificator: Int, newPath: String?, newTitle: String, newDefinition: String?)
+
     // метод @Query для удаления трека по Id
     //@Query("DELETE FROM like_track_entity WHERE trackId = (:id)")
     //fun deleteLikeTrackById(id: Int)

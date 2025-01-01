@@ -48,4 +48,13 @@ class PlaylistInteractorImpl(private val repository: PlaylistRepository) : Playl
     override suspend fun deletePlaylist(playlistId: Int) {
         repository.deletePlaylist(playlistId)
     }
+
+    override suspend fun editPlaylist(
+        playlistId: Int,
+        path: String?,
+        title: String,
+        definition: String?
+    ) {
+        repository.editPlaylist(playlistId, path, title, definition)
+    }
 }

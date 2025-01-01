@@ -15,5 +15,6 @@ interface PlaylistRepository {
     suspend fun addTrackToPlaylist(track: Track, playlistId: Int)// метод для добавления трека Track а список идентификаторов треков для плейлиста с заданным Id
     suspend fun getTracksInPlaylist(playlistId: Int) : Flow<Resource<List<Track>>>// метод для получения списка треков для плейлиста по идентификатору плейлиста
     suspend fun deleteTrackFromPlaylist(track: Track, playlistId: Int) // удалить трек из плейлиста
+    suspend fun editPlaylist(playlistId: Int, path: String?, title: String, definition: String?) // редактировать плейлист с идентификатором playlistId
 }
 

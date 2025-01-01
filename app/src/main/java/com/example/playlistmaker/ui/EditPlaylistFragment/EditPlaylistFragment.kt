@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui
+package com.example.playlistmaker.ui.EditPlaylistFragment
 
 import android.net.Uri
 import android.os.Bundle
@@ -9,21 +9,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toUri
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentNewPlayListBinding
 import com.example.playlistmaker.domain.entity.Playlist
 import com.example.playlistmaker.presentation.view_model.EditPlaylistViewModel
-import com.example.playlistmaker.presentation.view_model.NewPlaylistViewModel
 import com.example.playlistmaker.ui.NewPlaylistFragment.NewPlaylistFragment
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.example.playlistmaker.ui.PlaylistFragment.PlaylistFragmentArgs
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 
-class EditPlaylistFragment(val playlist: Playlist) : NewPlaylistFragment() {
+class EditPlaylistFragment(/*val playlist: Playlist*/) : NewPlaylistFragment() {
     private var _binding: FragmentNewPlayListBinding? = null
     // This property is only valid between onCreateView and onDestroyView.
     private val binding
@@ -33,7 +33,9 @@ class EditPlaylistFragment(val playlist: Playlist) : NewPlaylistFragment() {
 
     override var imageUri: Uri? = null
 
-    private val viewModel by viewModel<EditPlaylistViewModel>() /// override
+    var playlist: Playlist? = null
+
+    private val viewModel by viewModel<EditPlaylistViewModel> {parametersOf(playlist)} /// override
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,7 +46,7 @@ class EditPlaylistFragment(val playlist: Playlist) : NewPlaylistFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+//        super.onViewCreated(view, savedInstanceState)
 
       /*  // создаем диалог
         confirmDialog = MaterialAlertDialogBuilder(requireContext())
@@ -64,11 +66,15 @@ class EditPlaylistFragment(val playlist: Playlist) : NewPlaylistFragment() {
             findNavController().navigateUp()
         }
 
-        binding.titleEdittext.setText(R.string.edit_playlist)
+        // получаем данные плейлиста
+        val args: EditPlaylistFragmentArgs by navArgs()
+        playlist = args.playlist
+
+        binding.toolbarPlaylistTextview.setText(R.string.edit_playlist)
         binding.buttonCreateNewPlaylist.setText(R.string.save)
-        binding.titleEdittext.setText(playlist.name)
-        binding.definitionEdittext.setText(playlist.definition)
-        binding.imagePlaylist.setImageURI(playlist.path?.toUri())
+        binding.titleEdittext.setText(playlist!!.name)
+        binding.definitionEdittext.setText(playlist!!.definition)
+        binding.imagePlaylist.setImageURI(playlist!!.path?.toUri())
 
        // val titleEditText = binding.titleEdittext
 
@@ -121,7 +127,7 @@ class EditPlaylistFragment(val playlist: Playlist) : NewPlaylistFragment() {
 
         // кнопка "Сохранить"
         binding.buttonCreateNewPlaylist.setOnClickListener{
-            savePlayList(playlist.playlistId)
+            savePlayList(playlist!!.playlistId)
         }
     }
     private fun savePlayList(playlistId: Int){
@@ -132,9 +138,9 @@ class EditPlaylistFragment(val playlist: Playlist) : NewPlaylistFragment() {
         val title = binding.titleEdittext.text.toString()
         val definition = binding.definitionEdittext.text.toString()
 
-        viewModel.savePlaylist(path, title, definition)
+        viewModel.savePlaylist(playlistId, path, title, definition)
 
-        //Toast.makeText(requireContext(), "Плейлист "+ title + " создан", Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), "Плейлист редактируем", Toast.LENGTH_LONG).show()
 
         findNavController().navigateUp()
     }

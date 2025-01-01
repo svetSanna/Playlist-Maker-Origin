@@ -184,7 +184,7 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
             val newPlaylistButton = binding.buttonAddToPlaylist
             newPlaylistButton.setOnClickListener {
                 // переход на экран создания нового плейлиста
-                findNavController().navigate(R.id.action_mediaFragment_to_newPlayListFragment)
+                findNavController().navigate(R.id.action_mediaFragment_to_newPlaylistFragment)
             }
 
             playlistAdapter.onChosePlaylistClickListener = this
