@@ -76,6 +76,8 @@ class EditPlaylistFragment(/*val playlist: Playlist*/) : NewPlaylistFragment() {
         binding.definitionEdittext.setText(playlist!!.definition)
         binding.imagePlaylist.setImageURI(playlist!!.path?.toUri())
 
+        binding.buttonCreateNewPlaylist.isEnabled = true
+
        // val titleEditText = binding.titleEdittext
 
         val simpleTextWatcher = object : TextWatcher {
@@ -140,7 +142,11 @@ class EditPlaylistFragment(/*val playlist: Playlist*/) : NewPlaylistFragment() {
 
         viewModel.savePlaylist(playlistId, path, title, definition)
 
-        Toast.makeText(requireContext(), "Плейлист редактируем", Toast.LENGTH_LONG).show()
+        playlist?.name = title
+        playlist?.definition = definition
+        playlist?.path = path
+
+        //playlist = viewModel.getPlaylist(playlistId) // jобновляем плейлист для корректного отображения, скачивая новую информацию из БД
 
         findNavController().navigateUp()
     }

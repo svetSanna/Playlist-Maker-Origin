@@ -158,6 +158,11 @@ class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener,
                 .placeholder(R.drawable.place_holder)
                 .into(ivPlaylistImage)
 
+            Glide.with(this)
+                .load(playlist!!.path)
+                .placeholder(R.drawable.place_holder)
+                .into(binding.imagePlaylistBottom)
+
             tvPlaylistName.text = playlist!!.name
             if (playlist!!.definition.isNullOrBlank()) {
                 tvPlaylistDefinition.visibility = View.GONE

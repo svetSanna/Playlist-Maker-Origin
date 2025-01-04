@@ -250,17 +250,18 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:id="@+id/image_playlist_layout"
+                            android:id="@+id/image_playlist_bottom"
                             android:layout_width="45dp"
                             android:layout_height="45dp"
                             android:layout_gravity="center_horizontal|center_vertical"
                             android:scaleType="centerCrop"
-
-                            android:src="@drawable/cat1"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintRight_toRightOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             tools:src="@drawable/cat1"></ImageView>
+
+                        <!-- android:src="@drawable/cat1" -->
+
                         <!--  <ImageView
                               android:id="@+id/image_playlist_layout"
                               android:layout_width="match_parent"
