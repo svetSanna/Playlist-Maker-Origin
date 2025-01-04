@@ -26,16 +26,19 @@ import com.example.playlistmaker.ui.AdapterAndViewHolder.PlaylistViewHolder
 import com.example.playlistmaker.ui.SearchFragment.SearchFragmentDirections
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
- class PlaylistsFragment :Fragment(), PlaylistViewHolder.OnPlaylistClickListener  {
+class PlaylistsFragment : Fragment(), PlaylistViewHolder.OnPlaylistClickListener {
     companion object {
-          fun newInstance() = PlaylistsFragment()
+        fun newInstance() = PlaylistsFragment()
     }
+
     private var _binding: FragmentPlaylistsBinding? = null
+
     // This property is only valid between onCreateView and onDestroyView.
     private val binding get() = _binding!!
 
     // для получения списка плейлистов
     private var playlistsList: ArrayList<Playlist> = arrayListOf()
+
     // создаем адаптер для Playlist
     private val playlistAdapter = PlaylistAdapter()
 
@@ -62,22 +65,24 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
         // подписываемся на состояние SearchViewModel
         viewModel.getScreenState().observe(viewLifecycleOwner) { state ->
-            when(state) {
+            when (state) {
                 is PlaylistsScreenState.Error -> {
                     showError()
                 }
+
                 is PlaylistsScreenState.Content -> {
                     showContent(state.data)
                 }
             }
         }
 
-        binding.buttonGoToNewPlaylist.setOnClickListener{
+        binding.buttonGoToNewPlaylist.setOnClickListener {
             // переход на экран создания нового плейлиста
 
             findNavController().navigate(R.id.action_mediatekaFragment_to_newPlayListFragment)
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -106,10 +111,14 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
         rvItems.apply {
             adapter = playlistAdapter
             // сделала разное количество столбцов в зависимости от ориентации экрана, но ориентация recyclerView dвсе равно вертикальная
-            if (requireContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
-                layoutManager = GridLayoutManager(requireContext(), 2) //ориентация по умолчанию — вертикальная
+            if (requireContext().getResources()
+                    .getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT
+            )
+                layoutManager =
+                    GridLayoutManager(requireContext(), 2) //ориентация по умолчанию — вертикальная
             else
-                layoutManager = GridLayoutManager(requireContext(), 4) //ориентация по умолчанию — вертикальная
+                layoutManager =
+                    GridLayoutManager(requireContext(), 4) //ориентация по умолчанию — вертикальная
         }
         playlistsList.clear()
 

@@ -15,14 +15,6 @@ import kotlinx.coroutines.withContext
 class EditPlaylistViewModel(playlistInteractor: PlaylistInteractor, playlist: Playlist) :
     NewPlaylistViewModel(playlistInteractor) {
 
-   /* fun getPlaylist(playlistId: Int) : Playlist {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                playlistInteractor.getPlayist(playlistId)
-            }
-        }
-    }*/
-
     fun savePlaylist(playlistId: Int, path: String?, title: String, definition: String?) {
        viewModelScope.launch {
            withContext(Dispatchers.IO) {

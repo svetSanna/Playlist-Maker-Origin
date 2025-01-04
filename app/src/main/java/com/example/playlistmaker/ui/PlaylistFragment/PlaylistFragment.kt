@@ -34,14 +34,11 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener,
-                        TrackViewHolder.OnLongClickListener{
+    TrackViewHolder.OnLongClickListener {
     private var _binding: FragmentPlaylistBinding? = null
     private val binding
         get() = _binding!!
 
-    //private lateinit var timeTrack : TextView
-
-    //private var url: String? = ""
     var playlist: Playlist? = null
 
     private lateinit var deletePlaylistDialog: MaterialAlertDialogBuilder // диалог удаления плейлиста
@@ -73,7 +70,6 @@ class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener,
 
         // bottomSheet
         val bottomSheetContainer = binding.bottomSheetTracksInPlaylist
-        // val overlay = binding.overlay
         val bottomSheetTracksBehavior = BottomSheetBehavior.from(bottomSheetContainer).apply {
             state = BottomSheetBehavior.STATE_COLLAPSED
         }
@@ -89,14 +85,6 @@ class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener,
             BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
 
-                /*  when (newState) {
-                      BottomSheetBehavior.STATE_HIDDEN -> {
-                          overlay.visibility = View.GONE
-                      }
-                      else -> {
-                          overlay.visibility = View.VISIBLE
-                      }
-                  }*/
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
@@ -110,7 +98,8 @@ class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener,
                 // что значение альфы варьируется от 0f до 1f, тогда как slideOffset имеет диапазон от -1f до 1f.
             }
         })
-        bottomSheetTracksBehavior.peekHeight = Resources.getSystem().getDisplayMetrics().heightPixels * 240/800 //250/800
+        bottomSheetTracksBehavior.peekHeight =
+            Resources.getSystem().getDisplayMetrics().heightPixels * 240 / 800 //250/800
 
         // bottomSheet для меню
         val bottomSheetMenuContainer = binding.bottomSheetMenuInPlaylist
@@ -126,20 +115,22 @@ class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener,
             override fun onStateChanged(bottomSheet: View, newState: Int) {
 
                 when (newState) {
-                      BottomSheetBehavior.STATE_HIDDEN -> {
-                          overlayMenu.visibility = View.GONE
-                      }
-                      else -> {
-                          overlayMenu.visibility = View.VISIBLE
-                      }
-                  }
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        overlayMenu.visibility = View.GONE
+                    }
+
+                    else -> {
+                        overlayMenu.visibility = View.VISIBLE
+                    }
+                }
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                   overlayMenu.alpha = (slideOffset + 1)/2
+                overlayMenu.alpha = (slideOffset + 1) / 2
             }
         })
-        bottomSheetMenuBehavior.peekHeight = Resources.getSystem().getDisplayMetrics().heightPixels * 383/800 //47 / 100
+        bottomSheetMenuBehavior.peekHeight =
+            Resources.getSystem().getDisplayMetrics().heightPixels * 383 / 800 //47 / 100
 
         // получаем данные плейлиста
         val args: PlaylistFragmentArgs by navArgs()
@@ -197,11 +188,13 @@ class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener,
                         trackList.count().toString() + getEndingTrack(trackList.count())
                     val sum = sumTime(trackList)
                     tvPlaylistTime.text =
-                        SimpleDateFormat("mm", Locale.getDefault()).format(sum) + getEndingMinute(sum.toInt())
+                        SimpleDateFormat("mm", Locale.getDefault()).format(sum) + getEndingMinute(
+                            sum.toInt()
+                        )
 
-                    binding.countPlaylistLayout.text = trackList.count().toString() + getEndingTrack(trackList.count())
-                }
-                else binding.countPlaylistLayout.text = getString(R.string.null_tracks)
+                    binding.countPlaylistLayout.text =
+                        trackList.count().toString() + getEndingTrack(trackList.count())
+                } else binding.countPlaylistLayout.text = getString(R.string.null_tracks)
             }
 
             // создаем диалог для удаления плейлиста
@@ -218,41 +211,46 @@ class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener,
                 }
         }
 
-        binding.buttonPlaylistShare.setOnClickListener{
+        binding.buttonPlaylistShare.setOnClickListener {
             // нажатие на кнопочку "Поделиться"
             share()
         }
 
-        binding.buttonPlaylistMenu.setOnClickListener{
+        binding.buttonPlaylistMenu.setOnClickListener {
             // нажатие на кнопочку "открыть меню"
             bottomSheetMenuBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
-        binding.playlistMenuShare.setOnClickListener{
+        binding.playlistMenuShare.setOnClickListener {
             // нажатие на надпись "Поделиться"
             share()
         }
 
-        binding.playlistMenuEdit.setOnClickListener{
+        binding.playlistMenuEdit.setOnClickListener {
             // нажатие на надпись "редактировать информацию"
             // переход на экран создания/редактирования плейлиста, передаем выбранный плейлист
-            val direction = PlaylistFragmentDirections.actionPlaylistFragmentToEditPlaylistFragment(playlist!!)
+            val direction =
+                PlaylistFragmentDirections.actionPlaylistFragmentToEditPlaylistFragment(playlist!!)
             findNavController().navigate(direction)
             //Toast.makeText( requireContext(),"редактируем информацию", Toast.LENGTH_SHORT).show()
         }
 
-        binding.playlistMenuDelete.setOnClickListener{
+        binding.playlistMenuDelete.setOnClickListener {
             // нажатие на надпись "Удалить плейлист"
             deletePlaylistDialog.show()
         }
 
     }
 
-    fun share(){
+    fun share() {
         // поделиться
         if (trackList.isEmpty())
-            Toast.makeText( requireContext(), getString(R.string.track_list_is_empty), Toast.LENGTH_SHORT).show()
-        else{
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.track_list_is_empty),
+                Toast.LENGTH_SHORT
+            ).show()
+        else {
             // составляем сообщение
             /*
             Сообщение для получателя должно содержать простой текст со списком треков плейлиста
@@ -264,13 +262,15 @@ class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener,
             Каждый трек отображается в отдельной строке.
             */
             var message = playlist!!.name.toString() + "\n"
-            if(!playlist!!.definition.isNullOrBlank())
+            if (!playlist!!.definition.isNullOrBlank())
                 message += playlist!!.definition.toString() + "\n"
             message += trackList.count().toString() + getEndingTrack(trackList.count()) + "\n"
 
             var num = 1
-            for(track in trackList){
-                message += num.toString() + ". " + track.artistName + " - " + track.trackName + " (" + SimpleDateFormatMapper.map(track!!.trackTimeMillis) + ")\n"
+            for (track in trackList) {
+                message += num.toString() + ". " + track.artistName + " - " + track.trackName + " (" + SimpleDateFormatMapper.map(
+                    track!!.trackTimeMillis
+                ) + ")\n"
                 num++
             }
 
@@ -278,6 +278,7 @@ class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener,
             onShare(message)
         }
     }
+
     fun onShare(message: String) {
         val intent = Intent(Intent.ACTION_SEND)
         intent.setType("text/plain")

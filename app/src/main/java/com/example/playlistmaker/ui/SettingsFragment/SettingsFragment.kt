@@ -16,15 +16,20 @@ import com.example.playlistmaker.databinding.FragmentSettingsBinding
 import com.example.playlistmaker.presentation.view_model.SettingsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingsFragment: Fragment() {
+class SettingsFragment : Fragment() {
     private var _binding: FragmentSettingsBinding? = null
+
     // This property is only valid between onCreateView and onDestroyView.
     private val binding
         get() = _binding!!
 
     private val viewModel by viewModel<SettingsViewModel>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    )
             : View? {
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         return binding.root
@@ -113,6 +118,7 @@ class SettingsFragment: Fragment() {
             ).show()
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

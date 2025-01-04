@@ -25,17 +25,15 @@ import org.koin.core.parameter.parametersOf
 
 class EditPlaylistFragment(/*val playlist: Playlist*/) : NewPlaylistFragment() {
     private var _binding: FragmentNewPlayListBinding? = null
+
     // This property is only valid between onCreateView and onDestroyView.
     private val binding
         get() = _binding!!
 
-  //  lateinit var confirmDialog: MaterialAlertDialogBuilder
-
     override var imageUri: Uri? = null
-
     var playlist: Playlist? = null
 
-    private val viewModel by viewModel<EditPlaylistViewModel> {parametersOf(playlist)} /// override
+    private val viewModel by viewModel<EditPlaylistViewModel> { parametersOf(playlist) } /// override
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,18 +46,6 @@ class EditPlaylistFragment(/*val playlist: Playlist*/) : NewPlaylistFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 //        super.onViewCreated(view, savedInstanceState)
 
-      /*  // создаем диалог
-        confirmDialog = MaterialAlertDialogBuilder(requireContext())
-            .setTitle(getString(R.string.title_dialog)) // Заголовок диалога
-            .setMessage(getString(R.string.message_dialog)) // Описание диалога
-            .setNeutralButton(getString(R.string.cancel_dialog)) { dialog, which -> // Добавляет кнопку «Отмена»
-                // Действия, выполняемые при нажатии на кнопку «Отмена»
-            }
-            .setPositiveButton(getString(R.string.complete_dialog)) { dialog, which -> // Добавляет кнопку «Завершить»
-                // Действия, выполняемые при нажатии на кнопку «Да»
-                findNavController().navigateUp()
-            }
-*/
         // кнопка "Назад"
         val buttonBackMedia = binding.toolbarPlaylist
         buttonBackMedia.setOnClickListener {
@@ -78,18 +64,15 @@ class EditPlaylistFragment(/*val playlist: Playlist*/) : NewPlaylistFragment() {
 
         binding.buttonCreateNewPlaylist.isEnabled = true
 
-       // val titleEditText = binding.titleEdittext
-
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 //    TODO("Not yet implemented")
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if(s.isNullOrBlank()) {
+                if (s.isNullOrBlank()) {
                     binding.buttonCreateNewPlaylist.isEnabled = false
-                }
-                else {
+                } else {
                     binding.buttonCreateNewPlaylist.isEnabled = true
                 }
             }
@@ -98,12 +81,11 @@ class EditPlaylistFragment(/*val playlist: Playlist*/) : NewPlaylistFragment() {
                 //  TODO("Not yet implemented")
             }
         }
-        //titleEditText.addTextChangedListener(simpleTextWatcher)
         binding.titleEdittext.addTextChangedListener(simpleTextWatcher)
 
         // создаём событие с результатом и передаём в него PickVisualMedia()
         val pickMedia =
-            registerForActivityResult(ActivityResultContracts.OpenDocument()){ uri->//.PickVisualMedia()) { uri ->
+            registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->//.PickVisualMedia()) { uri ->
                 // Callback вызовется, когда пользователь выберет картинку
                 if (uri != null) {
                     binding.imagePlaylist.setImageURI(uri)
@@ -114,27 +96,20 @@ class EditPlaylistFragment(/*val playlist: Playlist*/) : NewPlaylistFragment() {
             }
 
         //по нажатию на кнопку imagePlaylist запускаем photo picker
-        binding.imagePlaylist.setOnClickListener{
+        binding.imagePlaylist.setOnClickListener {
             // Вызываем метод launch и передаём параметр, чтобы предлагались только картинки
             pickMedia.launch(arrayOf("image/*"))
         }
 
-        /*
-        // добавление слушателя для обработки нажатия на кнопку Back
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object: OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                onBack()
-            }
-        }) */
-
         // кнопка "Сохранить"
-        binding.buttonCreateNewPlaylist.setOnClickListener{
+        binding.buttonCreateNewPlaylist.setOnClickListener {
             savePlayList(playlist!!.playlistId)
         }
     }
-    private fun savePlayList(playlistId: Int){
-        var path:String? = null
-        if(imageUri != null)
+
+    private fun savePlayList(playlistId: Int) {
+        var path: String? = null
+        if (imageUri != null)
             path = saveImageToPrivateStorage(imageUri!!)
         //Log.d("PhotoPicker", "Выбранный URI: $uri")
         val title = binding.titleEdittext.text.toString()
@@ -145,8 +120,6 @@ class EditPlaylistFragment(/*val playlist: Playlist*/) : NewPlaylistFragment() {
         playlist?.name = title
         playlist?.definition = definition
         playlist?.path = path
-
-        //playlist = viewModel.getPlaylist(playlistId) // jобновляем плейлист для корректного отображения, скачивая новую информацию из БД
 
         findNavController().navigateUp()
     }

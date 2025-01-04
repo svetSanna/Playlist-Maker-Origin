@@ -24,6 +24,7 @@ class LikeTracksFragment : Fragment(), TrackViewHolder.OnItemClickListener {
     companion object {
         fun newInstance() = LikeTracksFragment()
     }
+
     private var _binding: FragmentLikeTracksBinding? = null
     private val binding
         get() = _binding!!
@@ -42,7 +43,8 @@ class LikeTracksFragment : Fragment(), TrackViewHolder.OnItemClickListener {
     ): View? {
         _binding = FragmentLikeTracksBinding.inflate(inflater, container, false)
         return binding.root
-   }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -59,16 +61,18 @@ class LikeTracksFragment : Fragment(), TrackViewHolder.OnItemClickListener {
 
         // подписываемся на состояние SearchViewModel
         viewModel.getScreenState().observe(viewLifecycleOwner) { state ->
-            when(state) {
+            when (state) {
                 is LikeTracksScreenState.Content -> {
                     showContent(state.data)
                 }
+
                 is LikeTracksScreenState.Error -> {
                     showError(state.message)
                 }
             }
         }
     }
+
     private fun showError(code: String) {
         trackList.clear()
         trackAdapter.notifyDataSetChanged()
@@ -103,11 +107,10 @@ class LikeTracksFragment : Fragment(), TrackViewHolder.OnItemClickListener {
     }
 
     override fun onItemClick(item: Track) {
-       // if (clickDebounce()) { // если между нажатиями на элемент прошло не меньше 1 секунды
-            // переход на экран аудиоплейера, передаем выбранный трек
-            val direction: NavDirections = MediatekaFragmentDirections.actionMediatekaFragmentToMediaFragment(item)
-            findNavController().navigate(direction)
-        //}
+        // переход на экран аудиоплейера, передаем выбранный трек
+        val direction: NavDirections =
+            MediatekaFragmentDirections.actionMediatekaFragmentToMediaFragment(item)
+        findNavController().navigate(direction)
     }
 
     override fun onResume() {

@@ -32,6 +32,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
     private var _binding: FragmentSearchBinding? = null
+
     // This property is only valid between onCreateView and onDestroyView.
     private val binding
         get() = _binding!!
@@ -56,8 +57,12 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
     }
 
     private var isClickAllowed = true
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?)
-    : View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    )
+            : View? {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -92,18 +97,21 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
 
         // подписываемся на состояние SearchViewModel
         viewModel.getScreenState().observe(viewLifecycleOwner) { state ->
-            when(state) {
+            when (state) {
                 is SearchScreenState.Loading -> {
                     progressBarVisibility(true)
                 }
+
                 is SearchScreenState.Error -> {
                     progressBarVisibility(false)
                     showError(state.message)
                 }
+
                 is SearchScreenState.Content -> {
                     progressBarVisibility(false)
                     showContent(state.data)
                 }
+
                 is SearchScreenState.ContentHistory -> {
                     progressBarVisibility(false)
                     showHistory(state.data)
@@ -123,7 +131,10 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
                 binding.placeholderLinearLayout.visibility = View.GONE
                 binding.rvItems.visibility = View.GONE
                 binding.searchHistoryLinearLayout.visibility = View.GONE
-                Log.i("MyTest", "SearchFragment.inputEditText.setOnEditorActionListener: вызывается searchRequest() ")
+                Log.i(
+                    "MyTest",
+                    "SearchFragment.inputEditText.setOnEditorActionListener: вызывается searchRequest() "
+                )
                 searchRequest()
                 true
             }
@@ -135,7 +146,8 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
         clearButton.setOnClickListener {
             inputEditText.setText("")
 
-            val imm = requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val imm =
+                requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm?.hideSoftInputFromWindow(inputEditText.getWindowToken(), 0)
 
             trackAdapter.items.clear()
@@ -154,7 +166,7 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
                     if (inputEditText.hasFocus() && (s?.isEmpty() == true))
                         View.VISIBLE
                     else View.GONE
-                if(trackAdapterSearchHistory.itemCount==0)
+                if (trackAdapterSearchHistory.itemCount == 0)
                     binding.searchHistoryLinearLayout.visibility = View.GONE
 
                 trackList.clear()
@@ -164,7 +176,10 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
                 binding.placeholderLinearLayout.visibility = View.GONE
                 binding.rvItems.visibility = View.GONE
 
-                Log.i("MyTest", "SearchFragment.simpleTextWatcher.onTextChanged: вызывается viewModel.SearchDebounce() ")
+                Log.i(
+                    "MyTest",
+                    "SearchFragment.simpleTextWatcher.onTextChanged: вызывается viewModel.SearchDebounce() "
+                )
                 viewModel.searchDebounce(inputEditText.text.toString()) //searchDebounce()
             }
 
@@ -180,7 +195,7 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
                 if (hasFocus && inputEditText.text.isEmpty())
                     View.VISIBLE
                 else View.GONE
-            if(trackAdapterSearchHistory.itemCount==0)
+            if (trackAdapterSearchHistory.itemCount == 0)
                 binding.searchHistoryLinearLayout.visibility = View.GONE
         }
 
@@ -202,10 +217,9 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
     private fun showHistory(data: List<Track>) {
         trackAdapterSearchHistory.items = data.toMutableList()
         binding.rvItems.visibility = View.GONE
-        if ( trackAdapterSearchHistory.itemCount == 0){
+        if (trackAdapterSearchHistory.itemCount == 0) {
             binding.searchHistoryLinearLayout.visibility = View.GONE
-        }
-        else binding.searchHistoryLinearLayout.visibility = View.VISIBLE
+        } else binding.searchHistoryLinearLayout.visibility = View.VISIBLE
         binding.placeholderLinearLayout.visibility = View.GONE
     }
 
@@ -265,7 +279,7 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
     private fun progressBarVisibility(isVisible: Boolean) {
         var progressBar = binding.progressBar
 
-        if(isVisible) progressBar.visibility = View.VISIBLE
+        if (isVisible) progressBar.visibility = View.VISIBLE
         else progressBar.visibility = View.GONE
     }
 
@@ -311,7 +325,7 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         // Вторым параметром мы передаём значение по умолчанию
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             editString = savedInstanceState!!.getString(EDIT_STRING, "")
             val inputEditText = binding.editSearchWindow
             inputEditText.setText(editString)
@@ -329,7 +343,6 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
             )
             trackAdapterSearchHistory.items = viewModel.getTrackListSearchHistory()
             trackAdapterSearchHistory.notifyDataSetChanged()
-
         }
     }
 
@@ -354,7 +367,8 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
             viewModel.writeToSharedPreferences()
 
             // переход на экран аудиоплейера, передаем выбранный трек
-            val direction = SearchFragmentDirections.actionSearchFragmentToMediaFragment(item) //.actionSearchFragmentToMediaActivity(item)
+            val direction =
+                SearchFragmentDirections.actionSearchFragmentToMediaFragment(item) //.actionSearchFragmentToMediaActivity(item)
             findNavController().navigate(direction)
         }
     }
@@ -364,7 +378,7 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-          //  viewLifecycleOwner.lifecycleScope.launch {
+            //  viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycleScope.launch {
                 delay(CLICK_DEBOUNCE_DELAY)
                 isClickAllowed = true
@@ -380,6 +394,6 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
 
     override fun onResume() {
         super.onResume()
-            isClickAllowed = true
+        isClickAllowed = true
     }
 }

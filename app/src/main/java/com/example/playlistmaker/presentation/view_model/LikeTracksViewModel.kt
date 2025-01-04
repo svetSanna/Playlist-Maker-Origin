@@ -15,8 +15,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class LikeTracksViewModel(private val likeTrackListInteractor: LikeTrackListInteractor,
-                          private val context: Context
+class LikeTracksViewModel(
+    private val likeTrackListInteractor: LikeTrackListInteractor,
+    private val context: Context
 ) : ViewModel() {
 
     private val state = MutableLiveData<LikeTracksScreenState>()
@@ -24,9 +25,11 @@ class LikeTracksViewModel(private val likeTrackListInteractor: LikeTrackListInte
     init {
         loadData()
     }
+
     fun getScreenState(): LiveData<LikeTracksScreenState> {
         return state
     }
+
     fun loadData() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {

@@ -43,14 +43,12 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         // для истории поиска генерируем слушателя нажатия на элемент
         itemView.setOnLongClickListener {
-           // onItemClickListener?.onLongItemClick(item)
             onLongClickListener?.onLongClick(item)!!
         }
     }
 
     interface OnItemClickListener {
         fun onItemClick(item: Track)
-       // fun onLongItemClick(item: Track)
     }
     interface OnLongClickListener{
         fun onLongClick(item: Track): Boolean

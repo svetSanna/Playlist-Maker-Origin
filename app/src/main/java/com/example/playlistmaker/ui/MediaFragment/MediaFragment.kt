@@ -32,26 +32,32 @@ import org.koin.core.parameter.parametersOf
 
 class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickListener {
     private var _binding: FragmentMediaBinding? = null
+
     // This property is only valid between onCreateView and onDestroyView.
     private val binding
         get() = _binding!!
 
-    private lateinit var timeTrack : TextView
+    private lateinit var timeTrack: TextView
 
-    //private var url: String? = ""
     var item: Track? = null
 
     private var playlistsList: MutableList<Playlist> = arrayListOf()
+
     // создаем адаптер для playlist
     private val playlistAdapter = ChosePlaylistAdapter()
 
-    private val viewModel by viewModel<MediaViewModel>{ parametersOf(item) }
+    private val viewModel by viewModel<MediaViewModel> { parametersOf(item) }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    )
             : View? {
         _binding = FragmentMediaBinding.inflate(inflater, container, false)
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -78,24 +84,27 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
         STATE_SETTLING — BottomSheet устанавливается на определённую высоту после жеста перетаскивания (dragging)/взмахивания.
         */
 
-        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
 
                 when (newState) {
                     BottomSheetBehavior.STATE_HIDDEN -> {
                         overlay.visibility = View.GONE
                     }
+
                     else -> {
                         overlay.visibility = View.VISIBLE
                     }
                 }
             }
+
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
                 // Чтобы интенсивность затеменения менялась плавно в зависимости от положения Bottom Sheet,
                 // можете добавить в метод onSlide() у этого же слушателя изменение значения alpha,
                 // используя переменную slideOffset:
 
-                overlay.alpha = (slideOffset + 1)/2
+                overlay.alpha = (slideOffset + 1) / 2
 
                 // Однако вам потребуется доработать этот код самостоятельно, ведь необходимо учесть,
                 // что значение альфы варьируется от 0f до 1f, тогда как slideOffset имеет диапазон от -1f до 1f.
@@ -132,17 +141,16 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
             tvPrimaryGenreName.text = item!!.primaryGenreName
             tvCountry.text = item!!.country
 
-            // ссылка на отрывок
-            //url = item?.previewUrl
-
-            viewModel.getMediaPlayerState().observe(viewLifecycleOwner){ state ->
-                when(state) {
+            viewModel.getMediaPlayerState().observe(viewLifecycleOwner) { state ->
+                when (state) {
                     is MediaPlayerState.Playing -> {
                         showPlaying()
                     }
+
                     is MediaPlayerState.Paused -> {
                         showPaused()
                     }
+
                     is MediaPlayerState.Prepared -> {
                         showPrepared()
                     }
@@ -156,11 +164,12 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
             }
 
             viewModel.getLikeButtonState().observe(viewLifecycleOwner) { state ->//(this) { state ->
-                when(state) {
+                when (state) {
                     is LikeButtonState.Liked -> {
                         val buttonLike = binding.buttonMediaLike
                         buttonLike.setImageResource(R.drawable.button_media_like_chosen)
                     }
+
                     is LikeButtonState.Unliked -> {
                         val buttonLike = binding.buttonMediaLike
                         buttonLike.setImageResource(R.drawable.button_media_like)
@@ -191,7 +200,7 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
             viewModel.loadPlaylists()
 
             viewModel.getPlaylistsMutableData().observe(viewLifecycleOwner) { list ->
-                if(list != null) {
+                if (list != null) {
                     val rvItems: RecyclerView = binding.recyclerviewChosePlaylist
                     rvItems.apply {
                         adapter = playlistAdapter
@@ -206,7 +215,8 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
             }
         }
     }
-    fun showPlaying(){
+
+    fun showPlaying() {
         // запустить плейер        // кнопка "Play"/"Pause"
         // Log.i("MyTest", "MediaActivity.showPlaying() ")
         val buttonPlayPause = binding.buttonMediaPlayPause
@@ -215,7 +225,7 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
         timeTrack.text = SimpleDateFormatMapper.map(viewModel.getCurrentPosition())
     }
 
-    fun showPaused(){
+    fun showPaused() {
         // кнопка "Play"/"Pause"
         //   Log.i("MyTest", "MediaActivity.showPaused() ")
         val buttonPlayPause = binding.buttonMediaPlayPause
@@ -225,7 +235,7 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
     }
 
     fun showPrepared() {
-    var timeTrack = binding.time
+        var timeTrack = binding.time
         timeTrack.text = getString(R.string.time_00_00)
         // кнопка "Play"/"Pause"
         val buttonPlayPause = binding.buttonMediaPlayPause
@@ -233,10 +243,14 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
     }
 
     override fun onChosePlaylistClick(playlist: Playlist) {
-        if (playlist.trackIdList != null){
-            val idList= playlist.trackIdList!!.split(',')
-            if (idList.contains(item!!.trackId.toString())){
-                Toast.makeText(requireContext(), "Трек уже добавлен в плейлист " + playlist.name, Toast.LENGTH_LONG).show()
+        if (playlist.trackIdList != null) {
+            val idList = playlist.trackIdList!!.split(',')
+            if (idList.contains(item!!.trackId.toString())) {
+                Toast.makeText(
+                    requireContext(),
+                    "Трек уже добавлен в плейлист " + playlist.name,
+                    Toast.LENGTH_LONG
+                ).show()
                 //val bottomSheetContainer = binding.standardBottomSheet
                 //val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
                 //bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
@@ -250,8 +264,10 @@ class MediaFragment : Fragment(), ChosePlaylistViewHolder.OnChosePlaylistClickLi
         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
-        Toast.makeText(requireContext(), "Добавлено в плейлист " + playlist.name, Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), "Добавлено в плейлист " + playlist.name, Toast.LENGTH_LONG)
+            .show()
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
