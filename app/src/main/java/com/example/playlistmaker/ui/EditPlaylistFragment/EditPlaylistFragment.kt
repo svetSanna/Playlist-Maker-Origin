@@ -108,18 +108,20 @@ class EditPlaylistFragment(/*val playlist: Playlist*/) : NewPlaylistFragment() {
     }
 
     private fun savePlayList(playlistId: Int) {
-        var path: String? = null
-        if (imageUri != null)
-            path = saveImageToPrivateStorage(imageUri!!)
+        //var path: String? = null
+        if (imageUri != null) {
+            //path = saveImageToPrivateStorage(imageUri!!)
+            playlist?.path = saveImageToPrivateStorage(imageUri!!) //path
+        }
         //Log.d("PhotoPicker", "Выбранный URI: $uri")
         val title = binding.titleEdittext.text.toString()
         val definition = binding.definitionEdittext.text.toString()
 
-        viewModel.savePlaylist(playlistId, path, title, definition)
+        viewModel.savePlaylist(playlistId, playlist?.path, title, definition)
 
         playlist?.name = title
         playlist?.definition = definition
-        playlist?.path = path
+        //playlist?.path = path
 
         findNavController().navigateUp()
     }
