@@ -138,6 +138,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
 
-        app:layout_constraintTop_toBottomOf="@id/definition_layout" />
-
+        />
+<!-- app:layout_constraintTop_toBottomOf="@id/definition_layout" -->
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
