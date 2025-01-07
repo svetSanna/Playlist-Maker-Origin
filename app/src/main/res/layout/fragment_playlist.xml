@@ -101,7 +101,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_playlist"></ImageView>
+                        android:src="@drawable/ic_playlist"/>
 
                     <TextView
                         android:id="@+id/playlist_number_of_tracks"
@@ -130,7 +130,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_share"></ImageView>
+                        android:src="@drawable/ic_share"/>
 
                     <ImageView
                         android:id="@+id/button_playlist_menu"
@@ -138,7 +138,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/margin_16"
-                        android:src="@drawable/ic_menu"></ImageView>
+                        android:src="@drawable/ic_menu"/>
 
                 </LinearLayout>
                 <!--                 app:layout_constraintHorizontal_bias="0" -->
@@ -163,6 +163,7 @@
          android:visibility="gone" /> -->
 
     <!-- -bottomSheet -->
+
     <LinearLayout
         android:id="@+id/bottom_sheet_tracks_in_playlist"
         android:layout_width="match_parent"
@@ -182,12 +183,44 @@
             android:layout_marginTop="@dimen/margin_8"
             android:background="@drawable/slider" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerviewTracksInPlaylist"
-            android:layout_width="match_parent"
+        <FrameLayout
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/margin_12"
-            tools:listitem="@layout/track_layout" />
+            android:layout_width="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerviewTracksInPlaylist"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/margin_12"
+                tools:listitem="@layout/track_layout" />
+
+            <LinearLayout
+                android:id="@+id/placeholderForPlaylist"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:id="@+id/error_image_for_playlist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_marginTop="@dimen/margin_46"
+                    tools:src="@drawable/album" />
+
+                <TextView
+                    android:id="@+id/error_message_for_playlist"
+                    style="@style/PlaceHolderMessageText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:layout_marginTop="@dimen/margin_16"
+                    android:lines="2"
+                    android:text="@string/no_tracks_in_playlist" />
+
+            </LinearLayout>
+        </FrameLayout>
 
     </LinearLayout>
 
@@ -258,24 +291,7 @@
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintRight_toRightOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            tools:src="@drawable/cat1"></ImageView>
-
-                        <!-- android:src="@drawable/cat1" -->
-
-                        <!--  <ImageView
-                              android:id="@+id/image_playlist_layout"
-                              android:layout_width="match_parent"
-                              android:layout_height="0dp"
-                              android:layout_gravity="center_horizontal|center_vertical"
-                              android:scaleType="centerCrop"
-                              app:layout_constraintDimensionRatio="1:1"
-                              app:layout_constraintLeft_toLeftOf="parent"
-                              app:layout_constraintRight_toRightOf="parent"
-                              app:layout_constraintTop_toTopOf="parent"
-                              tools:src="@drawable/cat1"
-                              android:src="@drawable/cat1">
-                          </ImageView> -->
-                        />
+                            tools:src="@drawable/cat1"/>
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.cardview.widget.CardView>
 

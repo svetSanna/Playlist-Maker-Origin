@@ -171,8 +171,20 @@ class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener,
             trackAdapter.onLongClickListener = this
             viewModel.loadTracks(playlist!!.playlistId)
 
+            val placeholderImage: ImageView = binding.errorImageForPlaylist
+            placeholderImage.setImageResource(R.drawable.nothing_found)
+
+            if(playlist!!.count == 0){
+                binding.recyclerviewTracksInPlaylist.visibility = View.GONE
+                binding.placeholderForPlaylist.visibility = View.VISIBLE
+            }
+            else{
+                binding.recyclerviewTracksInPlaylist.visibility = View.VISIBLE
+                binding.placeholderForPlaylist.visibility = View.GONE
+            }
+
             viewModel.getTracksMutableData().observe(viewLifecycleOwner) { tracks ->
-                if (tracks != null) {
+                if (!tracks.isNullOrEmpty()) {
                     val rvItems: RecyclerView = binding.recyclerviewTracksInPlaylist
                     rvItems.apply {
                         adapter = trackAdapter
@@ -194,7 +206,15 @@ class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener,
 
                     binding.countPlaylistLayout.text =
                         trackList.count().toString() + getEndingTrack(trackList.count())
-                } else binding.countPlaylistLayout.text = getString(R.string.null_tracks)
+
+                    binding.recyclerviewTracksInPlaylist.visibility = View.VISIBLE
+                    binding.placeholderForPlaylist.visibility = View.GONE
+
+                } else {
+                    binding.countPlaylistLayout.text = getString(R.string.null_tracks)
+                    binding.recyclerviewTracksInPlaylist.visibility = View.GONE
+                    binding.placeholderForPlaylist.visibility = View.VISIBLE
+                }
             }
 
             // создаем диалог для удаления плейлиста

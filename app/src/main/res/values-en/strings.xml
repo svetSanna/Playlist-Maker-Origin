@@ -54,5 +54,6 @@
   <string name="null_minutes">0 minutes</string>
   <string name="edit_playlist">Edit</string>
   <string name="save">Save</string>
+  <string name="no_tracks_in_playlist">Playlist is empty</string>
 
 </resources>

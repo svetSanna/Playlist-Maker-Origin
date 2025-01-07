@@ -57,5 +57,6 @@
     <string name="null_minutes">0 минут</string>
     <string name="edit_playlist">Редактировать</string>
     <string name="save">Сохранить</string>
+    <string name="no_tracks_in_playlist">Плейлист пуст</string>
 
 </resources>

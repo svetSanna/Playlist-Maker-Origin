@@ -29,7 +29,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="@dimen/margin_12"
                 android:layout_marginTop="@dimen/margin_8"
-                tools:listitem="@layout/playlist_layout"></androidx.recyclerview.widget.RecyclerView>
+                tools:listitem="@layout/playlist_layout"/>
 
             <LinearLayout
                 android:id="@+id/placeholderPlaylist"
