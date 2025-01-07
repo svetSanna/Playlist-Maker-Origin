@@ -13,12 +13,12 @@
         android:layout_marginVertical="@dimen/margin_8"
         android:layout_marginStart="@dimen/margin_7"
         android:layout_marginEnd="@dimen/margin_8"
-        tools:src="@drawable/support"></ImageView>
+        tools:src="@drawable/support"/>
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_gravity="center_vertical|left"
+        android:layout_gravity="center_vertical|start"
         android:layout_weight="1"
         android:orientation="vertical">
 
@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/ic"></ImageView>
+                android:src="@drawable/ic"/>
 
             <TextView
                 android:id="@+id/tvTrackTime"

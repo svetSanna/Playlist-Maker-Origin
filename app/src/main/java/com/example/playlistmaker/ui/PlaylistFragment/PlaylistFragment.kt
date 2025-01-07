@@ -232,7 +232,6 @@ class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener,
             val direction =
                 PlaylistFragmentDirections.actionPlaylistFragmentToEditPlaylistFragment(playlist!!)
             findNavController().navigate(direction)
-            //Toast.makeText( requireContext(),"редактируем информацию", Toast.LENGTH_SHORT).show()
         }
 
         binding.playlistMenuDelete.setOnClickListener {
