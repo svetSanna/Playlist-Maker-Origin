@@ -122,4 +122,9 @@ class SearchViewModel( private var getTrackListUseCase : GetTrackListUseCase,
     fun searchDebounce(changedText: String) {
         mySearchDebounce(changedText)
     }
+
+   // fun setStateHistory(){
+   //     val content = SearchScreenState.History(data = tracks)
+   //     state.postValue()
+  //  }
 }

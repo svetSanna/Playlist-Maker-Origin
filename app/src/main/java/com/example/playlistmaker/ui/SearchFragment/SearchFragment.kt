@@ -71,6 +71,7 @@ TrackViewHolder.OnLongClickListener{
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //Log.i("MyTest","SearchFragment.onViewCreated - 01 ")
 
         trackAdapterSearchHistory.onItemClickListener = this
         trackAdapterSearchHistory.onLongClickListener = this
@@ -135,10 +136,7 @@ TrackViewHolder.OnLongClickListener{
                 binding.placeholderLinearLayout.visibility = View.GONE
                 binding.rvItems.visibility = View.GONE
                 binding.searchHistoryLinearLayout.visibility = View.GONE
-                Log.i(
-                    "MyTest",
-                    "SearchFragment.inputEditText.setOnEditorActionListener: вызывается searchRequest() "
-                )
+
                 searchRequest()
                 true
             }
@@ -150,27 +148,30 @@ TrackViewHolder.OnLongClickListener{
         clearButton.setOnClickListener {
             inputEditText.setText("")
 
-            val imm =
-                requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val imm =  requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm?.hideSoftInputFromWindow(inputEditText.getWindowToken(), 0)
 
             trackAdapter.items.clear()
             trackAdapter.notifyDataSetChanged()
+
+            viewModel.loadData("") ///
         }
 
         val simpleTextWatcher = object : TextWatcher {
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //    TODO("Not yet implemented")
+
+
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 clearButton.visibility = clearButtonVisibility(s)
                 binding.searchHistoryLinearLayout.isVisible = inputEditText.hasFocus() && s.isEmpty()
 
-               // if(inputEditText.hasFocus()){
-                    if (trackAdapterSearchHistory.itemCount == 0)
+                if (trackAdapterSearchHistory.itemCount == 0)
                         binding.searchHistoryLinearLayout.visibility = View.GONE
 
+                if(inputEditText.hasFocus()) {
                     trackList.clear()
                     trackAdapter.items = trackList
                     trackAdapter.notifyDataSetChanged()
@@ -179,59 +180,15 @@ TrackViewHolder.OnLongClickListener{
                     binding.rvItems.visibility = View.GONE
 
                     viewModel.searchDebounce(inputEditText.text.toString()) //searchDebounce()
-               // }
-               // Log.i(
-               //     "MyTest",
-              //      "SearchFragment.simpleTextWatcher.onTextChanged: вызывается viewModel.SearchDebounce() "
-               // )
+                }
             }
 
-            /*
-             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                clearButton.visibility = clearButtonVisibility(s)
-
-                binding.searchHistoryLinearLayout.visibility =
-                    if (inputEditText.hasFocus() && (s?.isEmpty() == true))
-                        View.VISIBLE
-                    else View.GONE
-                if (trackAdapterSearchHistory.itemCount == 0)
-                    binding.searchHistoryLinearLayout.visibility = View.GONE
-
-                trackList.clear()
-                trackAdapter.items = trackList
-                trackAdapter.notifyDataSetChanged()
-
-                binding.placeholderLinearLayout.visibility = View.GONE
-                binding.rvItems.visibility = View.GONE
-
-                Log.i(
-                    "MyTest",
-                    "SearchFragment.simpleTextWatcher.onTextChanged: вызывается viewModel.SearchDebounce() "
-                )
-                viewModel.searchDebounce(inputEditText.text.toString()) //searchDebounce()
-            }
-            * */
-
-            override fun afterTextChanged(s: Editable?) {
+             override fun afterTextChanged(s: Editable?) {
                 //  TODO("Not yet implemented")
             }
         }
         inputEditText.addTextChangedListener(simpleTextWatcher)
 
-        /*
-        // отображаем LinearLayout истории поиска, если фокус находится в inputEditText и inputEditText пуст
-        inputEditText.setOnFocusChangeListener { view, hasFocus ->
-          /*  binding.searchHistoryLinearLayout.visibility =
-                if (hasFocus && inputEditText.text.isEmpty())
-                    View.VISIBLE
-                else View.GONE*/
-            binding.searchHistoryLinearLayout.isVisible = hasFocus && inputEditText.text.isEmpty()
-            if (trackAdapterSearchHistory.itemCount == 0)
-                binding.searchHistoryLinearLayout.visibility = View.GONE
-        }
-
-        inputEditText.requestFocus()
-*/
         // кнопка "Очистить историю"
         binding.buttonCleanSearchHistory.setOnClickListener {
 
