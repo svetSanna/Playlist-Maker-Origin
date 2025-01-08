@@ -300,6 +300,9 @@ TrackViewHolder.OnLongClickListener{
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        val inputEditText = binding.editSearchWindow
+        editString = inputEditText.text.toString()
+
         outState.putString(EDIT_STRING, editString)
 
         outState.putParcelableArrayList(TRACK_LIST, trackList as ArrayList<out Parcelable?>?)
