@@ -31,6 +31,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
+import java.util.Collections
 import java.util.Locale
 
 class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener,
@@ -193,7 +194,13 @@ class PlaylistFragment : Fragment(), TrackViewHolder.OnItemClickListener,
                     }
                     trackList = tracks as MutableList<Track>
 
-                    trackAdapter.items = trackList
+                    //var trackListReverse = trackList
+                    //trackListReverse.reverse()
+
+                    trackList.reverse()
+
+                    trackAdapter.items = trackList //trackListReverse as MutableList<Track>
+
                     trackAdapter.notifyDataSetChanged()
 
                     tvPlaylistNumberOfTracks.text =

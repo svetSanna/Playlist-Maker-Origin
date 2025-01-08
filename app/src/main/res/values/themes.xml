@@ -3,11 +3,22 @@
     <style name="Base.Theme.PlaylistMaker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <item name="colorSecondary">@color/cursor_edittext</item>
+        <item name="android:textColor">@color/progressbar</item>
     </style>
 
     <style name="Theme.PlaylistMaker" parent="Base.Theme.PlaylistMaker">
         <item name="switchStyle">@style/MySwitchStyle</item>
     </style>
+
 </resources>
+
+
+    <!--<style name="Theme.MyApp.Dialog.Alert" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialogText</item>
+    </style>
+    <style name="MaterialAlertDialogText" parent="@style/MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:textColor">@color/progressbar</item>
+    </style> -->
+
 
 <!-- Theme.Material3.DayNight.NoActionBar -->

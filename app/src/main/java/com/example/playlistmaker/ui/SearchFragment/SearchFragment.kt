@@ -12,6 +12,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
@@ -30,7 +31,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
+class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener,
+TrackViewHolder.OnLongClickListener{
     private var _binding: FragmentSearchBinding? = null
 
     // This property is only valid between onCreateView and onDestroyView.
@@ -71,11 +73,13 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         trackAdapterSearchHistory.onItemClickListener = this
+        trackAdapterSearchHistory.onLongClickListener = this
         trackAdapter.onItemClickListener = this
+        trackAdapter.onLongClickListener = this
 
         val inputEditText = binding.editSearchWindow
 
-        viewModel.loadData(inputEditText.text.toString())
+       // viewModel.loadData(inputEditText.text.toString())
 
         // для поиска
         val rvItems1: RecyclerView = binding.rvItems
@@ -159,7 +163,31 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
                 //    TODO("Not yet implemented")
             }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                clearButton.visibility = clearButtonVisibility(s)
+                binding.searchHistoryLinearLayout.isVisible = inputEditText.hasFocus() && s.isEmpty()
+
+               // if(inputEditText.hasFocus()){
+                    if (trackAdapterSearchHistory.itemCount == 0)
+                        binding.searchHistoryLinearLayout.visibility = View.GONE
+
+                    trackList.clear()
+                    trackAdapter.items = trackList
+                    trackAdapter.notifyDataSetChanged()
+
+                    binding.placeholderLinearLayout.visibility = View.GONE
+                    binding.rvItems.visibility = View.GONE
+
+                    viewModel.searchDebounce(inputEditText.text.toString()) //searchDebounce()
+               // }
+               // Log.i(
+               //     "MyTest",
+              //      "SearchFragment.simpleTextWatcher.onTextChanged: вызывается viewModel.SearchDebounce() "
+               // )
+            }
+
+            /*
+             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButton.visibility = clearButtonVisibility(s)
 
                 binding.searchHistoryLinearLayout.visibility =
@@ -182,6 +210,7 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
                 )
                 viewModel.searchDebounce(inputEditText.text.toString()) //searchDebounce()
             }
+            * */
 
             override fun afterTextChanged(s: Editable?) {
                 //  TODO("Not yet implemented")
@@ -189,18 +218,20 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
         }
         inputEditText.addTextChangedListener(simpleTextWatcher)
 
+        /*
         // отображаем LinearLayout истории поиска, если фокус находится в inputEditText и inputEditText пуст
         inputEditText.setOnFocusChangeListener { view, hasFocus ->
-            binding.searchHistoryLinearLayout.visibility =
+          /*  binding.searchHistoryLinearLayout.visibility =
                 if (hasFocus && inputEditText.text.isEmpty())
                     View.VISIBLE
-                else View.GONE
+                else View.GONE*/
+            binding.searchHistoryLinearLayout.isVisible = hasFocus && inputEditText.text.isEmpty()
             if (trackAdapterSearchHistory.itemCount == 0)
                 binding.searchHistoryLinearLayout.visibility = View.GONE
         }
 
         inputEditText.requestFocus()
-
+*/
         // кнопка "Очистить историю"
         binding.buttonCleanSearchHistory.setOnClickListener {
 
@@ -395,5 +426,9 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
     override fun onResume() {
         super.onResume()
         isClickAllowed = true
+    }
+
+    override fun onLongClick(item: Track): Boolean {
+        return true
     }
 }

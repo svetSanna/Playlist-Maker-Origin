@@ -1,6 +1,7 @@
 package com.example.playlistmaker.ui.MediatekaFragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +21,9 @@ import com.example.playlistmaker.ui.AdapterAndViewHolder.TrackAdapter
 import com.example.playlistmaker.ui.AdapterAndViewHolder.TrackViewHolder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class LikeTracksFragment : Fragment(), TrackViewHolder.OnItemClickListener {
+class LikeTracksFragment : Fragment(), TrackViewHolder.OnItemClickListener,
+        TrackViewHolder.OnLongClickListener
+{
     companion object {
         fun newInstance() = LikeTracksFragment()
     }
@@ -49,6 +52,7 @@ class LikeTracksFragment : Fragment(), TrackViewHolder.OnItemClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         trackAdapter.onItemClickListener = this
+        trackAdapter.onLongClickListener = this
 
         // для поиска
         val rvItems: RecyclerView = binding.rvLikeItems
@@ -111,6 +115,11 @@ class LikeTracksFragment : Fragment(), TrackViewHolder.OnItemClickListener {
         val direction: NavDirections =
             MediatekaFragmentDirections.actionMediatekaFragmentToMediaFragment(item)
         findNavController().navigate(direction)
+    }
+
+    override fun onLongClick(item: Track): Boolean {
+        Log.d("MyTag", "LikeTracksFragment: onLongClick()")
+        return true
     }
 
     override fun onResume() {
