@@ -1,6 +1,7 @@
 package com.example.playlistmaker.ui.MediatekaFragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,10 +21,13 @@ import com.example.playlistmaker.ui.AdapterAndViewHolder.TrackAdapter
 import com.example.playlistmaker.ui.AdapterAndViewHolder.TrackViewHolder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class LikeTracksFragment : Fragment(), TrackViewHolder.OnItemClickListener {
+class LikeTracksFragment : Fragment(), TrackViewHolder.OnItemClickListener,
+        TrackViewHolder.OnLongClickListener
+{
     companion object {
         fun newInstance() = LikeTracksFragment()
     }
+
     private var _binding: FragmentLikeTracksBinding? = null
     private val binding
         get() = _binding!!
@@ -42,11 +46,13 @@ class LikeTracksFragment : Fragment(), TrackViewHolder.OnItemClickListener {
     ): View? {
         _binding = FragmentLikeTracksBinding.inflate(inflater, container, false)
         return binding.root
-   }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         trackAdapter.onItemClickListener = this
+        trackAdapter.onLongClickListener = this
 
         // для поиска
         val rvItems: RecyclerView = binding.rvLikeItems
@@ -59,16 +65,18 @@ class LikeTracksFragment : Fragment(), TrackViewHolder.OnItemClickListener {
 
         // подписываемся на состояние SearchViewModel
         viewModel.getScreenState().observe(viewLifecycleOwner) { state ->
-            when(state) {
+            when (state) {
                 is LikeTracksScreenState.Content -> {
                     showContent(state.data)
                 }
+
                 is LikeTracksScreenState.Error -> {
                     showError(state.message)
                 }
             }
         }
     }
+
     private fun showError(code: String) {
         trackList.clear()
         trackAdapter.notifyDataSetChanged()
@@ -103,11 +111,15 @@ class LikeTracksFragment : Fragment(), TrackViewHolder.OnItemClickListener {
     }
 
     override fun onItemClick(item: Track) {
-       // if (clickDebounce()) { // если между нажатиями на элемент прошло не меньше 1 секунды
-            // переход на экран аудиоплейера, передаем выбранный трек
-            val direction: NavDirections = MediatekaFragmentDirections.actionMediatekaFragmentToMediaFragment(item)
-            findNavController().navigate(direction)
-        //}
+        // переход на экран аудиоплейера, передаем выбранный трек
+        val direction: NavDirections =
+            MediatekaFragmentDirections.actionMediatekaFragmentToMediaFragment(item)
+        findNavController().navigate(direction)
+    }
+
+    override fun onLongClick(item: Track): Boolean {
+        Log.d("MyTag", "LikeTracksFragment: onLongClick()")
+        return true
     }
 
     override fun onResume() {

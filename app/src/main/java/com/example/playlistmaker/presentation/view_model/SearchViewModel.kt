@@ -119,11 +119,12 @@ class SearchViewModel( private var getTrackListUseCase : GetTrackListUseCase,
     }
 
     // для поиска при задержке ввода на 2 секунды
-    public fun searchDebounce(changedText: String) {
-
-      //  if (latestSearchText != changedText) {
-      //      latestSearchText = changedText
-            mySearchDebounce(changedText)
-      //  }
+    fun searchDebounce(changedText: String) {
+        mySearchDebounce(changedText)
     }
+
+   // fun setStateHistory(){
+   //     val content = SearchScreenState.History(data = tracks)
+   //     state.postValue()
+  //  }
 }

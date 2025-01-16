@@ -49,23 +49,23 @@ val dataModule = module {
         RetrofitNetworkClient(trackApiService = get(), androidContext())
     }
 
-    single<MediaPlayerRepository>{
+    single<MediaPlayerRepository> {
         MediaPlayerRepositoryImpl(mediaPlayer = get())
     }
 
-    single<SearchHistoryRepository>{
+    single<SearchHistoryRepository> {
         SearchHistoryRepositoryImpl(searchHistory = get())
     }
 
-    single<SearchHistory>{
+    single<SearchHistory> {
         SearchHistory(sharedPrefs = get(), json = get())
     }
 
-    single<SharedPreferencesRepository>{
+    single<SharedPreferencesRepository> {
         SharedPreferencesRepositoryImpl(sharedPrefs = get())
     }
 
-    single<TrackRepository>{
+    single<TrackRepository> {
         TrackRepositoryImpl(networkClient = get())
     }
 
@@ -79,18 +79,15 @@ val dataModule = module {
             .build()
     }
 
-    /*single {
-        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "AppDatabase.db")
-            .addMigrations(AppDatabase::MIGRATION_1_2 as Migration)
-            .build()
-    }*/
-
     single<LikeTrackListRepository> {
         LikeTrackListRepositoryImpl(appDatabase = get(), trackDbConverter = get())
     }
 
     single<PlaylistRepository> {
-        PlaylistRepositoryImpl(appDatabase = get(), playlistDbConverter = get(), trackInPlaylistDbConverter = get())
+        PlaylistRepositoryImpl(
+            appDatabase = get(),
+            playlistDbConverter = get(),
+            trackInPlaylistDbConverter = get()
+        )
     }
-
 }

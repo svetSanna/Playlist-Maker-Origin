@@ -12,6 +12,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
@@ -30,8 +31,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
+class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener,
+TrackViewHolder.OnLongClickListener{
     private var _binding: FragmentSearchBinding? = null
+
     // This property is only valid between onCreateView and onDestroyView.
     private val binding
         get() = _binding!!
@@ -56,21 +59,28 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
     }
 
     private var isClickAllowed = true
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?)
-    : View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    )
+            : View? {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //Log.i("MyTest","SearchFragment.onViewCreated - 01 ")
 
         trackAdapterSearchHistory.onItemClickListener = this
+        trackAdapterSearchHistory.onLongClickListener = this
         trackAdapter.onItemClickListener = this
+        trackAdapter.onLongClickListener = this
 
         val inputEditText = binding.editSearchWindow
 
-        viewModel.loadData(inputEditText.text.toString())
+       // viewModel.loadData(inputEditText.text.toString())
 
         // для поиска
         val rvItems1: RecyclerView = binding.rvItems
@@ -92,18 +102,21 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
 
         // подписываемся на состояние SearchViewModel
         viewModel.getScreenState().observe(viewLifecycleOwner) { state ->
-            when(state) {
+            when (state) {
                 is SearchScreenState.Loading -> {
                     progressBarVisibility(true)
                 }
+
                 is SearchScreenState.Error -> {
                     progressBarVisibility(false)
                     showError(state.message)
                 }
+
                 is SearchScreenState.Content -> {
                     progressBarVisibility(false)
                     showContent(state.data)
                 }
+
                 is SearchScreenState.ContentHistory -> {
                     progressBarVisibility(false)
                     showHistory(state.data)
@@ -123,7 +136,7 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
                 binding.placeholderLinearLayout.visibility = View.GONE
                 binding.rvItems.visibility = View.GONE
                 binding.searchHistoryLinearLayout.visibility = View.GONE
-                Log.i("MyTest", "SearchFragment.inputEditText.setOnEditorActionListener: вызывается searchRequest() ")
+
                 searchRequest()
                 true
             }
@@ -135,56 +148,46 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
         clearButton.setOnClickListener {
             inputEditText.setText("")
 
-            val imm = requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val imm =  requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm?.hideSoftInputFromWindow(inputEditText.getWindowToken(), 0)
 
             trackAdapter.items.clear()
             trackAdapter.notifyDataSetChanged()
+
+            viewModel.loadData("") ///
         }
 
         val simpleTextWatcher = object : TextWatcher {
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //    TODO("Not yet implemented")
+
+
             }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 clearButton.visibility = clearButtonVisibility(s)
+                binding.searchHistoryLinearLayout.isVisible = inputEditText.hasFocus() && s.isEmpty()
 
-                binding.searchHistoryLinearLayout.visibility =
-                    if (inputEditText.hasFocus() && (s?.isEmpty() == true))
-                        View.VISIBLE
-                    else View.GONE
-                if(trackAdapterSearchHistory.itemCount==0)
-                    binding.searchHistoryLinearLayout.visibility = View.GONE
+                if (trackAdapterSearchHistory.itemCount == 0)
+                        binding.searchHistoryLinearLayout.visibility = View.GONE
 
-                trackList.clear()
-                trackAdapter.items = trackList
-                trackAdapter.notifyDataSetChanged()
+                if(inputEditText.hasFocus()) {
+                    trackList.clear()
+                    trackAdapter.items = trackList
+                    trackAdapter.notifyDataSetChanged()
 
-                binding.placeholderLinearLayout.visibility = View.GONE
-                binding.rvItems.visibility = View.GONE
+                    binding.placeholderLinearLayout.visibility = View.GONE
+                    binding.rvItems.visibility = View.GONE
 
-                Log.i("MyTest", "SearchFragment.simpleTextWatcher.onTextChanged: вызывается viewModel.SearchDebounce() ")
-                viewModel.searchDebounce(inputEditText.text.toString()) //searchDebounce()
+                    viewModel.searchDebounce(inputEditText.text.toString()) //searchDebounce()
+                }
             }
 
-            override fun afterTextChanged(s: Editable?) {
+             override fun afterTextChanged(s: Editable?) {
                 //  TODO("Not yet implemented")
             }
         }
         inputEditText.addTextChangedListener(simpleTextWatcher)
-
-        // отображаем LinearLayout истории поиска, если фокус находится в inputEditText и inputEditText пуст
-        inputEditText.setOnFocusChangeListener { view, hasFocus ->
-            binding.searchHistoryLinearLayout.visibility =
-                if (hasFocus && inputEditText.text.isEmpty())
-                    View.VISIBLE
-                else View.GONE
-            if(trackAdapterSearchHistory.itemCount==0)
-                binding.searchHistoryLinearLayout.visibility = View.GONE
-        }
-
-        inputEditText.requestFocus()
 
         // кнопка "Очистить историю"
         binding.buttonCleanSearchHistory.setOnClickListener {
@@ -202,10 +205,9 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
     private fun showHistory(data: List<Track>) {
         trackAdapterSearchHistory.items = data.toMutableList()
         binding.rvItems.visibility = View.GONE
-        if ( trackAdapterSearchHistory.itemCount == 0){
+        if (trackAdapterSearchHistory.itemCount == 0) {
             binding.searchHistoryLinearLayout.visibility = View.GONE
-        }
-        else binding.searchHistoryLinearLayout.visibility = View.VISIBLE
+        } else binding.searchHistoryLinearLayout.visibility = View.VISIBLE
         binding.placeholderLinearLayout.visibility = View.GONE
     }
 
@@ -265,7 +267,7 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
     private fun progressBarVisibility(isVisible: Boolean) {
         var progressBar = binding.progressBar
 
-        if(isVisible) progressBar.visibility = View.VISIBLE
+        if (isVisible) progressBar.visibility = View.VISIBLE
         else progressBar.visibility = View.GONE
     }
 
@@ -298,6 +300,9 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        val inputEditText = binding.editSearchWindow
+        editString = inputEditText.text.toString()
+
         outState.putString(EDIT_STRING, editString)
 
         outState.putParcelableArrayList(TRACK_LIST, trackList as ArrayList<out Parcelable?>?)
@@ -311,7 +316,7 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         // Вторым параметром мы передаём значение по умолчанию
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             editString = savedInstanceState!!.getString(EDIT_STRING, "")
             val inputEditText = binding.editSearchWindow
             inputEditText.setText(editString)
@@ -329,7 +334,6 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
             )
             trackAdapterSearchHistory.items = viewModel.getTrackListSearchHistory()
             trackAdapterSearchHistory.notifyDataSetChanged()
-
         }
     }
 
@@ -354,7 +358,8 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
             viewModel.writeToSharedPreferences()
 
             // переход на экран аудиоплейера, передаем выбранный трек
-            val direction = SearchFragmentDirections.actionSearchFragmentToMediaFragment(item) //.actionSearchFragmentToMediaActivity(item)
+            val direction =
+                SearchFragmentDirections.actionSearchFragmentToMediaFragment(item) //.actionSearchFragmentToMediaActivity(item)
             findNavController().navigate(direction)
         }
     }
@@ -364,7 +369,7 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-          //  viewLifecycleOwner.lifecycleScope.launch {
+            //  viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycleScope.launch {
                 delay(CLICK_DEBOUNCE_DELAY)
                 isClickAllowed = true
@@ -380,6 +385,10 @@ class SearchFragment : Fragment(), TrackViewHolder.OnItemClickListener {
 
     override fun onResume() {
         super.onResume()
-            isClickAllowed = true
+        isClickAllowed = true
+    }
+
+    override fun onLongClick(item: Track): Boolean {
+        return true
     }
 }

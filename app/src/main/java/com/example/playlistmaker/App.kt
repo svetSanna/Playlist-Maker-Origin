@@ -6,13 +6,13 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.di.dataModule
 import com.example.playlistmaker.di.domainModule
 import com.example.playlistmaker.di.viewModelModule
-import com.example.playlistmaker.domain.entity.Track
 import com.example.playlistmaker.domain.use_case.SharedPreferencesInteractor
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
+import java.util.Locale
 
 const val PLAYLISTMAKER_PREFERENCES = "playlist_preferences" // ключ для SharedPreferences
 const val THEME_SWITCH_KEY = "key_for_selectorSwitch" // ключ для перелючателя темы
@@ -31,20 +31,38 @@ class App : Application() {
         }
 
     companion object {
-        // функция отпределяет окончание к слову "трек" в зависимости от числительного n
-        fun getEnding(n: Int) : String{
+        // функция отпределяет формы слова "трек" в зависимости от числительного n
+        fun getEndingTrack(n: Int) : String{
+            var s = n.toString()
+            val currentLanguage = Locale.getDefault().displayLanguage
+            if (currentLanguage.lowercase(Locale.getDefault()).contains("русский")) {
+                if (s.endsWith("5") || s.endsWith("6") || s.endsWith("7") || s.endsWith("8") || s.endsWith("9")
+                    || s.endsWith("0") || s.endsWith("11") || s.endsWith("12") || s.endsWith("13") || s.endsWith("14")
+                    || s.endsWith("15") || s.endsWith("16") || s.endsWith("17") || s.endsWith("18") || s.endsWith("19")) return " треков"//"ов"
+                if (s.endsWith("2") || s.endsWith("3") || s.endsWith("4")) return " трека"//"а"
+                return " трек"//""
+            }else{
+                if(n==1) return " track"
+                else return " tracks"
+            }
+        }
+
+        // функция отпределяет формы слова "минута" в зависимости от числительного n
+        fun getEndingMinute(n: Int) : String{
             var s = n.toString()
 
-            if (s.endsWith("5") || s.endsWith("6") || s.endsWith("7") || s.endsWith("8") || s.endsWith("9")
-                || s.endsWith("0") || s.endsWith("11") || s.endsWith("12") || s.endsWith("13") || s.endsWith("14")
-                || s.endsWith("15") || s.endsWith("16") || s.endsWith("17") || s.endsWith("18") || s.endsWith("19")) return "ов"
-            if (s.endsWith("2") || s.endsWith("3") || s.endsWith("4")) return "а"
-            return ""
+            val currentLanguage = Locale.getDefault().displayLanguage
+            if (currentLanguage.lowercase(Locale.getDefault()).contains("русский")) {
+                if (s.endsWith("5") || s.endsWith("6") || s.endsWith("7") || s.endsWith("8") || s.endsWith("9")
+                    || s.endsWith("0") || s.endsWith("11") || s.endsWith("12") || s.endsWith("13") || s.endsWith("14")
+                    || s.endsWith("15") || s.endsWith("16") || s.endsWith("17") || s.endsWith("18") || s.endsWith("19")) return " минут" //""
+                if (s.endsWith("2") || s.endsWith("3") || s.endsWith("4")) return " минуты"//"ы"
+                return " минута"//"а"
+            } else{
+                if(n==1) return " minute"
+                else return " minutes"
+            }
         }
-       // var screen_for_mediaActivity = 1 ///
-        // 1 - переход на экран создания нового плейлиста со списка плейлистов PlaylistsFragment
-        // 2 - с плейера MediaActivity
-       // var track: Track? = null ///
     }
     override fun onCreate() {
         // Получаем тему приложения, выбранную пользователем, из SharedPreferences, а если

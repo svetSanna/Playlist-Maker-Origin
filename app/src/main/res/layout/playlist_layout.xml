@@ -47,7 +47,7 @@
 
         <TextView
             android:id="@+id/name_playlist_layout"
-            style="@style/text_playlist_layout"
+            style="@style/TextBigPlaylistLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
@@ -56,13 +56,12 @@
 
         <TextView
             android:id="@+id/count_playlist_layout"
-            style="@style/text_playlist_layout"
+            style="@style/TextSmallPlaylistLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             app:layout_constraintTop_toBottomOf="@+id/name_playlist_layout"
             tools:text="148 треков" />
-        />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

@@ -26,7 +26,7 @@ class PlaylistViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             .into(image)
 
         name.text = item.name
-        count.text = item.count.toString() + " трек" + App.getEnding(item.count)
+        count.text = item.count.toString() + App.getEndingTrack(item.count)
 
         // генерируем слушателя нажатия на элемент
         itemView.setOnClickListener {

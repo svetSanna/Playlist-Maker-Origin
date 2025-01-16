@@ -17,21 +17,33 @@ interface PlayListDao {
     @Delete(entity = PlaylistEntity::class)
     fun deletePlaylist(playlist: PlaylistEntity)
 
+    // метод @Delete для удаления плейлиста из таблицы по идентификатору
+    @Query("DELETE FROM play_list_entity WHERE playlistId =:playlistIdentificator")
+    fun deletePlaylist(playlistIdentificator: Int)
+
     // метод @Query для получения списка со всеми плейлистами
     @Query("SELECT * FROM play_list_entity")
     fun getPlaylists(): List<PlaylistEntity>
 
     // метод @Query для изменения значения в столбце trackIdList для плейлиста с заданным Id
-    @Query("UPDATE play_list_entity SET trackIdList = :newTrackIdList WHERE playlistId = :identificator")
-    fun setTrackIdListByPlaylistId(newTrackIdList: String, identificator: Int)
+    @Query("UPDATE play_list_entity SET trackIdList = :newTrackIdList WHERE playlistId = :playlistIdentificator")
+    fun setTrackIdListByPlaylistId(newTrackIdList: String, playlistIdentificator: Int)
 
     // метод @Query для изменения значения в столбце count для плейлиста с заданным Id
-    @Query("UPDATE play_list_entity SET count = count+1 WHERE playlistId = :identificator")
-    fun countPlusOne(identificator: Int)
+    @Query("UPDATE play_list_entity SET count = :newCount WHERE playlistId = :playlistIdentificator")
+    fun setCount(newCount: Int, playlistIdentificator: Int)
+
+    // метод @Query для получения значения count для плейлиста с заданным Id
+    @Query("SELECT count FROM play_list_entity WHERE playlistId = :playlistIdentificator")
+    fun getCount(playlistIdentificator: Int): Int
 
     // метод @Query для получения списка треков в плейлисте по идентификатору Id плейлиста
-    @Query("SELECT trackIdList FROM play_list_entity WHERE playlistId = (:id)")
-    fun getTrackIdList(id: Int): String?
+    @Query("SELECT trackIdList FROM play_list_entity WHERE playlistId = (:playlistIdentificator)")
+    fun getTrackIdList(playlistIdentificator: Int): String?
+
+    // метод @Query для изменения значения в столбце count для плейлиста с заданным Id
+    @Query("UPDATE play_list_entity SET path = :newPath, name = :newTitle, definition = :newDefinition WHERE playlistId = :playlistIdentificator")
+    fun editPlaylist(playlistIdentificator: Int, newPath: String?, newTitle: String, newDefinition: String?)
 
     // метод @Query для удаления трека по Id
     //@Query("DELETE FROM like_track_entity WHERE trackId = (:id)")
